@@ -1,4 +1,4 @@
-# ROS-Causal_HRISim
+# PeopleFlow
 A Gazebo-based human-robot interaction simulator that accurately mimics HRI scenarios involving a [TIAGo](https://pal-robotics.com/robots/tiago/) robot and multiple pedestrians modelled using the [pedsim_ros](https://github.com/srl-freiburg/pedsim_ros) ROS library. 
 
 ## Features
