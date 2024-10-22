@@ -89,13 +89,19 @@ class PedsimBridge():
                   agent.atWork and agent.isFree and not agent.isQuitting and
                   self.elapsedTime >= agent.exitTime):
                 
+                rospy.logerr(f'Agent {agent.id} is quitting..')
+                
                 agent.setTask('parking', SCHEDULE['quitting']['duration'] - agent.startingTime + SCHEDULE['off']['duration'])
                 agent.isQuitting = True
     
             # New goal logic                
             elif agent.atWork and agent.isStuck:
-                next_destination = agent.selectDestination(self.timeOfDay, req.destinations) if not agent.isQuitting else 'parking'
-                agent.setTask(next_destination)
+                if not agent.isQuitting:
+                    next_destination = agent.selectDestination(self.timeOfDay, req.destinations)
+                    agent.setTask(next_destination, agent.getTaskDuration())
+                else:
+                    agent.setTask('parking', SCHEDULE['quitting']['duration'] - agent.startingTime + SCHEDULE['off']['duration'])
+                    
                 rospy.logerr(f"Agent {agent.id} is stuck. new desination: {next_destination}")
                         
             elif agent.atWork and not agent.isStuck and agent.isQuitting and len(agent.path) == 1:
@@ -103,7 +109,10 @@ class PedsimBridge():
                 agent.isQuitting = False
                 
             elif agent.isFree and agent.atWork and not agent.isStuck and not agent.isQuitting:
-                next_destination = agent.selectDestination(self.timeOfDay, req.destinations)
+                if agent.closestWP in SHELFS:
+                    next_destination = 'delivery_point'
+                else:
+                    next_destination = agent.selectDestination(self.timeOfDay, req.destinations)
                 agent.setTask(next_destination, agent.getTaskDuration())
                 
             elif not agent.isFree:
