@@ -12,12 +12,12 @@ A Gazebo-based human-robot interaction simulator that accurately mimics HRI scen
 ### Build and run
 After cloning the repository, use the following commands to build the Docker image and run it:
 ```
-cd /path/to/ROS-Causal_HRISim
+cd /path/to/darko-peopleflow
 ./HRISim_build.sh 
 ```
 Once the Docker image is built, you can use the following command to run the container:
 ```
-cd /path/to/ROS-Causal_HRISim
+cd /path/to/darko-peopleflow
 ./HRISim_run.sh 
 ```
 ### Scenario setup and launch
@@ -72,7 +72,7 @@ tstop
 ```
 
 ### Planning
-The ROS-Causal_HRISim includes the [PetriNetPlans](https://github.com/francescodelduchetto/PetriNetPlans) to define predefined plans for the TIAGo robot. The plan is a combination of actions and conditions that can be defined to create your own plan. Three different folders have been pre-created for plans, actions, and conditions, and they are:
+darko-peopleflow includes the [PetriNetPlans](https://github.com/francescodelduchetto/PetriNetPlans) to define predefined plans for the TIAGo robot. The plan is a combination of actions and conditions that can be defined to create your own plan. Three different folders have been pre-created for plans, actions, and conditions, and they are:
 * hrisim_plans
 * hrisim_actions
 * hrisim_conditions
