@@ -123,3 +123,7 @@ windows:
     panes:
       - 'rosrun peopleflow_counter PeopleCounter.py'
       - if [[ "$RECORD" == "true" ]]; then rosrun hrisim_recording record.py; fi
+  - name: darko_orchestrator
+    tags: ['orch']
+    panes:
+      - 'roslaunch darko_orchestrator test_orch.launch'

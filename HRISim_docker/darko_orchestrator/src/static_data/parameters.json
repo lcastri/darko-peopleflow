@@ -1,0 +1,10 @@
+{
+    "t_horizon": 120,
+    "o_max": 1,
+    "alpha_risk": 0.01,
+    "min_prob": 0.01,
+    "scenario_length": 3,
+    "wait_time": 2,
+    "drop_time": 1,
+    "max_mission_steps": 5
+}

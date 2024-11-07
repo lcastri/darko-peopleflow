@@ -71,6 +71,10 @@ RUN DEBIAN_FRONTEND=noninteractive pip install shapely
 RUN DEBIAN_FRONTEND=noninteractive pip install networkx
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ros-noetic-jsk-rviz-plugins psmisc
 
+# Install darko orchestrator extra requirements
+ADD HRISim_docker/extra-requirements.txt /root/ros_ws/src/extra-requirements.txt
+RUN DEBIAN_FRONTEND=noninteractive pip install -r /root/ros_ws/src/extra-requirements.txt
+
 # Clone and install PetriNetPlans
 RUN cd ~/ros_ws
 RUN git clone -b noetic_devel https://github.com/francescodelduchetto/PetriNetPlans.git
@@ -100,6 +104,8 @@ RUN mkdir -p ~/ros_ws/src/HRISim/
 COPY HRISim_docker/HRISim /root/ros_ws/src/HRISim
 RUN mkdir -p ~/ros_ws/src/pedsim_ros/
 COPY HRISim_docker/pedsim_ros /root/ros_ws/src/pedsim_ros
+RUN mkdir -p ~/ros_ws/src/darko_orchestrator/
+COPY HRISim_docker/darko_orchestrator /root/ros_ws/src/darko_orchestrator
 
 # Create a shared folder with the host machine
 RUN mkdir -p ~/shared
