@@ -58,7 +58,7 @@ init_cmd: |
   # robot_mode == 2: SOCIAL mode means the robot's velocity is set by the social force just like the other agents -->
   export_default SCENARIO "warehouse"
   export_default ALLOW_TASK "true"
-  export_default RECORD "true"
+  export_default RECORD "false"
   export_default STARTING_ELAPSED "8"
   export_default MAX_TASKTIME "15"
   export_default SCALING_FACTOR "1"
@@ -110,13 +110,13 @@ windows:
     tags: ['core']
     panes:
       - 'roslaunch pnp_ros pnp_ros.launch plans_folder:=$PNP_PLANS actions_folder:=$PNP_ACTIONS conditions_folder:=$PNP_CONDITIONS'
-      - 'roscd hrisim_plans/scripts && python TIAGo_plan.py'
+      # - 'roscd hrisim_plans/scripts && python TIAGo_plan.py'
   - name: scenario
     tags: ['exp']
     panes:
       - 'roslaunch peopleflow_manager peopleflow_manager.launch scenario:=$SCENARIO scaling_factor:=$SCALING_FACTOR starting_elapsed:=$STARTING_ELAPSED'
       - 'roslaunch peopleflow_pedsim_bridge peopleflow_pedsim.launch scenario:=$SCENARIO allow_task:=$ALLOW_TASK max_tasktime:=$MAX_TASKTIME'
-      - 'roslaunch pedsim_simulator mysimulator.launch scenario:=$SCENARIO robot_mode:=$HUMAN_MODE max_robot_speed:=$MAX_HUMAN_SPEED robot_radius:=$ROBOT_RADIUS scaling_factor:=$SCALING_FACTOR is_stuck_threshold:=$IS_STUCK_THRESHOLD force_obstacle:=$FORCE_OBSTACLE sigma_obstacle:=$SIGMA_OBSTACLE force_social:=$FORCE_SOCIAL with_teleop_ped:=$WITH_TELEOP_PED ped_x:=$HUMAN_x ped_y:=$HUMAN_y ped_theta:=0'
+      # - 'roslaunch pedsim_simulator mysimulator.launch scenario:=$SCENARIO robot_mode:=$HUMAN_MODE max_robot_speed:=$MAX_HUMAN_SPEED robot_radius:=$ROBOT_RADIUS scaling_factor:=$SCALING_FACTOR is_stuck_threshold:=$IS_STUCK_THRESHOLD force_obstacle:=$FORCE_OBSTACLE sigma_obstacle:=$SIGMA_OBSTACLE force_social:=$FORCE_SOCIAL with_teleop_ped:=$WITH_TELEOP_PED ped_x:=$HUMAN_x ped_y:=$HUMAN_y ped_theta:=0'
       - 'rosrun rqt_peopleflow agents_info.py'
   - name: data
     tags: ['exp']
@@ -126,4 +126,4 @@ windows:
   - name: darko_orchestrator
     tags: ['orch']
     panes:
-      - 'roslaunch darko_orchestrator test_orch.launch'
+      - 'roslaunch darko_orchestrator orchestrator.launch'

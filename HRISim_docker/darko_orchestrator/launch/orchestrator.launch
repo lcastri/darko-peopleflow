@@ -13,6 +13,6 @@
     </node>
     <node name="darko_web_ui" pkg="darko_orchestrator" type="web_ui.py" output="screen" cwd="node">
     </node>
-    <node name="map_node" pkg="darko_orchestrator" type="map_node.py" output="screen" cwd="node">
-    </node>
+    <!-- <node name="map_node" pkg="darko_orchestrator" type="map_node.py" output="screen" cwd="node">
+    </node> -->
 </launch>

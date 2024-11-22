@@ -63,7 +63,7 @@ class Orchestrator:
         self.neighborhood_size = 5
         self.scheduler_module = Scheduler(params,action_nodes,trays,objects,rewards,action_times)
 
-        self.client = actionlib.SimpleActionClient('darko/move_base',MoveBaseAction)
+        self.client = actionlib.SimpleActionClient('/move_base',MoveBaseAction)
         self.client.wait_for_server()
         self.position_subscriber = AmclPoseManager()
         
@@ -113,7 +113,7 @@ class Orchestrator:
     def stop_robot(self):
         goal = MoveBaseGoal()
         # Specifica qui la posizione corrente del robot o l'obiettivo da interrompere
-        goal.target_pose.header.frame_id = 'darko/base_link'
+        goal.target_pose.header.frame_id = 'base_link'
         goal.target_pose.pose.position.x = 0.0
         goal.target_pose.pose.position.y = 0.0
         goal.target_pose.pose.orientation.w = 1.0
@@ -549,7 +549,7 @@ class Orchestrator:
             
     def submit_goal(self,xp,yp,xo,yo,zo,wo):
         goal = MoveBaseGoal()
-        goal.target_pose.header.frame_id = "darko/odom"
+        goal.target_pose.header.frame_id = "map"
         goal.target_pose.header.stamp = rospy.Time.now()
         goal.target_pose.pose.position.x = xp
         goal.target_pose.pose.position.y = yp

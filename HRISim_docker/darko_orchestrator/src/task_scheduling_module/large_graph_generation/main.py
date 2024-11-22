@@ -12,7 +12,7 @@ def generate_large_graph(costmap_subscriber):
     nodes, edges, action_nodes, obstacle_polygons = create_graph(costmap_reduced, location_coordinates)
     large_graph_dict = process_graph(nodes, edges, costmap_reduced)
 
-    plot_graph(nodes, edges, costmap_reduced, action_nodes, obstacle_polygons, large_graph_dict)
+    # plot_graph(nodes, edges, costmap_reduced, action_nodes, obstacle_polygons, large_graph_dict)
 
     with open("../static_data/large_graph.json", "w") as file:
         json.dump(large_graph_dict, file, indent=4)

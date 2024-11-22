@@ -9,7 +9,7 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
 def publish_stop_message():
     rospy.init_node('reschedule_publisher', anonymous=True)
-    client = actionlib.SimpleActionClient('darko/move_base', MoveBaseAction)
+    client = actionlib.SimpleActionClient('/move_base', MoveBaseAction)
     client.wait_for_server()
     stop_publisher = PublisherManager("/risk_monitoring/reschedule", Bool)
     rate = rospy.Rate(1)  # 10 messaggi al secondo

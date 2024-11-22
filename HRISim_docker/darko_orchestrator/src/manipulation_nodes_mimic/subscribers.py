@@ -100,7 +100,7 @@ class OccupancyGridManager(object):
 
 class AmclPoseManager(object):
     def __init__(self):
-        self._topic = "/darko/amcl_pose"
+        self._topic = "/amcl_pose"
         self._pose_data = None
         self._reference_frame = None
         self._sub = rospy.Subscriber(self._topic, PoseWithCovarianceStamped,self._amcl_pose_cb,queue_size=1)

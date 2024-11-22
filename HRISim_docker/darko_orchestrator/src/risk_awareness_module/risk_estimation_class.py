@@ -90,8 +90,6 @@ class RiskEstimation:
                 self.reduced_map.x_min:self.reduced_map.x_max
             ]
         )
-
-        print(f"after update of reduction: {np.max(self.reduced_map.data)}")
         
 
     def get_navigation_risk(self):
@@ -233,8 +231,6 @@ class Global_costamap_reduction:
         self.x_max, self.y_max = costmap_subscriber.get_costmap_x_y(self.x_max, self.y_max)
 
         self.data = np.copy(costmap_subscriber._grid_data[self.y_min:self.y_max,self.x_min:self.x_max])
-
-        print(f"inside init of reduction: {np.max(self.data)}")
 
         self.origin_x,self.origin_y  = costmap_subscriber.get_world_x_y(self.x_min,self.y_min) 
         self.width,self.lenght = self.data.shape
@@ -444,7 +440,6 @@ def get_distances_from_locations(x,y,loc_):
 
 @nb.njit
 def get_corrected_riskmap(c0):
-    print(f'Max value in c0: {np.max(c0)}')
     Kj = c0.shape[0]
     Ki = c0.shape[1]
     # riskmap = c0
@@ -458,9 +453,7 @@ def get_corrected_riskmap(c0):
                 riskmap[i,j] = riskmap[i,j]/3
             else:
                 riskmap[i,j] = 100
-                count += 1    
-    print(f'Max value in riskmap: {np.max(riskmap)}')
-    print(f'n of 100s: {count}')
+                count += 1
     return riskmap
 
 def get_rt_edges_new(riskmap,edges,nodes_dct,squares_edge_dict,resolution,vmax):
@@ -484,7 +477,6 @@ def get_rt_edges_new(riskmap,edges,nodes_dct,squares_edge_dict,resolution,vmax):
         dt = dst/vreal
         # rr = 0.6*rmax+0.4*ravg
         rr = 0.5*rmax+0.4*ravg + 0.1*dens_norm
-        print(f'rr: {rr}')
         rt_edges[e] = [dt,rr]
     return rt_edges
 

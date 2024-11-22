@@ -9,21 +9,12 @@ from large_graph_generation.main import generate_large_graph
 
 rospy.init_node('orchestrator_node', anonymous=True)
 
-while True:
-    rospy.loginfo("So'ppartito!")
-    rospy.sleep(1)
-
-# gridmap_subscriber = OccupancyGridManager("/darko/odom",True)
-
-costmap_subscriber = OccupancyGridManager("/merged_costmap",True)
+costmap_subscriber = OccupancyGridManager("/move_base/global_costmap/costmap",True)
 
 rospy.loginfo("generating graph...")
-# generate_large_graph(gridmap_subscriber)
 generate_large_graph(costmap_subscriber)
 rospy.loginfo("graph generated, all other modules can start")
 rospy.set_param("/orchestrator_started", True)
-
-
 
 # load static data
 path_to_static_data = "../static_data"

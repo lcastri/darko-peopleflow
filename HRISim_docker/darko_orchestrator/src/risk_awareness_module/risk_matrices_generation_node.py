@@ -44,7 +44,7 @@ if __name__ == '__main__':
     placing_report_sub = ReportSubscriber("/risk_estimation/send_placing_report",Float64MultiArray)
     # send_report_done_sub = SubscriberManager("/risk_estimation/send_report_done", Bool, False)
 
-    costmap_subscriber = OccupancyGridManager("/merged_costmap",False)
+    costmap_subscriber = OccupancyGridManager("/move_base/global_costmap/costmap",False)
     risk_estimation_module = RiskEstimation(costmap_subscriber=costmap_subscriber,
                                             static_data_path="../static_data",
                                             manipulation_model_path="manipulation_models")

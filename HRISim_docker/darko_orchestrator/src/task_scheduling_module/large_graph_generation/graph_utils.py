@@ -7,6 +7,7 @@ from sklearn.cluster import KMeans, MiniBatchKMeans
 from sklearn.neighbors import NearestNeighbors
 from large_graph_generation.costmap_utils import get_cost_from_costmap_x_y, get_world_x_y, get_costmap_x_y
 import shapely.geometry as sg
+import rospy
 
 
 def check_distance(n1, n2, distance_threshold):
@@ -55,6 +56,7 @@ def get_free_and_obstacles_real_positions(costmap, free_x, free_y):
                 costmap['resolution']
             )
 
+            # questo punto po esse nodo o po esse ostacolo
             if is_free_point(costmap, i, j, free_x, free_y):
                 free.append((x, y))
             else:
@@ -136,8 +138,8 @@ def plot_graph(nodes, edges, costmap, action_nodes, obstacle_polygons, large_gra
     fig, ax = plt.subplots()
 
     res = costmap["resolution"]
-    for i in range(costmap["height"]):
-        for j in range(costmap["width"]):
+    for i in range(0, costmap["height"], 10):
+        for j in range(0, costmap["width"], 10):
             cost = get_cost_from_costmap_x_y(j, i, costmap['data'])
 
             x, y = get_world_x_y(
@@ -156,29 +158,6 @@ def plot_graph(nodes, edges, costmap, action_nodes, obstacle_polygons, large_gra
         ax.plot(x, y, "ro")
 
 
-    # selected_action_node = 0
-    # selected_neigh_node = large_graph_dict['nodes_neighbors'][selected_action_node][0]
-
-
-    # x, y = large_graph_dict['nodes_xy'][selected_action_node]
-    # ax.plot(x, y, "yo")
-
-    # edge_index = 0
-    # for i in range(len(large_graph_dict['edges'])):
-    #     if (large_graph_dict['edges'][i][0] == selected_action_node and large_graph_dict['edges'][i][1] == selected_neigh_node) or (large_graph_dict['edges'][i][1] == selected_action_node and large_graph_dict['edges'][i][0] == selected_neigh_node):
-    #         edge_index = i
-    #         break
-
-    # for (i,j) in large_graph_dict['squares_edge_dict'][edge_index]:
-    #     x, y = get_world_x_y(
-    #         i,
-    #         j,
-    #         costmap['origin']['x'],
-    #         costmap['origin']['y'],
-    #         costmap['resolution']
-    #     )
-    #     ax.plot(x, y, "go")
-
     for polygon in obstacle_polygons:
         x, y = polygon.exterior.xy
         ax.fill(x, y, alpha=0.5, fc='red', ec='black')  # 'fc' è il colore di riempimento, 'ec' è il colore del bordo
@@ -188,8 +167,8 @@ def plot_graph(nodes, edges, costmap, action_nodes, obstacle_polygons, large_gra
     nx.draw(G, pos, node_size=20, with_labels=False)
     #plt.show()
 
-    fig.savefig('/root/output/large_graph.png')
-
+    fig.savefig('/root/shared/large_graph.png')
+    
 def get_neighbors(free_positions_discrete, node, num_neighbors):
     """
     Returns the `k` nearest neighbors of `node` in the list `free_positions_discrete`.
@@ -220,17 +199,21 @@ def create_graph(costmap_reduced, location_coordinates):
 
     free_positions, obstacle_positions = get_free_and_obstacles_real_positions(costmap_reduced, free_x, free_y)
 
-    # Create a MiniBatchKMeans object with a minimum of min_samples points per batch
-    kmeans = MiniBatchKMeans(n_clusters=num_clusters, batch_size=min_samples)
+    # # Create a MiniBatchKMeans object with a minimum of min_samples points per batch
+    # kmeans = MiniBatchKMeans(n_clusters=num_clusters, batch_size=min_samples)
 
-    # Fit the MiniBatchKMeans object to the free_positions array
-    kmeans.fit(free_positions)
+    # # Fit the MiniBatchKMeans object to the free_positions array
+    # kmeans.fit(free_positions)
 
-    # Get the cluster centers
-    cluster_centers = kmeans.cluster_centers_
+    # # Get the cluster centers
+    # cluster_centers = kmeans.cluster_centers_
 
-    # Round the cluster center coordinates to integers
-    nodes = [tuple(pt) for pt in cluster_centers]
+    # # Round the cluster center coordinates to integers
+    # nodes = [tuple(pt) for pt in cluster_centers]
+
+    wps = rospy.get_param("/peopleflow/wps")
+
+    nodes = [(wp['x'], wp['y']) for name, wp in wps.items() if name not in ['parking', 'door_entrance']]
 
     if obstacle_positions:
 
@@ -244,7 +227,6 @@ def create_graph(costmap_reduced, location_coordinates):
         # Creation of polygons to represent obstacles
         obstacle_polygons = generate_polygons(labels, points, num_obstacle_clusters)
 
-    obstacle_polygons = []
 
     # Create a set of all possible edges connecting each node to its num_neighbors nearest neighbors
     edges = set()
@@ -358,9 +340,9 @@ def process_graph(nodes, edges, costmap):
             for j in range(jmin, jmax + 1):
                 for i in range(imin, imax + 1):
                     if (i <= fi(j) <= i + 1) or (i <= fi(j + 1) <= i + 1) or (j <= fj(i) <= j + 1) or (j <= fj(i + 1) <= j + 1):
-                        if i >= 240 or j >= 180:
-                            print("ERROR", jmin, imin, jmax, imax, i, j)
-                            exit(1)
+                        # if i >= 240 or j >= 180:
+                        #     print("ERROR", jmin, imin, jmax, imax, i, j)
+                        #     exit(1)
                         idx_lst += [(j, i)]
 
         squares_edge_dict[idx] = idx_lst

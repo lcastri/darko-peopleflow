@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-
-<launch>
-    <node name="map_node" pkg="darko_orchestrator" type="map_node.py" output="screen" cwd="node">
-    </node>
-</launch>
