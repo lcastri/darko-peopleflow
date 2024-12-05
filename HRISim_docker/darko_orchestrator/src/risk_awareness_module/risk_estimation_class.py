@@ -426,7 +426,7 @@ def plot_manipulation_area(node_x, node_y, manip_x, manip_y, costmap, manip_inte
     for point in manip_internal_points:
         plt.scatter(point[0], point[1], color='green', s = 1)
     current_time = datetime.now()
-    plt.savefig(f"/root/output/traj_{current_time.strftime('%Y-%m-%d_%H:%M:%S')}.png")
+    plt.savefig(f"/root/shared/traj_{current_time.strftime('%Y-%m-%d_%H:%M:%S')}.png")
 
 def get_distances_from_locations(x,y,loc_):
     distances = np.array([]) 
