@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from subscribers import OccupancyGridManager
+from utils_module.subscribers import OccupancyGridManager
 import numpy as np
 import json
 from orchestrator_class import Orchestrator

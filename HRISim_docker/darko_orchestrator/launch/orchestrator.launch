@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 
 <launch>
+    <env name="PYTHONPATH" value="/root/ros_ws/src/darko_orchestrator/src:$(env PYTHONPATH)" />
     <param name="orchestrator_started" type="bool" value="False">
     </param>
     <node name="orchestrator_node" pkg="darko_orchestrator" type="orchestrator_node.py" output="screen" cwd="node">
@@ -13,6 +14,4 @@
     </node>
     <node name="darko_web_ui" pkg="darko_orchestrator" type="web_ui.py" output="screen" cwd="node">
     </node>
-    <!-- <node name="map_node" pkg="darko_orchestrator" type="map_node.py" output="screen" cwd="node">
-    </node> -->
 </launch>

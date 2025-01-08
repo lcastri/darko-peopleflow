@@ -4,7 +4,9 @@ from map_msgs.msg import OccupancyGridUpdate
 from geometry_msgs.msg import PoseWithCovarianceStamped
 from std_msgs.msg import Int64MultiArray, Float64MultiArray, Int64MultiArray
 import numpy as np
-from darko_orchestrator.msg import ScenarioList, Scenario, State
+from darko_orchestrator.msg import ScenarioList
+from geometry_msgs.msg import Point,Pose,PoseStamped
+from std_msgs.msg import Bool,Int64,String,Float64MultiArray
 
 class OccupancyGridManager(object):
     
@@ -21,7 +23,7 @@ class OccupancyGridManager(object):
                                                  OccupancyGridUpdate,
                                                  self._occ_grid_update_cb,
                                                  queue_size=1)
-            
+
         rospy.loginfo("Waiting for '" + str(self._sub.resolved_name) + "'...")
 
         while self._occ_grid_metadata is None and self._grid_data is None and not rospy.is_shutdown():
@@ -55,7 +57,7 @@ class OccupancyGridManager(object):
         self._reference_frame = data.header.frame_id
 
     def _occ_grid_update_cb(self, data):
-         
+
         if self._grid_data is not None:
 
             data_np = np.array(
@@ -97,9 +99,7 @@ class OccupancyGridManager(object):
         if self.is_in_gridmap(x, y):
             return self._grid_data[y][x]
         else:
-            raise IndexError(
-                "Coordinates out of gridmap, x: {}, y: {} must be in between: [0, {}], [0, {}]".format(
-                    x, y, self.height, self.width))
+            raise IndexError("Coordinates out of gridmap, x: {}, y: {} must be in between: [0, {}], [0, {}]".format(x, y, self.width, self.height))
 
     def is_in_gridmap(self, x, y):
         if -1 < x < self.width and -1 < y < self.height:
@@ -164,16 +164,71 @@ class RiskMtxSubscriberFloat(object):
         self._risk_data = np.array(data.data,dtype=np.float64).reshape(self._mtx_shape)
 
 class ScenariosSubscriber(object):
-    def __init__(self,topic_scenarios, topic_probabilities):
-        self._topic_scenarios = topic_scenarios
-        self._topic_probabilities = topic_probabilities
+    def __init__(self,topic):
+        self._topic = topic
         self._scenarios_data = None
         self._probabilities_data = None
-        self._sub_scenarios = rospy.Subscriber(self._topic_scenarios, ScenarioList,self._scenarios_cb,queue_size=1)
-        self._sub_probabilities = rospy.Subscriber(self._topic_probabilities, Float64MultiArray,self._probabilities_cb,queue_size=1)
-        
-    def _scenarios_cb(self, data):
-        self._scenarios_data = data.data
+        self._sub_scenarios = rospy.Subscriber(self._topic, ScenarioList,self._scenarios_cb,queue_size=1)
 
-    def _probabilities_cb(self, data):
-        self._probabilities_data = data.data
+    def _scenarios_cb(self, data):
+        self._scenarios_data = []
+        n_scenarios = len(data.scenario_list)
+        for i in range(n_scenarios):
+            scenario = data.scenario_list[i]
+            state_list = scenario.state_list
+            n_states = len(state_list)
+            state_lst = []
+            for j in range(n_states):
+                state = state_list[j]
+                state_lst.append(state.state)
+            self._scenarios_data.append(state_lst)
+        self._probabilities_data = list(data.probabilities)
+
+    def _check_empty_data(self):
+        tol = 1e-6
+        if self._msg_type == Bool:
+            return self._data == False
+        if self._msg_type == Int64:
+            return -100-tol <= self._data <= -100+tol 
+        if self._msg_type == String:
+            return self._data == "_"
+        if self._msg_type == Point:
+            xp_check = -100-tol <= self._data.x <= -100+tol
+            yp_check = -100-tol <= self._data.y <= -100+tol
+            zp_check = -100-tol <= self._data.z <= -100+tol
+            return (xp_check & yp_check & zp_check) 
+        if self._msg_type in [Pose,PoseStamped]:
+            xp_check = -100-tol <= self._data.position.x <= -100+tol
+            yp_check = -100-tol <= self._data.position.y <= -100+tol
+            zp_check = -100-tol <= self._data.position.z <= -100+tol
+            p_check = xp_check & yp_check & zp_check
+            xo_check = -1-tol <= self._data.orientation.x <= -1+tol
+            yo_check =  0-tol <= self._data.orientation.y <=  0+tol
+            zo_check =  0-tol <= self._data.orientation.z <=  0+tol
+            wo_check =  0-tol <= self._data.orientation.w <=  0+tol
+            o_check = xo_check & yo_check & zo_check & wo_check
+            return p_check & o_check
+        
+class ReportSubscriber(object):
+    def __init__(self,topic, type):
+        self._topic = topic
+        self._msg_type = type
+        self._report_data = None
+        self._mtx_shape  = None
+        self._sub = rospy.Subscriber(self._topic, type,self._report_cb,queue_size=1)
+        
+    def _report_cb(self, data):
+        if self._mtx_shape is None or self._mtx_shape == []:
+            layout = data.layout
+            ndims = len(layout.dim)
+            self._mtx_shape =  [layout.dim[i].size for i in range(ndims)]
+        if self._msg_type == Float64MultiArray:
+            self._report_data = np.array(data.data,dtype=np.float64)
+        elif self._msg_type == Int64MultiArray:
+            self._report_data = np.array(data.data,dtype=np.int64)
+ 
+    def _reset_data(self):
+        self._report_data = None
+
+    def _check_empty_data(self):
+        return self._report_data is None

@@ -2,9 +2,9 @@ import rospy, dash, json, dash_bootstrap_components as dbc
 from dash import html
 
 orchestrator_started = rospy.get_param("/orchestrator_started")
+rospy.loginfo("Waiting for the orchestrator...")
 while not orchestrator_started:
-    rospy.loginfo("Waiting for the orchestrator...")
-    rospy.sleep(1)
+    rospy.sleep(5)
     orchestrator_started = rospy.get_param("/orchestrator_started")
 
 path_to_static_data = "../static_data"

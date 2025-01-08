@@ -3,7 +3,7 @@ import json
 import networkx as nx
 import numpy as np
 from matplotlib import pyplot as plt
-from sklearn.cluster import KMeans, MiniBatchKMeans
+from sklearn.cluster import KMeans
 from sklearn.neighbors import NearestNeighbors
 from large_graph_generation.costmap_utils import get_cost_from_costmap_x_y, get_world_x_y, get_costmap_x_y
 import shapely.geometry as sg
@@ -99,9 +99,13 @@ def promote_action_nodes(nodes, location_coordinates, picking_distance, throwing
 
     fdist = lambda xp, yp, xl, yl: ((xp - xl)**2 + (yp - yl)**2)**.5
 
-    for node in nodes:
+    for node_tuple in nodes:
+
+        node = (node_tuple[0], node_tuple[1])
+        name = node_tuple[2]
 
         distances[node] = {}
+        distances[node]['name'] = name
 
         for location_coordinate in location_coordinates.keys():
 
@@ -118,10 +122,10 @@ def promote_action_nodes(nodes, location_coordinates, picking_distance, throwing
 
         threshold = picking_distance if "box" in location_coordinate else throwing_distance
 
-        [action_nodes.add(node) for node in distances.keys() if distances[node][location_coordinate] < threshold]
+        [action_nodes.add((node[0], node[1], distances[node]['name'])) for node in distances.keys() if distances[node][location_coordinate] < threshold]
 
 
-    return {f'n{i}': {'x': node[0], 'y': node[1]} for i, node in enumerate(action_nodes)}
+    return {f'n{i}': {'x': node[0], 'y': node[1], 'name': node[2]} for i, node in enumerate(action_nodes)}
 
 def plot_graph(nodes, edges, costmap, action_nodes, obstacle_polygons, large_graph_dict):
 
@@ -213,7 +217,14 @@ def create_graph(costmap_reduced, location_coordinates):
 
     wps = rospy.get_param("/peopleflow/wps")
 
-    nodes = [(wp['x'], wp['y']) for name, wp in wps.items() if name not in ['parking', 'door_entrance']]
+    nodes = []
+    nodes_with_name = []
+
+    for name, wp in wps.items():
+        if name not in ['parking', 'door_entrance']:
+            nodes_with_name.append((wp['x'], wp['y'], name))
+            nodes.append((wp['x'], wp['y']))
+
 
     if obstacle_positions:
 
@@ -267,12 +278,14 @@ def create_graph(costmap_reduced, location_coordinates):
     succs = [edge[1] for edge in edges]
 
     nodes_to_remove = [node for node in nodes if node not in preds and node not in succs]
+    nodes_with_name_to_remove = [node for node in nodes_with_name if (node[0], node[1]) not in preds and (node[0], node[1]) not in succs]
 
     [nodes.remove(node_to_remove) for node_to_remove in nodes_to_remove]
+    [nodes_with_name.remove(node_with_name_to_remove) for node_with_name_to_remove in nodes_with_name_to_remove]
 
-    action_nodes = promote_action_nodes(nodes, location_coordinates, picking_distance, throwing_distance)
+    action_nodes = promote_action_nodes(nodes_with_name, location_coordinates, picking_distance, throwing_distance)
     
-    return nodes, edges, action_nodes, obstacle_polygons
+    return nodes, nodes_with_name, edges, action_nodes, obstacle_polygons
 
 def process_graph(nodes, edges, costmap):
 
@@ -280,10 +293,13 @@ def process_graph(nodes, edges, costmap):
     nodes_dct_xy_inverted = {}
     nodes_dct_ij = {}
     nodes_neighbors = {}
+    nodes_conversion_dict = {}
+
     for i, node in enumerate(nodes):
 
         nodes_dct_xy[i] = (node[0], node[1])
-        nodes_dct_xy_inverted[node] = i
+        nodes_dct_xy_inverted[(node[0], node[1])] = i
+        nodes_conversion_dict[node[2]] = i
 
         ji = get_costmap_x_y(
             node[0],
@@ -352,5 +368,6 @@ def process_graph(nodes, edges, costmap):
         "nodes_ij": nodes_dct_ij,
         "edges": edges_list,
         "nodes_neighbors": nodes_neighbors,
-        "squares_edge_dict": squares_edge_dict
+        "squares_edge_dict": squares_edge_dict,
+        "nodes_conversion_dict": nodes_conversion_dict
     }

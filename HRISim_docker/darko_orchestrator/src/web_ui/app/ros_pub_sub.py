@@ -1,4 +1,4 @@
-from app.topic_manager import PublisherManager, SubscriberManager
+from utils_module.topic_manager import PublisherManager, SubscriberManager
 from std_msgs.msg import Int64MultiArray, Float64MultiArray, Bool
 from darko_orchestrator.msg import CurrentAction, State
 import rospy

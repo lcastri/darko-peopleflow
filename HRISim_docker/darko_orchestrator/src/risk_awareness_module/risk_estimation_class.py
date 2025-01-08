@@ -12,16 +12,18 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from shapely.geometry import Point, Polygon
 from datetime import datetime
+import rospy
 
 # %%
 
 class RiskEstimation:
-    def __init__(self, costmap_subscriber, 
+    def __init__(self, costmap_subscriber, gridmap_subscriber,
                        static_data_path="../static_data", 
                        manipulation_model_path="./manipulation_models"):
+        
         # full costmap
         self.costmap_subscriber = costmap_subscriber
-        
+        self.gridmap_subscriber = gridmap_subscriber
         
         # load static data
         with open(static_data_path+"/action_graph_nodes.json", "r") as json_file:
@@ -64,13 +66,34 @@ class RiskEstimation:
         self.trays_square_edge = self.risk_params["trays_square_edge"]
         self.node_side_length = self.risk_params["node_side_length"]
         self.reduced_map = Global_costamap_reduction(self.costmap_subscriber,self.reduced_global_map_parameters)
+        self.reduced_static_map = Global_costamap_reduction(self.gridmap_subscriber,self.reduced_global_map_parameters)
 
         self.boxes_loc, self.trays_loc = self.define_boxes_trays_loc()
         self.boxes_points = self.define_boxes_trays_area(self.boxes_loc) # punti interni all'area che circonda le box
         self.trays_points = self.define_boxes_trays_area(self.trays_loc) # punti interni all'area che circonda i trays
         self.box_trajectory_points, self.tray_trajectory_points = self.define_trajectory_area() # punti interni alle traiettorie tra node_action e box/tray
-        _ = self.get_risk_estimations()
 
+        # mock della parte di Luca C
+        n_row = len(self.large_graph_params['nodes_xy'])
+        n_col = 1 # tempo 0
+        self.prediction_risk_matrix = np.zeros((n_row, n_col), dtype=np.float64)
+        self.prediction_risk_matrix_names = list(self.large_graph_params['nodes_conversion_dict'].keys())
+
+        # n_row = 3
+        # n_col = 1
+        # self.prediction_risk_matrix = np.zeros((n_row, n_col), dtype=np.float64)
+
+        # self.prediction_risk_matrix[0][0] = 0
+        # self.prediction_risk_matrix[1][0] = 0
+        # self.prediction_risk_matrix[2][0] = 0
+
+        # self.prediction_risk_matrix_names = ['door_corridor1', 'door_corridor2', 'door_corridor3']
+
+        self.gaussian_sigma = 15.0
+        self.r = 25
+
+        _ = self.get_risk_estimations()
+        
 
     def get_node_action_idx(self):
         nodes_action = self.action_graph_nodes_params
@@ -103,10 +126,77 @@ class RiskEstimation:
                                                     self.tray_trajectory_points, self.box_trajectory_points, self.trays_points, self.boxes_points, self.risk_params)
         return pick_mtx, throw_mtx
     
+
+    def fuse_costmaps(self, t, alpha):
+        """
+        Fusione delle costmap dinamica, statica e delle predizioni di rischio.
+        
+        Args:
+            t (int): Indice temporale per le predizioni.
+            alpha (float): Fattore di scaling per la costmap dinamica.
+            
+        Returns:
+            np.ndarray: Costmap finale aggiornata.
+        """
+        # Ottieni le costmap dinamica e statica
+        dynamic_costmap = self.reduced_map.data
+        static_costmap = self.reduced_static_map.data
+        
+        # Verifica dimensioni costmap
+        assert dynamic_costmap.shape == static_costmap.shape, "Dimensioni costmap incoerenti!"
+        fused_costmap = np.zeros_like(dynamic_costmap, dtype=float)
+
+        # Genera la costmap delle predizioni con kernel gaussiano
+        predictions_costmap = np.zeros_like(dynamic_costmap, dtype=float)
+
+        for i in range(len(self.prediction_risk_matrix)):
+
+            risk_value = self.prediction_risk_matrix[i, t]
+            world_x, world_y = self.large_graph_params['nodes_xy'][
+                str(
+                    self.large_graph_params['nodes_conversion_dict'][
+                        self.prediction_risk_matrix_names[i]
+                    ]
+                )
+            ]
+
+            # Ottieni indice (i, j) del nodo
+            j, i = self.reduced_map.get_costmap_x_y(world_x, world_y)
+
+            # Propaga il rischio con il kernel gaussiano
+            for di in range(-self.r, self.r + 1):
+                for dj in range(-self.r, self.r + 1):
+                    ni, nj = i + di, j + dj
+                    if self.reduced_map.is_in_gridmap(ni, nj):
+                        distance = np.sqrt(di**2 + dj**2)
+                        if distance <= self.r:
+                            kernel_value = np.exp(-distance**2 / (2 * self.gaussian_sigma**2))
+                            predictions_costmap[ni, nj] += risk_value * kernel_value #* (1 - alpha)
+                  
+        # Scala la costmap dinamica
+        dynamic_costmap_scaled = dynamic_costmap #* alpha
+
+        # Combina costmap dinamica scalata e predizioni
+        #combined_costmap = dynamic_costmap_scaled + predictions_costmap
+        combined_costmap = np.maximum(dynamic_costmap_scaled, predictions_costmap)
+
+        # Prendi il massimo elemento per elemento con la costmap statica
+        fused_costmap = np.maximum(combined_costmap, static_costmap)
+
+        return fused_costmap
+
+
     def get_risk_estimations(self):
+
         self.update_reduce_map()
+
+        # chiama servizio di Luca C per ottenere nel self la matrice di rischio predetto
+
+        self.reduced_map.data = self.fuse_costmaps(0, 0.5)
+
         navigation_risk_mtx = self.get_navigation_risk()
         pick_risk_mtx,throw_risk_mtx = self.get_manipulation_risk()
+
         return navigation_risk_mtx,pick_risk_mtx,throw_risk_mtx
 
     def gradiente(self, t_real, t_prev, velocity):
@@ -252,6 +342,12 @@ class Global_costamap_reduction:
     def get_cost_from_world_x_y(self, x, y):
         cx, cy = self.get_costmap_x_y(self,x, y)
         return self.get_cost_from_costmap_x_y(self,cx, cy)
+    
+    def is_in_gridmap(self, x, y):
+        if -1 < x < self.width and -1 < y < self.lenght:
+            return True
+        else:
+            return False
 
 class RBFInterpolation:
     def __init__(self, sigma, centers, weights, alpha):
@@ -631,6 +727,8 @@ def get_navigation_risk_dict(reduced_map, large_graph_params, action_idx_name,
         x, y = action_graph_nodes[node]["x"], action_graph_nodes[node]["y"] # node location
         i,j = reduced_map.get_costmap_x_y(x,y)
         risk = riskmap[i,j]
-        nav_risk_mtx[node_idx, node_idx] = [0,0,0, risk]
+        nav_risk_mtx[node_idx, node_idx, :] = [1,1,1, risk]
+
+
     return nav_risk_mtx
 #%%

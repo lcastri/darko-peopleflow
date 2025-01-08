@@ -2,7 +2,8 @@
 
 import rospy
 from geometry_msgs.msg import Point,Quaternion,Pose,PoseStamped
-from std_msgs.msg import Bool,Int64,String,Float64MultiArray
+from std_msgs.msg import Bool,Int64,String,Float64MultiArray,Int64MultiArray
+from darko_orchestrator.msg import CurrentAction, Action, State
 
 class PublisherManager(object):
     def __init__(self,topic,msg_type,latch_bool=False):
@@ -38,6 +39,14 @@ class SubscriberManager(object):
         elif self._msg_type == PoseStamped:
             self._header = data.header
             self._data   = data.pose
+        elif self._msg_type == CurrentAction:
+            self._data = data
+        elif self._msg_type == State:
+            self._data = data
+        elif self._msg_type == Float64MultiArray:
+            self._data = data.data
+        elif self._msg_type == Int64MultiArray:
+            self._data = data.data
     
     def _reset_data(self):
         if self._msg_type == Bool:
@@ -51,6 +60,16 @@ class SubscriberManager(object):
         elif self._msg_type in [Pose,PoseStamped]:
             self._header = None
             self._data = Pose(Point(-100,-100,-100),Quaternion(-1,0,0,0))
+        elif self._msg_type == CurrentAction:
+            action1 = Action(action=[])
+            action2 = Action(action=[])
+            self._data = CurrentAction(first_action=action1, second_action=action2)
+        elif self._msg_type == State:
+            self._data = State()
+        elif self._msg_type == Float64MultiArray:
+            self._data = []
+        elif self._msg_type == Int64MultiArray:
+            self._data = []
 
     def _check_empty_data(self):
         tol = 1e-6
@@ -76,3 +95,7 @@ class SubscriberManager(object):
             wo_check =  0-tol <= self._data.orientation.w <=  0+tol
             o_check = xo_check & yo_check & zo_check & wo_check
             return p_check & o_check
+        if self._msg_type == Int64MultiArray:
+            return self._data in [None, []]
+        if self._msg_type == State:
+            return self._data.state == []

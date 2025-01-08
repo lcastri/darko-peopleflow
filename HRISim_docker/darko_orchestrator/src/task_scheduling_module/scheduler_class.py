@@ -1,7 +1,6 @@
 import numpy as np
 import numba as nb
 import itertools
-import rospy
 
 class Scheduler:
     def __init__(self, params,action_nodes,trays,objects,rewards,action_times):
@@ -75,6 +74,7 @@ class Scheduler:
                                     [tuple(itertools.chain.from_iterable(t)) for t in itertools.product(*lobjects)]))
         
     def available_actions(self,state):
+
         p1,r1s,s1s,r1f,s1f = _available_actions(state,self.t_horizon,self.o_max,self.n_action_nodes,self.n_objects,self.n_trays,
                                                      self.picking_reward,self.placing_reward,self.picking_time,self.throwing_time,
                                                      self.quantities,self.navigation_risk_mtx,self.picking_prob_mtx,self.throwing_prob_mtx,
@@ -265,8 +265,9 @@ def _available_actions(state,t_horizon,max_objects,n_action_nodes,n_objects,n_tr
             # rospy.sleep(20)
             delta_time,risk = max(1,navigation_risk_mtx[n0,n,1]), navigation_risk_mtx[n0,n,3]
             cond_1 = (state[0] + delta_time) < t_horiz # controllo di essere dentro l'orizzonte temporale alla fine dell'azione di moving
-            # cond_2 = risk <= 60
-            if cond_1:
+            cond_2 = risk <= 10
+            if cond_1 and cond_2:
+                # print('n0 ', n0, ' n ', n, ' time ', delta_time, ' risk ', risk)
                 p1_ay[ns] = 100
                 # success state
                 r1_A_ay[ns] = -alpha_risk*risk  

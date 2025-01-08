@@ -2,8 +2,8 @@
 #%%
 import rospy
 from std_msgs.msg import Bool, Float64MultiArray, Int64MultiArray
-from topic_manager import SubscriberManager,PublisherManager
-from subscribers import RiskMtxSubscriber, ScenariosSubscriber, RiskMtxSubscriberFloat
+from utils_module.topic_manager import SubscriberManager,PublisherManager
+from utils_module.subscribers import RiskMtxSubscriber, ScenariosSubscriber, RiskMtxSubscriberFloat
 from risk_monitoring_class import RiskMonitoring
 from darko_orchestrator.msg import ScenarioList, Scenario, State
 from darko_orchestrator.msg import ScenarioList, Scenario, State

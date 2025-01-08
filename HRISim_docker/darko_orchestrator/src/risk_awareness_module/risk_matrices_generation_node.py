@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
 #%%
 import rospy
-from std_msgs.msg import Bool,String,Int16MultiArray,Int64MultiArray,MultiArrayDimension, Float64MultiArray
-from topic_manager import SubscriberManager,PublisherManager
-import json
-import pathlib
-from subscribers import OccupancyGridManager
+from std_msgs.msg import Bool,Int64MultiArray,MultiArrayDimension, Float64MultiArray
+from utils_module.topic_manager import SubscriberManager,PublisherManager
+from utils_module.subscribers import OccupancyGridManager, ReportSubscriber
 from risk_estimation_class import RiskEstimation
-from subscribers import ReportSubscriber
-import numpy as np
 import math
 
 
@@ -17,9 +13,9 @@ if __name__ == '__main__':
     rospy.init_node('risk_matrices_generation', anonymous=True)
 
     orchestrator_started = rospy.get_param("/orchestrator_started")
+    rospy.loginfo("Waiting for the orchestrator...")
     while not orchestrator_started:
-        rospy.loginfo("Waiting for the orchestrator...")
-        rospy.sleep(1)
+        rospy.sleep(5)
         orchestrator_started = rospy.get_param("/orchestrator_started")
 
 
@@ -44,8 +40,10 @@ if __name__ == '__main__':
     placing_report_sub = ReportSubscriber("/risk_estimation/send_placing_report",Float64MultiArray)
     # send_report_done_sub = SubscriberManager("/risk_estimation/send_report_done", Bool, False)
 
-    costmap_subscriber = OccupancyGridManager("/move_base/global_costmap/costmap",False)
+    costmap_subscriber = OccupancyGridManager("/move_base/global_costmap/costmap", False)
+    gridmap_subscriber = OccupancyGridManager("/map", False)
     risk_estimation_module = RiskEstimation(costmap_subscriber=costmap_subscriber,
+                                            gridmap_subscriber=gridmap_subscriber,
                                             static_data_path="../static_data",
                                             manipulation_model_path="manipulation_models")
     
