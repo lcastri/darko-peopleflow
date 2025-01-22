@@ -15,6 +15,7 @@ echo " "
 
   echo "Container is now running."
   echo " "
+
   echo "function tstart(){  tmule -c ~/ros_ws/src/HRISim/hrisim_tmule/tmule/hrisim_bringup.yaml -W 3 launch ; }" >> ~/.bashrc
   echo "function tstop(){  tmule -c ~/ros_ws/src/HRISim/hrisim_tmule/tmule/hrisim_bringup.yaml terminate ; }" >> ~/.bashrc
   echo "function trestart(){  tmule -c ~/ros_ws/src/HRISim/hrisim_tmule/tmule/hrisim_bringup.yaml -W 3 relaunch ; }" >> ~/.bashrc
@@ -25,10 +26,13 @@ echo " "
   cd ~/ros_ws
   catkin build
   source ~/ros_ws/devel/setup.bash
-  
-  echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
-  echo "source ~/tiago_ws/devel/setup.bash" >> ~/.bashrc
+
   echo "source ~/ros_ws/devel/setup.bash" >> ~/.bashrc
+  
+  echo "export ROS_MASTER_URI=http://127.0.0.1:11311" >> ~/.bashrc
+  echo "export ROS_HOSTNAME=127.0.0.1" >> ~/.bashrc
+  echo "export ROS_IP=127.0.0.1" >> ~/.bashrc 
+
   source ~/.bashrc
   exec "/bin/bash"
 
