@@ -3,7 +3,6 @@
 import math
 import os
 import pickle
-import time
 import numpy as np
 import pandas as pd
 import rospy
@@ -144,8 +143,6 @@ class PredictionManager:
         for wp in WPS_COORD.keys():
             current_data[f"PD_{wp}"] = self.PDs[wp]
             current_data[f"BAC_{wp}"] = self.BACs[wp]
-        # for wp in self.PDs.keys():
-        #     current_data[f"PD_{wp}"] = self.PDs[wp] #! version without BAC
 
         # Add current data to the sliding window
         self.observations.append(current_data)
@@ -177,9 +174,7 @@ class PredictionManager:
         
         for i, wp in enumerate(WPS_COORD.keys()):
             # For each waypoint, pass the corresponding data to the causal inference engine
-            # wp_obs = data[["TOD", "R_V", "R_B", "B_S", f"PD_{wp}"]].values #! version without BAC
             wp_obs = data[["TOD", "R_V", "R_B", "B_S", f"PD_{wp}", f"BAC_{wp}"]].values
-            # wp_obs_df = pd.DataFrame(wp_obs, columns=["TOD", "R_V", "R_B", "B_S", "PD"]) #! version without BAC
             wp_obs_df = pd.DataFrame(wp_obs, columns=["TOD", "R_V", "R_B", "B_S", "PD", "BAC"])
             wp_obs_df["WP"] = constants.WPS[wp]
             
@@ -198,11 +193,9 @@ class PredictionManager:
             # end_time_cie = time.time()
             # rospy.logwarn(f"Time elapsed CIE: {end_time_cie - start_time_cie}")
 
-            # prediction_df = pd.DataFrame(res, columns=["TOD", "R_V", "R_B", "B_S", "PD", "WP"]) #! version without BAC
             prediction_df = pd.DataFrame(res, columns=["TOD", "R_V", "R_B", "B_S", "PD", "BAC", "WP"])
             if wp == constants.WP.CHARGING_STATION.value: prediction_df["BAC"] = prediction_df["R_B"]
             flattened_PDs.extend(prediction_df['PD'].values)
-            # flattened_BACs.extend(prediction_df['R_B'].values) #! version without BACs
             flattened_BACs.extend(prediction_df['BAC'].values)
         
         return GetRiskMapResponse(list(self.PDs.keys()), 
