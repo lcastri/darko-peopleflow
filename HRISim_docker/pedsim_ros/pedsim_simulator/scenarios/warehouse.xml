@@ -8253,9 +8253,9 @@
       <adddest name="wa-2-l"          p="0" std="0"/>
       <adddest name="wa-2-c"          p="0" std="0"/>
       <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0.253" std="0"/>
-      <adddest name="wa-3-c"          p="0.253" std="0"/>
-      <adddest name="wa-3-r"          p="0.253" std="0"/>
+      <adddest name="wa-3-l"          p="0.253333333" std="0"/>
+      <adddest name="wa-3-c"          p="0.253333333" std="0"/>
+      <adddest name="wa-3-r"          p="0.253333333" std="0"/>
       <adddest name="wa-4-l"          p="0" std="0"/>
       <adddest name="wa-4-c"          p="0" std="0"/>
       <adddest name="wa-4-r"          p="0" std="0"/>

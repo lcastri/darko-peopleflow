@@ -43,14 +43,15 @@ class BatteryAtCharger():
         msg.header = Header()
         
         battery_level = b.level.data
-        closest_wp = self.robot_closest_wp
+        # closest_wp = self.robot_closest_wp
 
         for wp in WPS:
-            battery_to_wp = self.battery_lookup[closest_wp][wp]
+            # battery_to_wp = self.battery_lookup[closest_wp][wp]
             battery_to_charger = self.battery_lookup[wp][constants.WP.CHARGING_STATION.value]
 
             bac = msgBAC()
-            bac.BAC.data = battery_level - battery_to_wp - battery_to_charger
+            # bac.BAC.data = battery_level - battery_to_wp - battery_to_charger
+            bac.BAC.data = battery_level - battery_to_charger
             bac.WP_id.data = wp
             msg.BACs.append(bac)
 

@@ -31,7 +31,7 @@ init_cmd: |
   export_default TIAGO_R "0.0"
   export_default TIAGO_P "0.0"
   export_default TIAGO_Y "0"
-  export_default INIT_BATTERY "98.25"
+  export_default INIT_BATTERY "100"
   export_default STATIC_DURATION "5"
   export_default DYNAMIC_DURATION "4"
   export_default CHARGING_TIME "2"
@@ -61,7 +61,7 @@ init_cmd: |
   export_default ALLOW_TASK "true"
   export_default RECORD "true"
   export_default STARTING_ELAPSED "8"
-  export_default MAX_TASKTIME "60"
+  export_default MAX_TASKTIME "15"
   export_default IS_STUCK_THRESHOLD "65"
   export_default HUMAN_MODE "1"
   export_default MAX_HUMAN_SPEED "1.5"
@@ -75,7 +75,6 @@ init_cmd: |
   export_default FORCE_OBSTACLE "5.0"
   export_default SIGMA_OBSTACLE "0.25"
   export_default FORCE_SOCIAL "10.0"
-  export_default INIT_TIME "H8"
 
   # Gazebo arguments
   export_default GUI "false"
@@ -116,7 +115,7 @@ windows:
     tags: ['core']
     panes:
       - 'roslaunch pnp_ros pnp_ros.launch plans_folder:=$PNP_PLANS actions_folder:=$PNP_ACTIONS conditions_folder:=$PNP_CONDITIONS'
-      - 'rosparam set /hrisim/abort_time_threshold $ABORT_TIME_THRESHOLD && roscd hrisim_plans/scripts && python TIAGo_causal_hardcoded_plan.py --init_time=$INIT_TIME --init_battery=$INIT_BATTERY'
+      - 'rosparam set /hrisim/abort_time_threshold $ABORT_TIME_THRESHOLD && roscd hrisim_plans/scripts && python TIAGo_noncausal_hardcoded_plan.py'
   - name: scenario
     tags: ['exp']
     panes:
@@ -130,7 +129,7 @@ windows:
     tags: ['exp']
     panes:
       - if [[ "$RECORD" == "true" ]]; then rosrun hrisim_recording record.py; fi
-  - name: prediction
-    tags: ['exp']
-    panes:
-      - 'roslaunch hrisim_prediction_manager prediction_manager.launch CIE:=$CIE pred_step:=$PRED_STEP'
+  # - name: prediction
+  #   tags: ['exp']
+  #   panes:
+  #     - 'roslaunch hrisim_prediction_manager prediction_manager.launch CIE:=$CIE pred_step:=$PRED_STEP'

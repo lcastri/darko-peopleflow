@@ -1,7 +1,7 @@
 #!/bin/bash
 
-container_name=HRISim
-image_name=hrisim-docker
+container_name=DARKO
+image_name=darko-docker
 host_folder=$(pwd)/shared
 container_folder=/root/shared
 
