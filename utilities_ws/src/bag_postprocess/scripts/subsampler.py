@@ -136,7 +136,7 @@ def get_subsampling_step(cutoff = 0.5, energy_percentage=0.95, plot = True):
 SF = 10 #Hz
 INDIR = '/home/lcastri/git/darko-peopleflow/utilities_ws/src/bag_postprocess/csv/original'
 OUTDIR = '/home/lcastri/git/darko-peopleflow/utilities_ws/src/bag_postprocess/csv/shrunk'
-BAGNAME= ['24-01-2025-DARKO']
+BAGNAME= ['06-02-2025-DARKO']
 
 R, BW, SSF, ST, STEP = get_subsampling_step(cutoff = 0.25, energy_percentage=0.95, plot = False)
 print(f"Bandwidth fm: {BW:.4f} Hz")
@@ -144,7 +144,7 @@ print(f"Subsampling frequency fs >= 2fm = {2*BW:.4f} Hz")
 print(f"Subsampling time 1 sample every each {ST:.4f} s")
 print(f"Subsampling step {STEP}")
 print("")
-STEP = 50
+STEP = 10
         
 for bag in BAGNAME:
     print(f"Subsampling {bag}")

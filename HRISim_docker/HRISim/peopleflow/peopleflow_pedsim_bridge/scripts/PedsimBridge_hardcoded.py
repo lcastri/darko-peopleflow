@@ -58,7 +58,7 @@ class PedsimBridge():
             agent = self.load_agents(req)
                         
             # Entrance logic
-            if (self.timeOfDay == constants.TOD.T1.value and not agent.atWork and 
+            if (self.timeOfDay == constants.TOD.T0.value and not agent.atWork and 
                 agent.isFree and not agent.isQuitting and 
                 agent.closestWP == constants.WP.PARKING.value):
                     
@@ -88,13 +88,13 @@ class PedsimBridge():
             #   dest = parking, 
             #   task_duration = SCHEDULE['quitting']['duration'] - agent.startingTime + SCHEDULE['off']['duration']
             # ! isQuitting = True --> this agent won't enter again this if
-            elif ((self.timeOfDay == constants.TOD.T20.value or self.timeOfDay == constants.TOD.OFF.value) and 
+            elif ((self.timeOfDay == constants.TOD.T19.value or self.timeOfDay == constants.TOD.OFF.value) and 
                   agent.atWork and agent.isFree and not agent.isQuitting and
                   self.elapsedTime >= agent.exitTime):
                 
                 rospy.logerr(f'Agent {agent.id} is quitting..')
                 
-                agent.setTask(constants.WP.PARKING.value, SCHEDULE[constants.TOD.T20.value]['duration'] - agent.startingTime + SCHEDULE[constants.TOD.OFF.value]['duration'])
+                agent.setTask(constants.WP.PARKING.value, SCHEDULE[constants.TOD.T19.value]['duration'] - agent.startingTime + SCHEDULE[constants.TOD.OFF.value]['duration'])
                 agent.isQuitting = True
     
             # New goal logic                
@@ -103,7 +103,7 @@ class PedsimBridge():
                     next_destination = AGENTSPLAN[agent.id]['tasks'][self.timeOfDay]['destinations'].pop(0)                           
                     agent.setTask(next_destination, AGENTSPLAN[agent.id]['tasks'][self.timeOfDay]['durations'].pop(0))                          
                 else:
-                    agent.setTask(constants.WP.PARKING.value, SCHEDULE[constants.TOD.T20.value]['duration'] - agent.startingTime + SCHEDULE[constants.TOD.OFF.value]['duration'])
+                    agent.setTask(constants.WP.PARKING.value, SCHEDULE[constants.TOD.T19.value]['duration'] - agent.startingTime + SCHEDULE[constants.TOD.OFF.value]['duration'])
                                             
             elif agent.atWork and not agent.isStuck and agent.isQuitting and len(agent.path) == 1:
                 agent.atWork = False

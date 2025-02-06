@@ -6080,78 +6080,78 @@
 
   <!--Waypoints-->
 <waypoint id="parking"            x="8"     y="20"    r="3"/>
-<waypoint id="door-entrance"      x="9.3"   y="10"  r="0.5"/>
+<waypoint id="door-entrance"      x="9.3"   y="10"    r="0.5"/>
 <waypoint id="entrance"           x="8.0"   y="8.5"   r="1.2"/>
-<waypoint id="door-canteen"       x="4.5"   y="7"  r="0.1"/>
+<waypoint id="door-canteen"       x="4.5"   y="7"     r="0.1"/>
 <waypoint id="corridor-0"         x="4.5"   y="8.5"   r="0.75"/>
 <waypoint id="corridor-1"         x="0.394" y="7.4"   r="0.5"/>
-<waypoint id="corridor-2-r"       x="-3"    y="7.75"     r="0.75"/>
-<waypoint id="corridor-3-r"       x="-3"    y="4.85"   r="0.75"/>
-<waypoint id="corridor-4-r"       x="-3"    y="1.85"   r="0.95"/>
-<waypoint id="corridor-5-r"       x="-3"    y="-1"  r="0.95"/>
+<waypoint id="corridor-2-r"       x="-3"    y="7.75"  r="0.75"/>
+<waypoint id="corridor-3-r"       x="-3"    y="4.85"  r="0.75"/>
+<waypoint id="corridor-4-r"       x="-3"    y="1.85"  r="0.95"/>
+<waypoint id="corridor-5-r"       x="-3"    y="-1"    r="0.95"/>
 <waypoint id="corridor-6-r"       x="-3"    y="-4.25" r="0.95"/>
-<waypoint id="corridor-7-r"       x="-3"  y="-6.5"  r="0.75"/>
-<waypoint id="corridor-2-c"       x="-4.75" y="7.75"    r="0.75"/>
-<waypoint id="corridor-3-c"       x="-4.75" y="4.85"   r="0.75"/>
-<waypoint id="corridor-4-c"       x="-4.75" y="1.85"   r="0.75"/>
-<waypoint id="corridor-5-c"       x="-4.75" y="-1"  r="0.75"/>
+<waypoint id="corridor-7-r"       x="-3"    y="-6.5"  r="0.75"/>
+<waypoint id="corridor-2-c"       x="-4.75" y="7.75"  r="0.75"/>
+<waypoint id="corridor-3-c"       x="-4.75" y="4.85"  r="0.75"/>
+<waypoint id="corridor-4-c"       x="-4.75" y="1.85"  r="0.75"/>
+<waypoint id="corridor-5-c"       x="-4.75" y="-1"    r="0.75"/>
 <waypoint id="corridor-6-c"       x="-4.75" y="-4.25" r="0.75"/>
 <waypoint id="corridor-7-c"       x="-4.75" y="-6.5"  r="0.75"/>
-<waypoint id="corridor-3-l"       x="-6.5"  y="6"   r="0.75"/>
-<waypoint id="corridor-4-l"       x="-6.5"  y="0"  r="0.75"/>
-<waypoint id="corridor-5-l"       x="-6.5"  y="-6"  r="0.75"/>
-<waypoint id="support-1"          x="-6.5"  y="9"  r="1"/>
+<waypoint id="corridor-3-l"       x="-6.5"  y="6"     r="0.75"/>
+<waypoint id="corridor-4-l"       x="-6.5"  y="0"     r="0.75"/>
+<waypoint id="corridor-5-l"       x="-6.5"  y="-6"    r="0.75"/>
+<waypoint id="support-1"          x="-6.5"  y="9"     r="1"/>
 <waypoint id="support-2"          x="-6.5"  y="-9.2"  r="1"/>
 <waypoint id="support-3"          x="-6.5"  y="-3.5"  r="0.75"/>
-<waypoint id="support-4"          x="-6.5"  y="4.3"  r="0.75"/>
-<waypoint id="door-office-1"      x="-1.8"  y="4.85"   r="0.25"/>
-<waypoint id="door-office-2"      x="-1.8"  y="1.85"   r="0.25"/>
-<waypoint id="door-toilet-1"      x="-1.7"  y="-1"  r="0.25"/>
-<waypoint id="door-toilet-2"      x="-1.7"  y="-4.25"  r="0.25"/>
-<waypoint id="office-1"           x="0.4"     y="5.5"  r="1"/>
-<waypoint id="office-2"           x="0.4"     y="2.6"  r="1"/>
-<waypoint id="toilet-1"           x="0.5"     y="-0.5" r="1"/>
-<waypoint id="toilet-2"           x="0.5"     y="-3.55" r="1"/>
-<waypoint id="support-5"          x="-1.2"     y="6.4"  r="0.5"/>
-<waypoint id="support-6"          x="-1.2"     y="3.4"  r="0.5"/>
-<waypoint id="support-7"          x="-1.2"     y="0.5" r="0.5"/>
-<waypoint id="support-8"          x="-1"     y="-2.5" r="0.5"/>
-<waypoint id="door-corridor-1"    x="-7.5"  y="6"  r="0.25"/>
-<waypoint id="door-corridor-2"    x="-7.5"  y="0"  r="0.25"/>
-<waypoint id="door-corridor-3"    x="-7.5"  y="-6"  r="0.25"/>
+<waypoint id="support-4"          x="-6.5"  y="4.3"   r="0.75"/>
+<waypoint id="door-office-1"      x="-1.8"  y="4.85"  r="0.25"/>
+<waypoint id="door-office-2"      x="-1.8"  y="1.85"  r="0.25"/>
+<waypoint id="door-toilet-1"      x="-1.7"  y="-1"    r="0.25"/>
+<waypoint id="door-toilet-2"      x="-1.7"  y="-4.25" r="0.25"/>
+<waypoint id="office-1"           x="0.4"   y="5.5"   r="1"/>
+<waypoint id="office-2"           x="0.4"   y="2.6"   r="1"/>
+<waypoint id="toilet-1"           x="0.5"   y="-0.5"  r="1"/>
+<waypoint id="toilet-2"           x="0.5"   y="-3.55" r="1"/>
+<waypoint id="support-5"          x="-1.2"  y="6.4"   r="0.5"/>
+<waypoint id="support-6"          x="-1.2"  y="3.4"   r="0.5"/>
+<waypoint id="support-7"          x="-1.2"  y="0.5"   r="0.5"/>
+<waypoint id="support-8"          x="-1"    y="-2.5"  r="0.5"/>
+<waypoint id="door-corridor-1"    x="-7.5"  y="6"     r="0.25"/>
+<waypoint id="door-corridor-2"    x="-7.5"  y="0"     r="0.25"/>
+<waypoint id="door-corridor-3"    x="-7.5"  y="-6"    r="0.25"/>
 <waypoint id="table-12"           x="7.2"   y="2.2"   r="2.2"/>
 <waypoint id="table-23"           x="7.1"   y="-2.2"  r="2.2"/>
 <waypoint id="support-0"          x="7.1"   y="-6.5"  r="2.2"/>
-<waypoint id="support-9"          x="2.5"   y="5.95" r="0.5"/>
+<waypoint id="support-9"          x="2.5"   y="5.95"  r="0.5"/>
 <waypoint id="corridor-canteen-1" x="6.5"   y="5.95"  r="0.1"/>
 <waypoint id="corridor-canteen-2" x="3.5"   y="2.2"   r="1.5"/>
 <waypoint id="corridor-canteen-3" x="3.5"   y="-2.2"  r="1.5"/>
 <waypoint id="corridor-canteen-4" x="3.0"   y="-6.0"  r="1.1"/>
-<waypoint id="wa-1-l"             x="-17.7" y="7.5"  r="1.1"/>
+<waypoint id="wa-1-l"             x="-17.7" y="7.5"   r="1.1"/>
 <waypoint id="wa-2-l"             x="-17.7" y="4.5"   r="1.3"/>
-<waypoint id="wa-3-l"             x="-17.7" y="0"   r="1"/>
-<waypoint id="wa-3-cl"            x="-15.5" y="0"   r="1"/>
+<waypoint id="wa-3-l"             x="-17.7" y="0"     r="1"/>
+<waypoint id="wa-3-cl"            x="-15.5" y="0"     r="1"/>
 <waypoint id="wa-4-l"             x="-17.7" y="-3.5"  r="1.3"/>
-<waypoint id="wa-5-l"             x="-17.7" y="-7"  r="1.1"/>
-<waypoint id="wa-1-c"             x="-13.5"   y="7.5"  r="1.1"/>
+<waypoint id="wa-5-l"             x="-17.7" y="-7"    r="1.1"/>
+<waypoint id="wa-1-c"             x="-13.5" y="7.5"   r="1.1"/>
 <waypoint id="wa-2-c"             x="-13.5" y="4.4"   r="1.3"/>
-<waypoint id="wa-3-c"             x="-13.5" y="0"   r="1"/>
+<waypoint id="wa-3-c"             x="-13.5" y="0"     r="1"/>
 <waypoint id="wa-4-c"             x="-13.5" y="-3.5"  r="1.3"/>
-<waypoint id="wa-5-c"             x="-13.5" y="-7"  r="1.2"/>
-<waypoint id="wa-1-r"             x="-9.5" y="7.5"  r="1"/>
-<waypoint id="wa-2-r"             x="-9.5" y="4.3"   r="1.3"/>
-<waypoint id="wa-3-r"             x="-9.5" y="0"     r="1"/>
-<waypoint id="wa-3-cr"             x="-11.5" y="0"     r="1"/>
-<waypoint id="wa-4-r"             x="-9.5" y="-3.5"    r="1.3"/>
-<waypoint id="wa-5-r"             x="-9.5" y="-7"  r="1.2"/>
-<waypoint id="target-1"           x="-17.7" y="9"  r="0.5"/>
-<waypoint id="target-2"           x="-13.5"   y="9"  r="0.5"/>
-<waypoint id="target-3"           x="-9.5" y="9"  r="0.5"/>
+<waypoint id="wa-5-c"             x="-13.5" y="-7"    r="1.2"/>
+<waypoint id="wa-1-r"             x="-9.5"  y="7.5"   r="1"/>
+<waypoint id="wa-2-r"             x="-9.5"  y="4.3"   r="1.3"/>
+<waypoint id="wa-3-r"             x="-9.5"  y="0"     r="1"/>
+<waypoint id="wa-3-cr"            x="-11.5" y="0"     r="1"/>
+<waypoint id="wa-4-r"             x="-9.5"  y="-3.5"  r="1.3"/>
+<waypoint id="wa-5-r"             x="-9.5"  y="-7"    r="1.2"/>
+<waypoint id="target-1"           x="-17.7" y="9"     r="0.5"/>
+<waypoint id="target-2"           x="-13.5" y="9"     r="0.5"/>
+<waypoint id="target-3"           x="-9.5"  y="9"     r="0.5"/>
 <waypoint id="target-4"           x="-17.7" y="-8.85" r="0.5"/>
 <waypoint id="target-5"           x="-13.5" y="-8.85" r="0.5"/>
-<waypoint id="target-6"           x="-9.5" y="-8.85" r="0.5"/>
+<waypoint id="target-6"           x="-9.5"  y="-8.85" r="0.5"/>
 <waypoint id="target-7"           x="0"     y="-9.2"  r="1.1"/>
-<waypoint id="charging-station"   x="9"   y="-9.2"  r="0.1"/>
+<waypoint id="charging-station"   x="9"     y="-9.2"  r="0.1"/>
 
 
   <!--Robot (type = 2)-->
@@ -6191,6 +6191,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6224,6 +6231,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6257,6 +6271,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6290,6 +6311,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6323,6 +6351,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6356,6 +6391,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6389,6 +6431,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6422,6 +6471,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6455,6 +6511,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6488,6 +6551,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6521,6 +6591,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6554,6 +6631,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6587,6 +6671,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6620,6 +6711,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6653,6 +6751,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6686,6 +6791,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6719,6 +6831,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6752,6 +6871,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6785,6 +6911,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6818,6 +6951,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6851,6 +6991,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6884,6 +7031,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6917,6 +7071,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6950,6 +7111,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -6983,6 +7151,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7016,6 +7191,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7049,6 +7231,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7082,6 +7271,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7115,6 +7311,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7148,6 +7351,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7181,6 +7391,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7214,6 +7431,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7247,6 +7471,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7280,6 +7511,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7313,6 +7551,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7346,6 +7591,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7379,6 +7631,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7412,6 +7671,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7445,6 +7711,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7478,6 +7751,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7511,6 +7791,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7544,6 +7831,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7577,6 +7871,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7610,6 +7911,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7643,6 +7951,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7676,6 +7991,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7709,6 +8031,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7742,6 +8071,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7775,6 +8111,13 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   <agent x="8" y="20" n="1" dx="2" dy="5" type="0">
     <addwaypoint id="office-1"/>
@@ -7808,702 +8151,864 @@
     <addwaypoint id="target-5"/>
     <addwaypoint id="target-6"/>
     <addwaypoint id="target-7"/>
+    <addwaypoint id="corridor-2-c"/>
+    <addwaypoint id="corridor-3-c"/>
+    <addwaypoint id="corridor-4-c"/>
+    <addwaypoint id="corridor-5-c"/>
+    <addwaypoint id="corridor-6-c"/>
+    <addwaypoint id="corridor-7-c"/>
+    <addwaypoint id="support-0"/>
   </agent>
   
   <schedule>
-    <!-- Time resolution: seconds -->
-    <time name="T1" duration="120" > 
-      <adddest name="parking"         p="0.05" std="0" />
-      <adddest name="office-1"        p="0.025" std="0" />
-      <adddest name="office-2"        p="0.025" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0.35" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0.35" std="0"/>
-      <adddest name="wa-4-c"          p="0" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.025" std="0" />
-      <adddest name="table-23"        p="0.025" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.025" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.025" std="0" />
+    <!-- SLOT STARTING -->
+    <time name="T0" duration="180" > 
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0.025" std="0" />
+      <adddest name="office-2"            p="0.025" std="0" />
+      <adddest name="toilet-1"            p="0.05" std="0" />
+      <adddest name="toilet-2"            p="0.05" std="0" />
+      <adddest name="wa-1-l"              p="0.25" std="0"/>
+      <adddest name="wa-1-c"              p="0" std="0"/>
+      <adddest name="wa-1-r"              p="0" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0.25" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0.25" std="0"/>
+      <adddest name="wa-5-c"              p="0" std="0"/>
+      <adddest name="wa-5-r"              p="0" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0.025" std="0" />
+      <adddest name="table-23"            p="0.025" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0.025" std="0" />
+      <adddest name="corridor-canteen-3"  p="0.025" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T2" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0.38" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0.38" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <!-- SLOT 1 -->
+    <time name="T1" duration="40" > 
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0.05" std="0" />
+      <adddest name="toilet-2"            p="0.05" std="0" />
+      <adddest name="wa-1-l"              p="0.3" std="0"/>
+      <adddest name="wa-1-c"              p="0" std="0"/>
+      <adddest name="wa-1-r"              p="0" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0.3" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0.3" std="0"/>
+      <adddest name="wa-5-c"              p="0" std="0"/>
+      <adddest name="wa-5-r"              p="0" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T3" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0.38" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0" std="0"/>
-      <adddest name="wa-4-r"          p="0.38" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <time name="T2" duration="40" >
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0.05" std="0" />
+      <adddest name="toilet-2"            p="0.05" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0" std="0"/>
+      <adddest name="wa-1-r"              p="0" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0.3" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0.3" std="0"/>
+      <adddest name="wa-5-c"              p="0.3" std="0"/>
+      <adddest name="wa-5-r"              p="0" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T4" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0.38" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0.38" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <time name="T3" duration="40" >
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0.05" std="0" />
+      <adddest name="toilet-2"            p="0.05" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0" std="0"/>
+      <adddest name="wa-1-r"              p="0" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0.3" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0.3" std="0"/>
+      <adddest name="wa-5-l"              p="0" std="0"/>
+      <adddest name="wa-5-c"              p="0" std="0"/>
+      <adddest name="wa-5-r"              p="0.3" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T5" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0.38" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0" std="0"/>
-      <adddest name="wa-4-r"          p="0.38" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <!-- SLOT 2 -->
+    <time name="T4" duration="40" >
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0.05" std="0" />
+      <adddest name="toilet-2"            p="0.05" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0.3" std="0"/>
+      <adddest name="wa-1-r"              p="0.3" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0.3" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0" std="0"/>
+      <adddest name="wa-5-c"              p="0" std="0"/>
+      <adddest name="wa-5-r"              p="0" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T6" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0" std="0" />
-      <adddest name="office-2"        p="0" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="table-12"        p="0.225" std="0" />
-      <adddest name="table-23"        p="0.225" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.225" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.225" std="0" />
+    <time name="T5" duration="40" >
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0.05" std="0" />
+      <adddest name="toilet-2"            p="0.05" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0" std="0"/>
+      <adddest name="wa-1-r"              p="0.3" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0.3" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0" std="0"/>
+      <adddest name="wa-5-c"              p="0" std="0"/>
+      <adddest name="wa-5-r"              p="0.3" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T7" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0.38" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0.38" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <time name="T6" duration="40" >
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0.05" std="0" />
+      <adddest name="toilet-2"            p="0.05" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0" std="0"/>
+      <adddest name="wa-1-r"              p="0" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0.3" std="0"/>
+      <adddest name="wa-5-l"              p="0" std="0"/>
+      <adddest name="wa-5-c"              p="0.3" std="0"/>
+      <adddest name="wa-5-r"              p="0.3" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T8" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0.38" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0.38" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <!-- SLOT 3 -->
+    <time name="T7" duration="40" >
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0.05" std="0" />
+      <adddest name="toilet-2"            p="0.05" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0" std="0"/>
+      <adddest name="wa-1-r"              p="0" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0.3" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0" std="0"/>
+      <adddest name="wa-5-c"              p="0" std="0"/>
+      <adddest name="wa-5-r"              p="0" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0.3" std="0"/>
+      <adddest name="corridor-5-c"        p="0.3" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T9" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0.38" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0.38" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <time name="T8" duration="40" >
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0.02" std="0" />
+      <adddest name="toilet-2"            p="0.02" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0" std="0"/>
+      <adddest name="wa-1-r"              p="0" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0" std="0"/>
+      <adddest name="wa-5-c"              p="0" std="0"/>
+      <adddest name="wa-5-r"              p="0" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0.24" std="0"/>
+      <adddest name="corridor-4-c"        p="0" std="0"/>
+      <adddest name="corridor-5-c"        p="0.24" std="0"/>
+      <adddest name="corridor-6-c"        p="0.24" std="0"/>
+      <adddest name="corridor-7-c"        p="0.24" std="0"/>
     </time>
-    <time name="T10" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0.76" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <time name="T9" duration="40" >
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0" std="0" />
+      <adddest name="toilet-2"            p="0" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0" std="0"/>
+      <adddest name="wa-1-r"              p="0" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0" std="0"/>
+      <adddest name="wa-5-c"              p="0" std="0"/>
+      <adddest name="wa-5-r"              p="0" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0.3" std="0" />
+      <adddest name="table-23"            p="0.05" std="0" />
+      <adddest name="support-0"           p="0.3" std="0" />
+      <adddest name="corridor-canteen-2"  p="0.3" std="0" />
+      <adddest name="corridor-canteen-3"  p="0.05" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T11" duration="120" > 
-      <adddest name="parking"         p="0." std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0.76" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <!-- SLOT 4 -->
+    <time name="T10" duration="40" >
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0.05" std="0" />
+      <adddest name="toilet-2"            p="0.05" std="0" />
+      <adddest name="wa-1-l"              p="0.3" std="0"/>
+      <adddest name="wa-1-c"              p="0.3" std="0"/>
+      <adddest name="wa-1-r"              p="0.3" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0" std="0"/>
+      <adddest name="wa-5-c"              p="0" std="0"/>
+      <adddest name="wa-5-r"              p="0" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T12" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0.76" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0." std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <time name="T11" duration="40" > 
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0.05" std="0" />
+      <adddest name="toilet-2"            p="0.05" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0" std="0"/>
+      <adddest name="wa-1-r"              p="0.3" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0.3" std="0"/>
+      <adddest name="wa-5-l"              p="0" std="0"/>
+      <adddest name="wa-5-c"              p="0" std="0"/>
+      <adddest name="wa-5-r"              p="0" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0.3" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T13" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0.38" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0.38" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <time name="T12" duration="40" >
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0.05" std="0" />
+      <adddest name="toilet-2"            p="0.05" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0" std="0"/>
+      <adddest name="wa-1-r"              p="0" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0." std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0" std="0"/>
+      <adddest name="wa-5-c"              p="0" std="0"/>
+      <adddest name="wa-5-r"              p="0" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0.3" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0.3" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0.3" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T14" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0.253333333" std="0"/>
-      <adddest name="wa-3-c"          p="0.253333333" std="0"/>
-      <adddest name="wa-3-r"          p="0.253333333" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <!-- SLOT 5 -->
+    <time name="T13" duration="40" >
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0.05" std="0" />
+      <adddest name="toilet-2"            p="0.05" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0" std="0"/>
+      <adddest name="wa-1-r"              p="0" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0.3" std="0"/>
+      <adddest name="wa-5-c"              p="0.3" std="0"/>
+      <adddest name="wa-5-r"              p="0.3" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T15" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0.76" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <time name="T14" duration="40" >
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0.05" std="0" />
+      <adddest name="toilet-2"            p="0.05" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0.3" std="0"/>
+      <adddest name="wa-1-r"              p="0" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0.3" std="0"/>
+      <adddest name="wa-3-r"              p="0" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0" std="0"/>
+      <adddest name="wa-5-c"              p="0.3" std="0"/>
+      <adddest name="wa-5-r"              p="0" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T16" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0.76" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <time name="T15" duration="40" >
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0.05" std="0" />
+      <adddest name="toilet-2"            p="0.05" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0" std="0"/>
+      <adddest name="wa-1-r"              p="0" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0.3" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0" std="0"/>
+      <adddest name="wa-5-c"              p="0" std="0"/>
+      <adddest name="wa-5-r"              p="0" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0.3" std="0"/>
+      <adddest name="corridor-4-c"        p="0.3" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T17" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0.76" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <!-- SLOT 6 -->
+    <time name="T16" duration="40" >
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0.02" std="0" />
+      <adddest name="toilet-2"            p="0.02" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0.24" std="0"/>
+      <adddest name="wa-1-r"              p="0.24" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0" std="0"/>
+      <adddest name="wa-5-c"              p="0.24" std="0"/>
+      <adddest name="wa-5-r"              p="0.24" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T18" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0.76" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <time name="T17" duration="40" >
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0.05" std="0" />
+      <adddest name="toilet-2"            p="0.05" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0" std="0"/>
+      <adddest name="wa-1-r"              p="0.3" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0" std="0"/>
+      <adddest name="wa-5-c"              p="0.3" std="0"/>
+      <adddest name="wa-5-r"              p="0.3" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T19" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0.76" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <time name="T18" duration="40" >
+      <adddest name="parking"             p="0" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0.05" std="0" />
+      <adddest name="toilet-2"            p="0.05" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0" std="0"/>
+      <adddest name="wa-1-r"              p="0" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0.3" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0" std="0"/>
+      <adddest name="wa-5-c"              p="0" std="0"/>
+      <adddest name="wa-5-r"              p="0.3" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0.3" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
-    <time name="T20" duration="120" >
-      <adddest name="parking"         p="0" std="0" />
-      <adddest name="office-1"        p="0.05" std="0" />
-      <adddest name="office-2"        p="0.05" std="0" />
-      <adddest name="toilet-1"        p="0.05" std="0" />
-      <adddest name="toilet-2"        p="0.05" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0.76" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="table-12"        p="0.01" std="0" />
-      <adddest name="table-23"        p="0.01" std="0" />
-      <adddest name="corridor-canteen-2"       p="0.01" std="0" />
-      <adddest name="corridor-canteen-3"       p="0.01" std="0" />
+    <!-- SLOT QUITTING -->    
+    <time name="T19" duration="180" > 
+      <adddest name="parking"             p="1" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="toilet-1"            p="0" std="0" />
+      <adddest name="toilet-2"            p="0" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0" std="0"/>
+      <adddest name="wa-1-r"              p="0" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0" std="0"/>
+      <adddest name="wa-5-c"              p="0" std="0"/>
+      <adddest name="wa-5-r"              p="0" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
+    <!-- SLOT OFF -->
     <time name="off" duration="50400" >
-      <adddest name="parking"         p="1" std="0" />
-      <adddest name="office-1"        p="0" std="0" />
-      <adddest name="office-2"        p="0" std="0" />
-      <adddest name="wa-1-l"          p="0" std="0"/>
-      <adddest name="wa-1-c"          p="0" std="0"/>
-      <adddest name="wa-1-r"          p="0" std="0"/>
-      <adddest name="wa-2-l"          p="0" std="0"/>
-      <adddest name="wa-2-c"          p="0" std="0"/>
-      <adddest name="wa-2-r"          p="0" std="0"/>
-      <adddest name="wa-3-l"          p="0" std="0"/>
-      <adddest name="wa-3-c"          p="0" std="0"/>
-      <adddest name="wa-3-r"          p="0" std="0"/>
-      <adddest name="wa-4-l"          p="0" std="0"/>
-      <adddest name="wa-4-c"          p="0" std="0"/>
-      <adddest name="wa-4-r"          p="0" std="0"/>
-      <adddest name="wa-5-l"          p="0" std="0"/>
-      <adddest name="wa-5-c"          p="0" std="0"/>
-      <adddest name="wa-5-r"          p="0" std="0"/>
-      <adddest name="target-1"        p="0" std="0"/>
-      <adddest name="target-2"        p="0" std="0"/>
-      <adddest name="target-3"        p="0" std="0"/>
-      <adddest name="target-4"        p="0" std="0"/>
-      <adddest name="target-5"        p="0" std="0"/>
-      <adddest name="target-6"        p="0" std="0"/>
-      <adddest name="target-7"        p="0" std="0"/>
-      <adddest name="toilet-1"        p="0" std="0" />
-      <adddest name="toilet-2"        p="0" std="0" />
-      <adddest name="table-12"        p="0" std="0" />
-      <adddest name="table-23"        p="0" std="0" />
-      <adddest name="corridor-canteen-2"       p="0" std="0" />
-      <adddest name="corridor-canteen-3"       p="0" std="0" />
+      <adddest name="parking"             p="1" std="0" />
+      <adddest name="office-1"            p="0" std="0" />
+      <adddest name="office-2"            p="0" std="0" />
+      <adddest name="wa-1-l"              p="0" std="0"/>
+      <adddest name="wa-1-c"              p="0" std="0"/>
+      <adddest name="wa-1-r"              p="0" std="0"/>
+      <adddest name="wa-2-l"              p="0" std="0"/>
+      <adddest name="wa-2-c"              p="0" std="0"/>
+      <adddest name="wa-2-r"              p="0" std="0"/>
+      <adddest name="wa-3-l"              p="0" std="0"/>
+      <adddest name="wa-3-c"              p="0" std="0"/>
+      <adddest name="wa-3-r"              p="0" std="0"/>
+      <adddest name="wa-4-l"              p="0" std="0"/>
+      <adddest name="wa-4-c"              p="0" std="0"/>
+      <adddest name="wa-4-r"              p="0" std="0"/>
+      <adddest name="wa-5-l"              p="0" std="0"/>
+      <adddest name="wa-5-c"              p="0" std="0"/>
+      <adddest name="wa-5-r"              p="0" std="0"/>
+      <adddest name="target-1"            p="0" std="0"/>
+      <adddest name="target-2"            p="0" std="0"/>
+      <adddest name="target-3"            p="0" std="0"/>
+      <adddest name="target-4"            p="0" std="0"/>
+      <adddest name="target-5"            p="0" std="0"/>
+      <adddest name="target-6"            p="0" std="0"/>
+      <adddest name="target-7"            p="0" std="0"/>
+      <adddest name="toilet-1"            p="0" std="0" />
+      <adddest name="toilet-2"            p="0" std="0" />
+      <adddest name="table-12"            p="0" std="0" />
+      <adddest name="table-23"            p="0" std="0" />
+      <adddest name="support-0"           p="0" std="0" />
+      <adddest name="corridor-canteen-2"  p="0" std="0" />
+      <adddest name="corridor-canteen-3"  p="0" std="0" />
+      <adddest name="corridor-2-c"        p="0" std="0"/>
+      <adddest name="corridor-3-c"        p="0" std="0"/>
+      <adddest name="corridor-4-c"        p="0" std="0"/>
+      <adddest name="corridor-5-c"        p="0" std="0"/>
+      <adddest name="corridor-6-c"        p="0" std="0"/>
+      <adddest name="corridor-7-c"        p="0" std="0"/>
     </time>
   </schedule>
 </scenario>

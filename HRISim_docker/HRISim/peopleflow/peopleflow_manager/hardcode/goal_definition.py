@@ -4,7 +4,7 @@ import constants as constants
 import xml.etree.ElementTree as ET
 import json
 
-MAX_TASK_TIME = 15
+MAX_TASK_TIME = 10
 
 class Time:
     def __init__(self, name, duration) -> None:
@@ -83,17 +83,17 @@ if __name__ == "__main__":
     for agent in AGENTS:
         AGENTS[agent]['tasks'] = {tod: {"destinations":[], "durations":[]} for tod in SCHEDULE}
         # AGENTS[agent]['startTime'] = random.randint(20, 3600 - 30)
-        AGENTS[agent]['startTime'] = random.randint(0, SCHEDULE[constants.TOD.T1.value].duration - 30)
-        AGENTS[agent]['exitTime'] = int(sum([SCHEDULE[t].duration for t in SCHEDULE if t in [e.value for e in constants.TOD if e != constants.TOD.T20 and e != constants.TOD.OFF]]) + random.randint(0, SCHEDULE[constants.TOD.T20.value].duration - 30))
+        AGENTS[agent]['startTime'] = random.randint(0, SCHEDULE[constants.TOD.T0.value].duration - 30)
+        AGENTS[agent]['exitTime'] = int(sum([SCHEDULE[t].duration for t in SCHEDULE if t in [e.value for e in constants.TOD if e != constants.TOD.T19 and e != constants.TOD.OFF]]) + random.randint(0, SCHEDULE[constants.TOD.T19.value].duration - 30))
         # AGENTS[agent]['exitTime'] = int(sum([SCHEDULE[t].duration for t in SCHEDULE if t in [e.value for e in constants.TOD if e != constants.TOD.H10 and e != constants.TOD.OFF]]) + AGENTS[agent]['startTime'])
         print(f"Agent {agent}: startTime {AGENTS[agent]['startTime']} exitTime {AGENTS[agent]['exitTime']}")
                    
         for tod in SCHEDULE:
-            print(f"TOD {tod}")
             while len(AGENTS[agent]['tasks'][tod]['destinations']) < 2500:
                 destination = selectDestination(tod, AGENTS[agent]['potential_dests'])
                 AGENTS[agent]['tasks'][tod]['destinations'].append(destination)
                 AGENTS[agent]['tasks'][tod]['durations'].append(getTaskDuration(destination))
+            print(f"TOD {tod}")
                     
     with open('/home/lcastri/git/darko-peopleflow/HRISim_docker/HRISim/peopleflow/peopleflow_manager/hardcode/agent_task_list.json', 'w') as f:
         json.dump(AGENTS, f)

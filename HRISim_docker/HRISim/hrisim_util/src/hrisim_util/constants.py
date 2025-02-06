@@ -11,6 +11,7 @@ class Task(Enum):
     CHARGING = "charging"
 
 class TOD(Enum):
+    T0 = "T0"
     T1 = "T1"
     T2 = "T2"
     T3 = "T3"
@@ -30,7 +31,6 @@ class TOD(Enum):
     T17 = "T17"
     T18 = "T18"
     T19 = "T19"
-    T20 = "T20"
     OFF = "off"
 
 TODS = {t.value: i for i, t in enumerate(TOD)}
