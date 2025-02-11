@@ -161,7 +161,8 @@ class PredictionManager:
         
         
     def handle_get_risk_map(self, req):
-        treatment_len = self.get_treatment_len()
+        steps = [0, 40, 80, 119]
+        treatment_len = 120
         rospy.logwarn(f"Treatment length: {treatment_len}")
         rospy.logwarn(f"Treatment seconds: {treatment_len*PREDICTION_STEP}")
         
@@ -195,11 +196,11 @@ class PredictionManager:
 
             prediction_df = pd.DataFrame(res, columns=["TOD", "R_V", "R_B", "B_S", "PD", "BAC", "WP"])
             if wp == constants.WP.CHARGING_STATION.value: prediction_df["BAC"] = prediction_df["R_B"]
-            flattened_PDs.extend(prediction_df['PD'].values)
-            flattened_BACs.extend(prediction_df['BAC'].values)
+            flattened_PDs.extend(np.nan_to_num(prediction_df['PD'].values[steps], nan=0.0))
+            flattened_BACs.extend(np.nan_to_num(prediction_df['BAC'].values[steps], nan=0.0))
         
         return GetRiskMapResponse(list(self.PDs.keys()), 
-                                  treatment_len, 
+                                  len(steps), 
                                   len(self.PDs.keys()),
                                   flattened_PDs,
                                   flattened_BACs)
