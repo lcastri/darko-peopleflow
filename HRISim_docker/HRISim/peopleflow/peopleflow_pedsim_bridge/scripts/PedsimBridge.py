@@ -1,17 +1,18 @@
 #!/usr/bin/env python
 
 import rospy
-import copy
+import networkx as nx 
 import random
 import pickle
 from pedsim_srvs.srv import GetNextDestination, GetNextDestinationResponse
 from peopleflow_msgs.msg import Time as pT
 from hrisim_util.Agent import Agent 
 import hrisim_util.ros_utils as ros_utils
+import hrisim_util.constants as constants
 import traceback
 import time
+from std_srvs.srv import Trigger
 
-SHELFS = ["shelf1", "shelf2", "shelf3", "shelf4", "shelf5", "shelf6"]
 TIME_INIT = 8
 
 def seconds_to_hhmmss(seconds):
@@ -39,8 +40,10 @@ class PedsimBridge():
         agents_param = rospy.get_param(f'/peopleflow/agents/{agent_id}', None)
         if agents_param is not None:
             a = Agent.from_dict(agents_param, SCHEDULE, G, ALLOW_TASK, MAX_TASKTIME)
+            # a = Agent.from_dict(agents_param, SCHEDULE, G, ALLOW_TASK, MAX_TASKTIME, OBSTACLES)
         else:
             a = Agent(agent_id, SCHEDULE, G, ALLOW_TASK, MAX_TASKTIME)
+            # a = Agent(agent_id, SCHEDULE, G, ALLOW_TASK, MAX_TASKTIME, OBSTACLES)
         a.x = req.origin.x
         a.y = req.origin.y
         a.isStuck = req.is_stuck
@@ -56,19 +59,20 @@ class PedsimBridge():
             agent = self.load_agents(req)
                         
             # Entrance logic
-            if (self.timeOfDay == 'starting' and not agent.atWork and 
+            if (self.timeOfDay == constants.TOD.H1.value and not agent.atWork and 
                 agent.isFree and not agent.isQuitting and 
-                agent.closestWP == 'parking'):
+                agent.closestWP == constants.WP.PARKING.value):
                     
                 # startingTime definition
                 # next_destination response: 
                 #   dest = parking, 
-                #   task_duration = random.randint(0, SCHEDULE['starting']['duration'] - 10) 
+                #   task_duration = random.randint(0, SCHEDULE[constants.TOD.H1]['duration'] - 10) 
                 # ! this agent won't ask again a destination for "task_duration" seconds
                 if agent.startingTime is None:
-                    agent.startingTime = random.randint(self.elapsedTime, SCHEDULE['starting']['duration'] - 10)
-                    agent.exitTime = int(sum([SCHEDULE[t]['duration'] for t in SCHEDULE if t in ['starting','morning','lunch','afternoon']]) + agent.startingTime)
-                    agent.setTask('parking', agent.startingTime)
+                    agent.startingTime = random.randint(self.elapsedTime, SCHEDULE[constants.TOD.H1.value]['duration'] - 90)
+                    # agent.startingTime = random.randint(self.elapsedTime, SCHEDULE[constants.TOD.H1.value]['duration'] - 10)
+                    agent.exitTime = int(sum([SCHEDULE[t]['duration'] for t in SCHEDULE if t in [e.value for e in constants.TOD if e != constants.TOD.H10 and e != constants.TOD.OFF]]) + agent.startingTime)
+                    agent.setTask(constants.WP.PARKING.value, agent.startingTime)
                         
                 # startingTime is now
                 # next_destination response: 
@@ -83,15 +87,15 @@ class PedsimBridge():
             # Quitting logic
             # next_destination response: 
             #   dest = parking, 
-            #   task_duration = SCHEDULE['quitting']['duration'] - agent.startingTime + SCHEDULE['off']['duration']
+            #   task_duration = SCHEDULE[constants.TOD.H1]['duration'] - agent.startingTime + SCHEDULE[constants.TOD.OFF]['duration']
             # ! isQuitting = True --> this agent won't enter again this if
-            elif ((self.timeOfDay == 'quitting' or self.timeOfDay == 'off') and 
+            elif ((self.timeOfDay == constants.TOD.H10.value or self.timeOfDay == constants.TOD.OFF.value) and 
                   agent.atWork and agent.isFree and not agent.isQuitting and
                   self.elapsedTime >= agent.exitTime):
                 
                 rospy.logerr(f'Agent {agent.id} is quitting..')
                 
-                agent.setTask('parking', SCHEDULE['quitting']['duration'] - agent.startingTime + SCHEDULE['off']['duration'])
+                agent.setTask(constants.WP.PARKING.value, SCHEDULE[constants.TOD.H10.value]['duration'] - agent.startingTime + SCHEDULE[constants.TOD.OFF.value]['duration'])
                 agent.isQuitting = True
     
             # New goal logic                
@@ -100,19 +104,14 @@ class PedsimBridge():
                     next_destination = agent.selectDestination(self.timeOfDay, req.destinations)
                     agent.setTask(next_destination, agent.getTaskDuration())
                 else:
-                    agent.setTask('parking', SCHEDULE['quitting']['duration'] - agent.startingTime + SCHEDULE['off']['duration'])
-                    
-                rospy.logerr(f"Agent {agent.id} is stuck. new desination: {next_destination}")
-                        
+                    agent.setTask(constants.WP.PARKING.value, SCHEDULE[constants.TOD.H10.value]['duration'] - agent.startingTime + SCHEDULE[constants.TOD.OFF.value]['duration'])
+                                            
             elif agent.atWork and not agent.isStuck and agent.isQuitting and len(agent.path) == 1:
                 agent.atWork = False
                 agent.isQuitting = False
                 
             elif agent.isFree and agent.atWork and not agent.isStuck and not agent.isQuitting:
-                if agent.closestWP in SHELFS:
-                    next_destination = 'delivery_point'
-                else:
-                    next_destination = agent.selectDestination(self.timeOfDay, req.destinations)
+                next_destination = agent.selectDestination(self.timeOfDay, req.destinations)
                 agent.setTask(next_destination, agent.getTaskDuration())
                 
             elif not agent.isFree:
@@ -147,7 +146,8 @@ class PedsimBridge():
             rospy.logerr(f"Time: {self.timeOfDay} - {self.elapsedTimeString}")
             rospy.logerr(f"Agent {agent.id} generated error: {str(e)}")
             rospy.logerr(f"Traceback: {traceback.format_exc()}")
-       
+
+
   
 if __name__ == '__main__':
     rospy.init_node('peopleflow_pedsim_bridge')
@@ -155,13 +155,25 @@ if __name__ == '__main__':
     
     SCHEDULE = ros_utils.wait_for_param("/peopleflow/schedule")
     WPS = ros_utils.wait_for_param("/peopleflow/wps")
+    OBSTACLES = ros_utils.wait_for_param("/peopleflow/obstacles")
     ALLOW_TASK = rospy.get_param("~allow_task", False)
     MAX_TASKTIME = int(rospy.get_param("~max_tasktime"))
     g_path = str(rospy.get_param("~g_path"))
-
     with open(g_path, 'rb') as f:
         G = pickle.load(f)
-        G.remove_node("charging_station")
+        ros_utils.load_graph_to_rosparam(G, "/peopleflow/G")
+        
+        # Create a handle for the Trigger service
+        update_service = rospy.ServiceProxy('/update_graph_visualization', Trigger)
+        # Call the service
+        response = update_service()
+        # Check the response
+        if response.success:
+            rospy.loginfo(f"Graph visualization updated successfully: {response.message}")
+        else:
+            rospy.logwarn(f"Graph visualization update failed: {response.message}")
+
+        G.remove_node(constants.WP.CHARGING_STATION.value)
         
     pedsimBridge = PedsimBridge()
                 

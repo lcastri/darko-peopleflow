@@ -1,7 +1,7 @@
 #!/bin/bash
 
-container_name=HRISim
-image_name=hrisim-docker
+container_name=DARKO
+image_name=darko-docker
 host_folder=$(pwd)/shared
 container_folder=/root/shared
 
@@ -19,6 +19,10 @@ dangling_images=$(docker images -qa -f 'dangling=true')
 if [ -n "$dangling_images" ]; then
     docker rmi $dangling_images
 fi
+
+# echo " "
+# echo "Pruning builder cache..."
+# docker builder prune -a -f
 
 echo " "
 echo "${container_name} docker container built!"
