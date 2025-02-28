@@ -107,7 +107,7 @@ if __name__ == '__main__':
             # calcolo nuove matrici di rischio
             navigation_risk_mtx_sched,pick_risk_mtx_sched,throw_risk_mtx_sched = risk_estimation_module.get_risk_estimations()
             # print("@@@ picking risk mtx", pick_risk_mtx)
-            # print("@@@ navigation risk mtx", navigation_risk_mtx[0,:,:])
+            # print("@@@ navigation risk mtx", navigation_risk_mtx)
             
             # genero messaggio di nav risk
             nav_risk_message = Float64MultiArray()

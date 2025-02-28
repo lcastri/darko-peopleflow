@@ -25,7 +25,8 @@ static_data_names = ["location_coordinates",
                         "rewards",
                         "action_times",
                         "items", "parameters",
-                        "reduced_global_map_parameters"]
+                        "reduced_global_map_parameters",
+                        "risk_parameters"]
 
 static_data = {}
 
@@ -42,6 +43,7 @@ action_graph_nodes      = static_data['action_graph_nodes']
 objects_box             = static_data['objects_box']
 location_coordinates    = static_data['location_coordinates']
 reduced_global_map_parameters = static_data['reduced_global_map_parameters']
+risk_parameters         = static_data['risk_parameters']
 
 action_graph_nodes_int  = {int(n[1:]):static_data['action_graph_nodes'][n] for n in action_nodes }
 action_nodes_int        = list(action_graph_nodes_int.keys())
@@ -64,7 +66,8 @@ orchestrator_module = Orchestrator(
     action_graph_nodes,
     objects_box,location_coordinates,
     costmap_subscriber,
-    reduced_global_map_parameters
+    reduced_global_map_parameters,
+    np.array(risk_parameters['t_list'])
 )
 
 while True:

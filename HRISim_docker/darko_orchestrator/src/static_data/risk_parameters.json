@@ -4,11 +4,13 @@
     "scenario_min" : 0.1144,
     "scenario_max": 0.2174,
     "trajectory_polygon_width": 10,
-    "trays_square_edge" : 16,
+    "loc_square_edge" : 16,
     "node_side_length" : 8,
     "steps" : 50,
     "alpha_t" : 3,
     "alpha_r" : 1,
     "rbf_pick_scaling_factor": 1,
-    "rbf_throw_scaling_factor": 1
-    }
+    "rbf_throw_scaling_factor": 1,
+    "t_list" : [0],
+    "dynamic_costmap_weight_k": 0.005
+}

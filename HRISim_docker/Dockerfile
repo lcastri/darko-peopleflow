@@ -96,6 +96,7 @@ RUN apt-get update && \
 # Install darko orchestrator extra requirements
 ADD HRISim_docker/extra-requirements.txt /root/ros_ws/src/extra-requirements.txt
 RUN DEBIAN_FRONTEND=noninteractive pip install -r /root/ros_ws/src/extra-requirements.txt
+
 # Clone and install PetriNetPlans
 RUN cd ~/ros_ws
 RUN git clone -b noetic_devel https://github.com/francescodelduchetto/PetriNetPlans.git

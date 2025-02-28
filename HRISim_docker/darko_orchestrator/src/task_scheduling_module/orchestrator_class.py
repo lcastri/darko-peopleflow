@@ -15,7 +15,7 @@ from utils import global_costamap_reduction
 class Orchestrator:
 
     def __init__(self, action_graph_nodes_int, action_nodes_int, static_data_path,manipulation_model_path,
-                params,action_nodes,trays,objects,rewards,action_times,action_graph_nodes, objects_box,location_coordinates, costmap_subscriber, reduced_global_map_parameters):
+                params,action_nodes,trays,objects,rewards,action_times,action_graph_nodes, objects_box,location_coordinates, costmap_subscriber, reduced_global_map_parameters, t_list):
         
         self.action_graph_nodes_int = action_graph_nodes_int
         self.action_nodes_int       = action_nodes_int
@@ -29,6 +29,7 @@ class Orchestrator:
         self.objects_box            = objects_box
         self.location_coordinates   = location_coordinates
         self.reduced_global_map_parameters = reduced_global_map_parameters
+        self.t_list = t_list
 
         ### <---------- publishers  ----------> ###
         self.manipulation_action_type_pub   = PublisherManager("/manipulation/action_type",String)
@@ -60,7 +61,7 @@ class Orchestrator:
 
         self.safety_threshold = 40
         self.neighborhood_size = 5
-        self.scheduler_module = Scheduler(params,action_nodes,trays,objects,rewards,action_times)
+        self.scheduler_module = Scheduler(params,action_nodes,trays,objects,rewards,action_times, t_list)
 
         self.client = actionlib.SimpleActionClient('/move_base',MoveBaseAction)
         self.client.wait_for_server()
@@ -639,7 +640,7 @@ class Orchestrator:
                     return False, True
                 rospy.sleep(0.1)
         else:   #waiting
-            rospy.sleep(self.params["wait_time"])
+            rospy.sleep(self.action_times["wait"])
         return self.manipulation_success_sub._data, False
 
     def update_mission_state(self,mission_state,time_start_mission,success,next_task):

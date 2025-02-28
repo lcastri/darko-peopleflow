@@ -2,92 +2,130 @@
 
 import math
 import json
-import os 
-import pickle as pkl
 import numpy as np
 import numba as nb
 import warnings
 from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning
+import matplotlib
 import matplotlib.pyplot as plt
-import matplotlib.patches as patches
 from shapely.geometry import Point, Polygon
 from datetime import datetime
-import rospy
 
-# %%
 
 class RiskEstimation:
+
     def __init__(self, costmap_subscriber, gridmap_subscriber,
                        static_data_path="../static_data", 
                        manipulation_model_path="./manipulation_models"):
         
         # full costmap
         self.costmap_subscriber = costmap_subscriber
-        self.gridmap_subscriber = gridmap_subscriber
+        self.gridmap_subscriber = costmap_subscriber # TODO da cambiare
         
-        # load static data
-        with open(static_data_path+"/action_graph_nodes.json", "r") as json_file:
+        """
+        Load static data:
+        
+        - file action_graph_nodes.json: contains the x,y coordinates of the action nodes and the node name.
+
+        - file large_graph.json: contains 
+            - nodes_xy: the x,y coordinates of the nodes
+            - nodes_ij: the i,j coordinates of the nodes (according to the costmap)
+            - edges: the edges of the graph
+            - nodes_neighbors: the neighbors of each node
+            - squares_edge_dict: the list of cells of the costmap that compose each edge
+            - nodes_conversion_dict: the conversion between node name and node index
+        
+        - file location_coordinates.json: contains the x,y coordinates of the boxes and trays.
+
+        - file reduced_global_map_parameters.json: contains the parameters to reduce the global costmap.
+
+        - file risk_parameters.json: contains the parameters for the risk estimation.
+
+        - file graph_params.json: contains the parameters for the graph (used for the generation of the graph. In this module 
+                                  it is used to get the throwing distance).
+       
+        - file rbf_picking_parameters_new.json: contains the parameters for the rbf interpolation of the picking model.
+
+        - file rbf_throwing_parameters_new.json: contains the parameters for the rbf interpolation of the throwing model.
+          """
+
+        with open(static_data_path + "/action_graph_nodes.json", "r") as json_file:
             self.action_graph_nodes_params = json.load(json_file)
-            
+        
         with open(static_data_path + "/large_graph.json", "r") as json_file:
             self.large_graph_params = json.load(json_file, parse_int=int)
 
         with open(static_data_path + "/location_coordinates.json", "r") as json_file:
             self.location_coordinates_params = json.load(json_file)
 
-        # with open(static_data_path + "/action_graph_conversion_dict.json", "r") as json_file:
-        #     self.action_graph_conversion_dict = json.load(json_file)
-
-        self.action_graph_conversion_dict = {n: int(n[1:]) for n in self.action_graph_nodes_params.keys()}
-
-
         with open(static_data_path + "/reduced_global_map_parameters.json", "r") as json_file:
             self.reduced_global_map_parameters = json.load(json_file)
         
         with open(static_data_path + "/risk_parameters.json", "r") as json_file:
             self.risk_params = json.load(json_file)
+
+        with open(static_data_path + "/graph_params.json", "r") as json_file:
+            self.graph_params = json.load(json_file)
         
-        self.action_idx_name = self.get_node_action_idx()
-    
-        # modelli di interpolazione per picking e throwing
+        # interpolation models for manipulation
         with open(manipulation_model_path + "/rbf_picking_parameters_new.json", "r") as json_file:
             self.rbf_pick_param = json.load(json_file)
         
         with open(manipulation_model_path + "/rbf_throwing_parameters_new.json", "r") as json_file:
             self.rbf_throw_param = json.load(json_file)
 
-        self.rbf_interp_picking = RBFInterpolation(self.rbf_pick_param["sigma"], self.rbf_pick_param["centers"], self.rbf_pick_param["weights"], self.rbf_pick_param["alpha"],)
-        self.rbf_interp_throwing = RBFInterpolation(self.rbf_throw_param["sigma"], self.rbf_throw_param["centers"], self.rbf_throw_param["weights"], self.rbf_throw_param["alpha"])
-        
-        self.update_parameters = True
-        self.v_max = self.risk_params["v_max"]
-        self.alpha = self.risk_params["alpha"]
-        self.trajectory_polygon_width = self.risk_params["trajectory_polygon_width"]
-        self.trays_square_edge = self.risk_params["trays_square_edge"]
-        self.node_side_length = self.risk_params["node_side_length"]
+        """GRAPH NAMES CONVERSION, COSTAMP REDUCTION AND PARAMETERS DEFINITION"""
+        # conversion between node name "n0", "n1", ... and node index "0", "1", ...
+        self.action_graph_conversion_dict = {n: int(n[1:]) for n in self.action_graph_nodes_params.keys()}
+        self.action_idx_name = self.get_node_action_idx_from_large_graph()
+
         self.reduced_map = Global_costamap_reduction(self.costmap_subscriber,self.reduced_global_map_parameters)
         self.reduced_static_map = Global_costamap_reduction(self.gridmap_subscriber,self.reduced_global_map_parameters)
 
-        self.boxes_loc, self.trays_loc = self.define_boxes_trays_loc()
-        self.boxes_points = self.define_boxes_trays_area(self.boxes_loc) # punti interni all'area che circonda le box
-        self.trays_points = self.define_boxes_trays_area(self.trays_loc) # punti interni all'area che circonda i trays
-        self.box_trajectory_points, self.tray_trajectory_points = self.define_trajectory_area() # punti interni alle traiettorie tra node_action e box/tray
+        self.update_parameters = True
+        self.v_max = self.risk_params["v_max"]
+        self.alpha = self.risk_params["alpha"]
+        self.plot = False
 
-        # mock della parte di Luca C
+        """ FOR THE MANIPULATION RISK ESTIMATION """
+        # initialize the rbf interpolation models
+        self.rbf_interp_picking = RBFInterpolation(self.rbf_pick_param["sigma"], self.rbf_pick_param["centers"], self.rbf_pick_param["weights"], self.rbf_pick_param["alpha"],)
+        self.rbf_interp_throwing = RBFInterpolation(self.rbf_throw_param["sigma"], self.rbf_throw_param["centers"], self.rbf_throw_param["weights"], self.rbf_throw_param["alpha"])
+        
+        # to include the risk along the trajectories when computing the throwing/picking risk 
+        # define the location of the boxes and trays (list of tuples (x,y) of trays and boxes)
+        self.boxes_loc, self.trays_loc = self.define_boxes_trays_loc()
+        # define the internal points of the area that contains the trays/boxes
+        self.trays_area_points = self.define_location_area(self.trays_loc, self.risk_params["loc_square_edge"])
+        self.boxes_area_points = self.define_location_area(self.boxes_loc, self.risk_params["loc_square_edge"])
+        # define the internal points of the trajectories between node_action and trays/boxes
+        self.tray_trajectory_points = self.define_trajectory_area(self.trays_loc, self.trays_area_points, self.risk_params["trajectory_polygon_width"],self.risk_params["node_side_length"]) 
+        self.boxes_trajectory_points = self.define_trajectory_area(self.boxes_loc, self.boxes_area_points, self.risk_params["trajectory_polygon_width"],self.risk_params["node_side_length"]) 
+        
+        # compute the distances between the action nodes and the boxes and trays for the rbf
+        self.distances_dict = {}   
+        for node in self.action_graph_nodes_params: 
+            x, y = self.action_graph_nodes_params[node]["x"], self.action_graph_nodes_params[node]["y"] # node location
+            d_boxes = self.get_distances_from_locations(x,y, self.boxes_loc)
+            d_trays = self.get_distances_from_locations(x,y, self.trays_loc)
+            self.distances_dict[node] = (d_boxes, d_trays)
+
+        self.num_boxes = len(self.boxes_loc)
+        self.num_trays = len(self.trays_loc)
+
+        """MOCK DELLA PARTE DI LUCA C"""
+        
+        self.t_list = self.risk_params["t_list"]
+        self.dynamic_costmap_weight ={t: np.exp(-self.risk_params["dynamic_costmap_weight_k"] * t) for t in self.t_list}
+       
         n_row = len(self.large_graph_params['nodes_xy'])
-        n_col = 1 # tempo 0
-        self.prediction_risk_matrix = np.zeros((n_row, n_col), dtype=np.float64)
+        n_col = len(self.t_list)
+        self.prediction_risk_matrix = 0 * np.ones((n_row, n_col), dtype=np.float64)
+ 
         self.prediction_risk_matrix_names = list(self.large_graph_params['nodes_conversion_dict'].keys())
 
-        # n_row = 3
-        # n_col = 1
-        # self.prediction_risk_matrix = np.zeros((n_row, n_col), dtype=np.float64)
-
-        # self.prediction_risk_matrix[0][0] = 0
-        # self.prediction_risk_matrix[1][0] = 0
-        # self.prediction_risk_matrix[2][0] = 0
-
-        # self.prediction_risk_matrix_names = ['door_corridor1', 'door_corridor2', 'door_corridor3']
+        self.predictions_costmaps_dict = {t: np.zeros_like(self.reduced_map.data, dtype=float) for t in self.t_list}
+        self.merged_costmaps_dict = {t: np.zeros_like(self.reduced_map.data, dtype=int) for t in self.t_list}
 
         self.gaussian_sigma = 15.0
         self.r = 25
@@ -95,15 +133,65 @@ class RiskEstimation:
         _ = self.get_risk_estimations()
         
 
-    def get_node_action_idx(self):
-        nodes_action = self.action_graph_nodes_params
+# RISK ESTIMATION
+
+    def get_node_action_idx_from_large_graph(self):
         nodes_action_idx_map = {}
+        nodes_action = self.action_graph_nodes_params
         graph_nodes_xy = self.large_graph_params["nodes_xy"]
         for n0 in nodes_action:
             for n in graph_nodes_xy:
                 if (graph_nodes_xy[n][0]==nodes_action[n0]["x"] and graph_nodes_xy[n][1]==nodes_action[n0]["y"]):
                     nodes_action_idx_map[int(n)] = self.action_graph_conversion_dict[n0]
         return nodes_action_idx_map
+
+    def get_risk_estimations(self):
+
+        self.generate_prediction_risk_costmaps()
+
+        self.merge_costmaps()
+
+        navigation_risk_mtx = self.get_navigation_risk()
+        pick_risk_mtx,throw_risk_mtx = self.get_manipulation_risk()
+
+        return navigation_risk_mtx,pick_risk_mtx,throw_risk_mtx
+
+    def get_navigation_risk(self):
+        n_action_nodes = len(self.action_graph_nodes_params)
+        navigation_risk_mtx = np.zeros((n_action_nodes,n_action_nodes, 4*len(self.t_list)), dtype=np.float64)
+        # for each time step, compute the navigation risk matrix
+        for t_idx in range(len(self.t_list)):
+            navigation_risk_mtx[:,:,4*t_idx:4*(t_idx+1)] = get_navigation_risk_mtx(self.merged_costmaps_dict[self.t_list[t_idx]], self.reduced_map, self.large_graph_params, self.action_idx_name, self.v_max, 
+                                                       self.action_graph_nodes_params, self.action_graph_conversion_dict, self.risk_params)
+        
+        return navigation_risk_mtx
+
+    def get_manipulation_risk(self):
+        n_action_nodes = len(self.action_graph_nodes_params)
+        pick_mtx = np.zeros((n_action_nodes, self.num_boxes*len(self.t_list)),dtype=np.int64)
+        throw_mtx = np.zeros((n_action_nodes, self.num_trays*len(self.t_list) ),dtype=np.int64)
+
+        for t_idx in range(len(self.t_list)):
+            if not self.plot:
+                
+                pick_mtx_t, throw_mtx_t = get_manipulation_risk(self.action_graph_nodes_params, self.action_graph_conversion_dict,  
+                                                        self.num_boxes, self.num_trays, self.distances_dict,
+                                                        self.rbf_interp_picking, self.rbf_interp_throwing, self.merged_costmaps_dict[self.t_list[t_idx]], 
+                                                        self.tray_trajectory_points, self.boxes_trajectory_points,self.risk_params)
+
+                pick_mtx[:,self.num_boxes*t_idx:self.num_boxes*(t_idx+1)] = pick_mtx_t
+                throw_mtx[:,self.num_trays*t_idx:self.num_trays*(t_idx+1)] = throw_mtx_t
+            else:
+                pick_mtx_t, throw_mtx_t = get_manipulation_risk_with_plot(self.action_graph_nodes_params, self.action_graph_conversion_dict, 
+                                                        self.num_boxes, self.trays_loc, self.distances_dict,
+                                                        self.rbf_interp_picking, self.rbf_interp_throwing,self.merged_costmaps_dict[self.t_list[t_idx]],self.reduced_map, 
+                                                        self.tray_trajectory_points, self.boxes_area_points, self.trays_area_points, self.risk_params)
+                pick_mtx[:,self.num_boxes*t_idx:self.num_boxes*(t_idx+1)] = pick_mtx_t
+                throw_mtx[:,self.num_trays*t_idx:self.num_trays*(t_idx+1)] = throw_mtx_t
+        
+        return pick_mtx, throw_mtx
+
+# COSTMAPS REDUCTION, MERGING AND DEFINITION
 
     def update_reduce_map(self):
 
@@ -113,102 +201,55 @@ class RiskEstimation:
                 self.reduced_map.x_min:self.reduced_map.x_max
             ]
         )
-        
 
-    def get_navigation_risk(self):
-        navigation_risk_mtx = get_navigation_risk_dict(self.reduced_map, self.large_graph_params, self.action_idx_name, self.v_max, 
-                                                       self.action_graph_nodes_params, self.action_graph_conversion_dict, self.risk_params)
-        return navigation_risk_mtx
-
-    def get_manipulation_risk(self):
-        pick_mtx, throw_mtx = get_manipulation_risk(self.action_graph_nodes_params, self.boxes_loc, self.trays_loc, self.action_graph_conversion_dict,
-                                                    self.rbf_interp_picking, self.rbf_interp_throwing, self.reduced_map, 
-                                                    self.tray_trajectory_points, self.box_trajectory_points, self.trays_points, self.boxes_points, self.risk_params)
-        return pick_mtx, throw_mtx
-    
-
-    def fuse_costmaps(self, t, alpha):
+    def generate_prediction_risk_costmaps(self):
         """
-        Fusione delle costmap dinamica, statica e delle predizioni di rischio.
-        
-        Args:
-            t (int): Indice temporale per le predizioni.
-            alpha (float): Fattore di scaling per la costmap dinamica.
-            
-        Returns:
-            np.ndarray: Costmap finale aggiornata.
+        Generate the prediction risk costmaps for each time step in the dictionary predictions_costmaps_dict.
         """
-        # Ottieni le costmap dinamica e statica
-        dynamic_costmap = self.reduced_map.data
-        static_costmap = self.reduced_static_map.data
-        
-        # Verifica dimensioni costmap
-        assert dynamic_costmap.shape == static_costmap.shape, "Dimensioni costmap incoerenti!"
-        fused_costmap = np.zeros_like(dynamic_costmap, dtype=float)
+        # the prediction costmap is a costmap where the risk values from prediction have been spreaed with a Gaussian Kernel
+        self.predictions_costmaps_dict = {t:np.zeros_like(self.reduced_map.data, dtype=float) for t in self.t_list}
+        for t_idx in range(len(self.t_list)):
+            for i in range(len(self.prediction_risk_matrix)):
+                risk_value = self.prediction_risk_matrix[i, t_idx]
+                node_idx = self.large_graph_params['nodes_conversion_dict'][self.prediction_risk_matrix_names[i]]
+                j,i = self.large_graph_params['nodes_ij'][str(node_idx)]
+                # Propagate the risk value to the surrounding cells with a Gaussian kernel
+                for di in range(-self.r, self.r + 1):
+                    for dj in range(-self.r, self.r + 1):
+                        ni, nj = i + di, j + dj
+                        if self.reduced_map.is_in_gridmap(ni, nj):
+                            distance = np.sqrt(di**2 + dj**2)
+                            if distance <= self.r:
+                                kernel_value = np.exp(-distance**2 / (2 * self.gaussian_sigma**2))
+                                # it can happen to combine the risk value spreaded from different near nodes
+                                self.predictions_costmaps_dict[self.t_list[t_idx]][ni, nj] += risk_value * kernel_value
+            self.predictions_costmaps_dict[self.t_list[t_idx]] = np.minimum(100, self.predictions_costmaps_dict[self.t_list[t_idx]])
 
-        # Genera la costmap delle predizioni con kernel gaussiano
-        predictions_costmap = np.zeros_like(dynamic_costmap, dtype=float)
-
-        for i in range(len(self.prediction_risk_matrix)):
-
-            risk_value = self.prediction_risk_matrix[i, t]
-            world_x, world_y = self.large_graph_params['nodes_xy'][
-                str(
-                    self.large_graph_params['nodes_conversion_dict'][
-                        self.prediction_risk_matrix_names[i]
-                    ]
-                )
-            ]
-
-            # Ottieni indice (i, j) del nodo
-            j, i = self.reduced_map.get_costmap_x_y(world_x, world_y)
-
-            # Propaga il rischio con il kernel gaussiano
-            for di in range(-self.r, self.r + 1):
-                for dj in range(-self.r, self.r + 1):
-                    ni, nj = i + di, j + dj
-                    if self.reduced_map.is_in_gridmap(ni, nj):
-                        distance = np.sqrt(di**2 + dj**2)
-                        if distance <= self.r:
-                            kernel_value = np.exp(-distance**2 / (2 * self.gaussian_sigma**2))
-                            predictions_costmap[ni, nj] += risk_value * kernel_value #* (1 - alpha)
-                  
-        # Scala la costmap dinamica
-        dynamic_costmap_scaled = dynamic_costmap #* alpha
-
-        # Combina costmap dinamica scalata e predizioni
-        #combined_costmap = dynamic_costmap_scaled + predictions_costmap
-        combined_costmap = np.maximum(dynamic_costmap_scaled, predictions_costmap)
-
-        # Prendi il massimo elemento per elemento con la costmap statica
-        fused_costmap = np.maximum(combined_costmap, static_costmap)
-
-        return fused_costmap
-
-
-    def get_risk_estimations(self):
-
+    def merge_costmaps(self):
+        """
+        Merge of the dynamic costmap, static costmap and risk predictions. 
+        Updates the merged costmap for each time step in the dictionary merged_costmaps_dict.
+        """
         self.update_reduce_map()
 
-        # chiama servizio di Luca C per ottenere nel self la matrice di rischio predetto
+        dynamic_costmap = self.reduced_map.data.copy()
+        static_costmap = self.reduced_static_map.data.copy()
+        assert dynamic_costmap.shape == static_costmap.shape, "The dynamic and static costmaps have different shapes"
+        
+        dynamic_costmap_dict = {}
+        for t in self.t_list:
+            dynamic_costmap_dict[t] = dynamic_costmap.copy()
+            
 
-        self.reduced_map.data = self.fuse_costmaps(0, 0.5)
+        # The dynamic costmap is weighted by a coefficient decreasing over time
+        for t in self.t_list:
+            # The merged costmap is the maximum between the dynamic costmap, the static costmap and the prediction costmap   
+            merge_predictions_dynamic = np.maximum(self.predictions_costmaps_dict[t], self.dynamic_costmap_weight[t]*dynamic_costmap_dict[t])
+            self.merged_costmaps_dict[t]  = np.maximum(merge_predictions_dynamic, static_costmap)
 
-        navigation_risk_mtx = self.get_navigation_risk()
-        pick_risk_mtx,throw_risk_mtx = self.get_manipulation_risk()
-
-        return navigation_risk_mtx,pick_risk_mtx,throw_risk_mtx
-
-    def gradiente(self, t_real, t_prev, velocity):
-        grad = -(t_prev-t_real)*velocity/t_real
-        return grad
-
-    def update_velocity(self, t_real, t_prev):
-            new_v = self.v_max - self.alpha*(self.gradiente(t_real, t_prev, self.v_max ))
-            self.v_max = new_v
-
-    # ritorna una lista con le tuple (x,y) di ogni tray e una con le (x,y) delle boxes
+# AREAS AND TRAJECTORIES DEFINITION
     def define_boxes_trays_loc(self):
+    # return a list with the tuples (x,y) of the boxes and a list with the (x,y) of the trays
         boxes_loc = []
         trays_loc = []
         for key, value in self.location_coordinates_params.items():
@@ -218,18 +259,18 @@ class RiskEstimation:
                 trays_loc.append((value['x'], value['y'])) 
         return boxes_loc, trays_loc
 
-    # prende in input una lista di (x,y) di trays o boxes e ritorna gli internal points dell'area che contiene i trays/boxes
-    def define_boxes_trays_area(self, loc_list):
+    def define_location_area(self, loc_list, square_edge):
+        # takes in input a list of (x,y) of trays or boxes and returns the internal points of the area containing the trays/boxes
         total_internal_points = []
         for t in loc_list:
             i, j = self.reduced_map.get_costmap_x_y(t[0], t[1])
             # Calcola metà della lunghezza del lato
-            half_edge = self.trays_square_edge / 2
-            half_edge2 = self.trays_square_edge / 2 + 1
+            half_edge = square_edge / 2
+            half_edge2 = square_edge / 2 + 1
             # Calcola i vertici del quadrato
             top_left = (max(int(i - half_edge2), 0), max(int(j - half_edge), 0))
-            top_right = (max(int(i - half_edge2), 0), min(int(j + half_edge), self.reduced_map.width- 1))
-            bottom_left = (min(int(i + half_edge2), self.reduced_map.lenght - 1), max(int(j - half_edge), 0))
+            # top_right = (max(int(i - half_edge2), 0), min(int(j + half_edge), self.reduced_map.width- 1))
+            # bottom_left = (min(int(i + half_edge2), self.reduced_map.lenght - 1), max(int(j - half_edge), 0))
             bottom_right = (min(int(i + half_edge2), self.reduced_map.lenght  - 1), min(int(j + half_edge), self.reduced_map.width - 1))
             # corners = np.array([top_left, top_right, bottom_right, bottom_left])
             # Trova tutti i punti interni
@@ -237,27 +278,26 @@ class RiskEstimation:
             total_internal_points = total_internal_points + internal_points
         return total_internal_points
 
-    # definisce per ogni nodo, per ogni tray/box, gli internal points della traiettoria che congiunge il nodo all'obiettivo (tray/box).
-    # l'area della traiettoria è data dalla somma di due forme: un quadrato centrato nel nodo e un trapezio che congiunge i due punti (nodo e obiettivo)
-    # ottengo due dizionari con chiave la coppia di indici (nodo,box/tray) e valore la lista di punti interni alla traiettoria. Un dizionario per le box e uno per i tray. 
-    def define_trajectory_area(self):
-        boxes_internal_points_dict = {}
-        trays_internal_points_dict = {}
+    def define_trajectory_area(self, loc_list, loc_area_points, trajectory_polygon_width, node_side_length): 
+        # define for each node, for each tray/box, the internal points of the trajectory that connects the node to the target (tray/box).
+        # the trajectory area is given by the sum of two shapes: a square centered in the node and a trapezoid connecting the two points (node and target)
+        # I get two dictionaries with key the pair of indices (node,box/tray) and value the list of points internal to the trajectory.
+        traj_internal_points_dict = {}
         for node in self.action_graph_nodes_params:
             x, y = self.action_graph_nodes_params[node]["x"], self.action_graph_nodes_params[node]["y"] # node location
             n = self.action_graph_conversion_dict[node]
-            for idx in range(0, len(self.trays_loc)): 
-                x_t, y_t = self.trays_loc[idx][0], self.trays_loc[idx][1]
-                internal_points = self.define_trajectory_internal_points(x, y, x_t, y_t, self.trays_points)
-                trays_internal_points_dict[(n, idx)] = internal_points
-            for idx in range(0, len(self.boxes_loc)): 
-                x_b, y_b = self.boxes_loc[idx][0], self.boxes_loc[idx][1]
-                internal_points = self.define_trajectory_internal_points(x, y,x_b, y_b, self.boxes_points)
-                boxes_internal_points_dict[(n, idx)] = internal_points
-        return boxes_internal_points_dict, trays_internal_points_dict
+            for idx in range(0, len(loc_list)): 
+                x_l, y_l = loc_list[idx][0], loc_list[idx][1]
+                distance = euclidean_distance(x, y, x_l, y_l) # Calcola la distanza tra il nodo e il box/tray
+                if distance <= self.graph_params["throwing_distance"]:
+                    internal_points = self.define_trajectory_internal_points(x, y, x_l, y_l, loc_area_points, trajectory_polygon_width, node_side_length)
+                    traj_internal_points_dict[(n, idx)] = internal_points
+                else:
+                    traj_internal_points_dict[(n, idx)] = []
+        return traj_internal_points_dict
 
-    # definisce dato un nodo e un obiettivo (box/tray) gli internal points della traiettoria che congiunge il nodo all'obiettivo.
-    def define_trajectory_internal_points(self, x_n, y_n, x_o, y_o, obj_internal_points):
+    def define_trajectory_internal_points(self, x_n, y_n, x_o, y_o, obj_internal_points, trajectory_polygon_width, node_side_length):
+        # define the internal points of the trajectory area that connects the node to the target (tray/box).
         i_o, j_o = self.reduced_map.get_costmap_x_y(x_o, y_o)
         i_n, j_n = self.reduced_map.get_costmap_x_y(x_n, y_n)
         mid_point_1 = np.array([i_o,j_o])
@@ -267,8 +307,8 @@ class RiskEstimation:
         # Calcola il vettore direzione tra i punti medi e il vettore perpendicolare
         direction_vector = np.array(mid_point_2) - np.array(mid_point_1)
         v = direction_vector / np.linalg.norm(direction_vector)
-        perp_vector = (np.array([-v[1], v[0]]))* (self.trajectory_polygon_width / 2)
-        perp_vector2 = (np.array([-v[1], v[0]]))* (self.trajectory_polygon_width / 1.2)
+        perp_vector = (np.array([-v[1], v[0]]))* (trajectory_polygon_width / 2)
+        perp_vector2 = (np.array([-v[1], v[0]]))* (trajectory_polygon_width / 1.2)
         # Calcola i vertici del poligono (trapezio)
         top_left = (mid_point_1 + perp_vector2).astype(int)
         top_right = (mid_point_1 - perp_vector2).astype(int)
@@ -290,7 +330,7 @@ class RiskEstimation:
                     internal_points.append((i, j)) # punti interni al trapezio
 
         # Definisco un quadrato centrato nel nodo da cui fare l'azione    
-        half_side = self.node_side_length / 2
+        half_side = node_side_length / 2
         # Calcola i limiti del quadrato
         i_min = int(i_n - half_side)
         i_max = int(i_n + half_side)
@@ -307,9 +347,65 @@ class RiskEstimation:
         trajectory_without_obj= list(traj_internal_points_set - obj_internal_points_set)
 
         return trajectory_without_obj
-    
+
+    def get_distances_from_locations(self, x,y,loc_):
+
+        distances = np.array([]) 
+        for l in loc_: 
+            distances_0 = np.array(euclidean_distance(l[0],l[1],x,y)).reshape(-1)
+            distances = np.concatenate((distances, distances_0))
+        distances = distances.reshape(-1,1)
+        return distances
+
+# PLOTS 
+    def plot_costmap(self, data):
+        plt.figure(figsize=(6, 6))
+        plt.imshow(data, cmap='gray', origin='lower')
+        plt.colorbar(label='Cost')
+        plt.title('ROS Costmap')
+        plt.savefig("/root/shared/costmp.png")
+
+    def plot_costmaps(self, costmaps, t_values, alpha_values, k):
+        if len(costmaps) != 4 or len(t_values) != 4 or len(alpha_values) != 4:
+            raise ValueError("Le liste devono contenere esattamente 4 elementi.")
+
+        fig, axes = plt.subplots(1, 4, figsize=(40, 10))  # Layout orizzontale ottimizzato
+        fig.suptitle(f'k = {k}', fontsize=32, fontweight='bold')  # Titolo più grande
+
+        # Normalizziamo i colori per avere una scala comune
+        vmin = min(cm.min() for cm in costmaps)
+        vmax = max(cm.max() for cm in costmaps)
+        norm = matplotlib.colors.Normalize(vmin=vmin, vmax=vmax)
+
+        im = None  # Variabile per l'ultima immagine
+        for i, ax in enumerate(axes.flat):
+            im = ax.imshow(costmaps[i], cmap='viridis', norm=norm, origin='upper')
+            ax.set_title(f't = {t_values[i]}\nα = {alpha_values[i]:.2f}', fontsize=28, fontweight='bold')
+            ax.title.set_position([0.5, 1.05])  # Sposta il titolo in alto
+            ax.axis('off')  # Nasconde gli assi
+
+        # Aggiungiamo una colorbar accanto all'ultima costmap
+        cbar_ax = fig.add_axes([0.92, 0.2, 0.015, 0.6])  # [left, bottom, width, height]
+        cbar = fig.colorbar(im, cax=cbar_ax, orientation='vertical')
+        cbar.ax.tick_params(labelsize=24)  # Ingrandisce il font della colorbar
+
+        # Riduciamo gli spazi tra i subplot per ottimizzare la disposizione
+        plt.subplots_adjust(left=0.05, right=0.90, top=0.85, bottom=0.15, wspace=0.15)
+
+        plt.show()
+
+# CONTINUOUS LEARNING
+    def gradiente(self, t_real, t_prev, velocity):
+        grad = -(t_prev-t_real)*velocity/t_real
+        return grad
+
+    def update_velocity(self, t_real, t_prev):
+            new_v = self.v_max - self.alpha*(self.gradiente(t_real, t_prev, self.v_max ))
+            self.v_max = new_v
+
 
 class Global_costamap_reduction:
+
     def __init__(self,costmap_subscriber,reduced_global_map_parameters):
         
         self.x_min = reduced_global_map_parameters['x_min']
@@ -350,11 +446,13 @@ class Global_costamap_reduction:
             return False
 
 class RBFInterpolation:
+
     def __init__(self, sigma, centers, weights, alpha):
         self.sigma = sigma
         self.centers = centers
         self.weights = weights
         self.alpha = alpha
+
    # generate the model
     def radial_basis_function(self, x, centers, sigma):
         return np.exp(-np.square(x - centers) / (2 * sigma**2))
@@ -373,10 +471,6 @@ class RBFInterpolation:
         self.weights = self.weights - delta_w
 
     def predict(self, X, scaling_factor):
-
-        # return np.array(100 * (X < 1.2)).reshape(-1,)
-    
-        # print("X", X)
         num_centers = len(self.centers)
         phi_i = np.zeros((num_centers,len(X)))
         for i in range(num_centers):
@@ -392,32 +486,33 @@ class RBFInterpolation:
         return y_pred_ay
     
 
-
 # -------- manipulation ---------------------------------------------------------
 
 def euclidean_distance(x1,y1, x2, y2):
     distance = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
     return distance
 
-def get_manipulation_risk(action_graph_nodes, boxes_loc, trays_loc, action_graph_conversion_dict, 
-                          rbf_interp_picking, rbf_interp_throwing, costmap, trays_trajectory_internal_points, 
-                          boxes_trajectory_internal_points, trays_internal_points, boxes_internal_points, risk_params):
+def get_corrected_cost(cost):
+    if cost < 50:
+        return 0
+    if  cost < 85:
+        return cost/3
+    return 100  
+
+def get_manipulation_risk(action_graph_nodes, action_graph_conversion_dict,  n_boxes, n_trays, distances_dict,
+                          rbf_interp_picking, rbf_interp_throwing, 
+                          merged_costmap, trays_trajectory_internal_points,boxes_trajectory_internal_points, risk_params):
+    
     n_nodes_actions = len(action_graph_nodes)
-    n_boxes = len(boxes_loc)
-    n_trays = len(trays_loc)
     # evaluate picking and throwing risk for every action node
     pick_mtx = np.zeros((n_nodes_actions, n_boxes),dtype=np.int64)
     throw_mtx = np.zeros((n_nodes_actions, n_trays),dtype=np.int64)
     for node in action_graph_nodes: 
         node_idx = action_graph_conversion_dict[node]
-        x, y = action_graph_nodes[node]["x"], action_graph_nodes[node]["y"] # node location
-        d_boxes = get_distances_from_locations(x,y, boxes_loc)
-        d_trays = get_distances_from_locations(x,y, trays_loc)
+        d_boxes = distances_dict[node][0]
+        d_trays = distances_dict[node][1]
 
-        # print("++++++++++++++++++++++++++++++++++++++++++++++++")
-        # print("x, y, d_boxes, d_trays", x, y, d_boxes, d_trays)
-
-        '''NB: i modelli che calcolano la probabilità di successo nei casi di picking e throwing, sono stati allenati considerando una distanza di 1.5 
+        '''NB: i modelli che calcolano la probabilità di successo nei casi di picking e throwing sono stati allenati considerando una distanza di 1.5 
         --> oltre 1.5 la probabilità di successo è 0. Quando le distanze "caratteristiche" cambiano (e.g., un robot può fare picking da 8 metri), non serve ri-allenare 
         i modelli ma è sufficiente utilizzare lo scaling factor presente nei risk parameters'''
 
@@ -427,21 +522,9 @@ def get_manipulation_risk(action_graph_nodes, boxes_loc, trays_loc, action_graph
 
         # print("pick_risk, throw_risk", pick_risk, throw_risk)
         # print("++++++++++++++++++++++++++++++++++++++++++++++++")
+        trays_trajectories_risk = get_manipulation_trajectory_risk(node_idx, n_trays, trays_trajectory_internal_points, merged_costmap)
+        boxes_trajectories_risk = get_manipulation_trajectory_risk(node_idx, n_boxes, boxes_trajectory_internal_points, merged_costmap)
 
-
-        plot = False
-
-        if plot:
-
-            trays_trajectories_risk = get_manipulation_trajectory_risk_with_plot(node_idx, n_trays, trays_trajectory_internal_points, costmap, x, y, trays_internal_points, trays_loc)
-            boxes_trajectories_risk = get_manipulation_trajectory_risk_with_plot(node_idx, n_boxes, boxes_trajectory_internal_points, costmap, x, y, boxes_internal_points, boxes_loc)
-
-        else:
-
-            trays_trajectories_risk = get_manipulation_trajectory_risk(node_idx, n_trays, trays_trajectory_internal_points, costmap)
-            boxes_trajectories_risk = get_manipulation_trajectory_risk(node_idx, n_boxes, boxes_trajectory_internal_points, costmap)
-
-        
         for idx in range(0, n_trays): # se il rischio di fare throwing dal node al tray idx è alto, dividi per tre la prob di successo del lancio
             if trays_trajectories_risk[idx] > 40: 
                 throw_risk[idx] = throw_risk[idx]/3
@@ -453,24 +536,55 @@ def get_manipulation_risk(action_graph_nodes, boxes_loc, trays_loc, action_graph
         throw_mtx[node_idx] = throw_risk
     return pick_mtx, throw_mtx
 
-def get_corrected_cost(cost):
-    if cost < 50:
-        return 0
-    if  cost < 85:
-        return cost/3
-    return 100  
+def get_manipulation_risk_with_plot(action_graph_nodes, action_graph_conversion_dict, 
+                                    n_boxes, trays_loc, distances_dict,
+                                    rbf_interp_picking, rbf_interp_throwing, 
+                                    merged_costmap, costmap, 
+                                    trays_trajectory_internal_points, boxes_internal_points, trays_internal_points, risk_params):
+    n_nodes_actions = len(action_graph_nodes)
+    n_trays = len(trays_loc)
+    # evaluate picking and throwing risk for every action node
+    pick_mtx = np.zeros((n_nodes_actions, n_boxes),dtype=np.int64)
+    throw_mtx = np.zeros((n_nodes_actions, n_trays),dtype=np.int64)
+    for node in action_graph_nodes: 
+        node_idx = action_graph_conversion_dict[node]
+        d_boxes = distances_dict[node][0]
+        d_trays = distances_dict[node][1]
 
-# risk of doing a manipulation action from a node to a tray/box considering the trajectory area
-# return a list with the risks of manipulation action for each box/tray from the given node
-def get_manipulation_trajectory_risk(node, n_loc, trajectory_internal_points, costmap):
+        '''NB: i modelli che calcolano la probabilità di successo nei casi di picking e throwing sono stati allenati considerando una distanza di 1.5 
+        --> oltre 1.5 la probabilità di successo è 0. Quando le distanze "caratteristiche" cambiano (e.g., un robot può fare picking da 8 metri), non serve ri-allenare 
+        i modelli ma è sufficiente utilizzare lo scaling factor presente nei risk parameters'''
+
+        # picking and throwing risk prediction by rbf interpolation
+        pick_risk = rbf_interp_picking.predict(d_boxes, risk_params["rbf_pick_scaling_factor"])
+        throw_risk = rbf_interp_throwing.predict(d_trays, risk_params["rbf_throw_scaling_factor"])
+
+        # print("pick_risk, throw_risk", pick_risk, throw_risk)
+        # print("++++++++++++++++++++++++++++++++++++++++++++++++")
+
+        x, y = action_graph_nodes[node]["x"], action_graph_nodes[node]["y"] # node location
+        trays_trajectories_risk = get_manipulation_trajectory_risk_with_plot(node_idx, n_trays, trays_trajectory_internal_points, merged_costmap, costmap, x, y, boxes_internal_points, trays_internal_points, trays_loc)
+
+        for idx in range(0, n_trays): # se il rischio di fare throwing dal node al tray idx è alto, dividi per tre la prob di successo del lancio
+            if trays_trajectories_risk[idx] > 40: 
+                throw_risk[idx] = throw_risk[idx]/3
+
+        pick_mtx[node_idx] = pick_risk
+        throw_mtx[node_idx] = throw_risk
+    return pick_mtx, throw_mtx
+
+def get_manipulation_trajectory_risk(node, n_loc, trajectory_internal_points, merged_costmap):
+    # risk of doing a manipulation action from a node to a tray/box considering the trajectory area
+    # return a list with the risks of manipulation action for each box/tray from the given node
     trajectories_risk = []
     for idx in range(0, n_loc):
         internal_points = trajectory_internal_points[(node, idx)]
         # evaluate the costmap values in the trajectory area
         trajectory_area_values = []
-        for (i, j) in internal_points:
+        for (j,i) in internal_points:
             try:
-                cost = costmap.get_cost_from_costmap_x_y(i, j)
+                # j,i = costmap.get_costmap_x_y(x,y)
+                cost = merged_costmap[i,j]
                 cost_corr = get_corrected_cost(cost)
                 trajectory_area_values.append(cost_corr)
             except IndexError:
@@ -484,16 +598,17 @@ def get_manipulation_trajectory_risk(node, n_loc, trajectory_internal_points, co
     return trajectories_risk
 
 # per debug per plottare le traiettorie
-def get_manipulation_trajectory_risk_with_plot(node, n_loc, trajectory_internal_points, costmap,
-                                      node_x, node_y, manip_internal_points, loc_):
+def get_manipulation_trajectory_risk_with_plot(node, n_loc, trajectory_internal_points,merged_costmap, costmap,
+                                      node_x, node_y, box_internal_points, trays_internal_points, loc_):
     trajectories_risk = []
     for idx in range(0, n_loc):
         internal_points = trajectory_internal_points[(node, idx)]
         # evaluate the costmap values in the trajectory area
         trajectory_area_values = []
-        for (i, j) in internal_points:
+        for (x,y) in internal_points:
             try:
-                cost = costmap.get_cost_from_costmap_x_y(i, j)
+                j,i = costmap.get_costmap_x_y(x,y)
+                cost = merged_costmap[i,j]
                 cost_corr = get_corrected_cost(cost)
                 trajectory_area_values.append(cost_corr)
             except IndexError:
@@ -503,34 +618,37 @@ def get_manipulation_trajectory_risk_with_plot(node, n_loc, trajectory_internal_
             max_value = np.max(trajectory_area_values)
         else:
             max_value = 1
-        plot_manipulation_area(node_x, node_y, loc_[idx][0],loc_[idx][1], costmap, manip_internal_points, internal_points)
+        if internal_points:
+            plot_manipulation_area(node_x, node_y, loc_[idx][0],loc_[idx][1], merged_costmap,costmap, box_internal_points, trays_internal_points, internal_points)
         trajectories_risk.append(max_value)
     return trajectories_risk
 
-def plot_manipulation_area(node_x, node_y, manip_x, manip_y, costmap, manip_internal_points, traj_internal_points):
+def plot_manipulation_area(node_x, node_y, manip_x, manip_y, merged_costmap, costmap, box_internal_points, trays_internal_points, traj_internal_points):
     # Disegno della traiettoria sulla costmap
     i,j = costmap.get_costmap_x_y(node_x,node_y)
     it,jt = costmap.get_costmap_x_y(manip_x,manip_y)
     fig, ax = plt.subplots()
-    ax.imshow(costmap.data, cmap='gray', interpolation='nearest')
-    # disegno i punti di partenza (nodo di lancio e nodo di placing)
-    plt.scatter([it], [jt], color='green', s = 3)
-    plt.scatter([i], [j], color='red', s = 3)
-    # disegno in verde box e trays e in giallo la traiettoria
-    for point in traj_internal_points:
-        plt.scatter(point[0], point[1], color='yellow', s = 1)
-    for point in manip_internal_points:
-        plt.scatter(point[0], point[1], color='green', s = 1)
-    current_time = datetime.now()
-    plt.savefig(f"/root/shared/traj_{current_time.strftime('%Y-%m-%d_%H:%M:%S')}.png")
+    ax.imshow(merged_costmap.data, cmap='gray_r', interpolation='nearest')
 
-def get_distances_from_locations(x,y,loc_):
-    distances = np.array([]) 
-    for l in loc_: 
-        distances_0 = np.array(euclidean_distance(l[0],l[1],x,y)).reshape(-1)
-        distances = np.concatenate((distances, distances_0))
-    distances = distances.reshape(-1,1)
-    return distances
+    # disegno box, trays e traiettorie
+    for idx,point in enumerate(traj_internal_points):
+        if idx%5 == 0:
+            plt.scatter(point[0], point[1], color='orange', s = 1)
+    for idx,point in enumerate(box_internal_points):
+        if idx%5 == 0:
+            plt.scatter(point[0], point[1], color='purple', s = 1)
+    for idx,point in enumerate(trays_internal_points):
+        if idx%5 == 0:
+            plt.scatter(point[0], point[1], color='green', s = 1)
+    current_time = datetime.now()
+
+    # disegno i punti di partenza (nodo di lancio e nodo di placing)
+    plt.scatter([it], [jt], color='lightgreen', s = 5)
+    plt.scatter([i], [j], color='red', s = 5)
+    # plt.savefig(f"/root/shared/traj_{current_time.strftime('%Y-%m-%d_%H:%M:%S')}.png")
+    plt.savefig(f"traj_{current_time.strftime('%Y-%m-%d_%H%M%S')}.png")
+
+
 
 # -------- navigation -----------------------------------------------------------
 
@@ -539,7 +657,8 @@ def get_corrected_riskmap(c0):
     Kj = c0.shape[0]
     Ki = c0.shape[1]
     # riskmap = c0
-    riskmap = c0.transpose()
+    riskmap = c0.copy()
+    riskmap = riskmap.transpose()
     count = 0
     for i in range(Ki):
         for j in range(Kj):
@@ -560,7 +679,17 @@ def get_rt_edges_new(riskmap,edges,nodes_dct,squares_edge_dict,resolution,vmax):
         x1,y1 = nodes_dct[e[1]]
         dst = euclidean_distance(x0,y0,x1,y1)*resolution
         squares_edge = squares_edge_dict[ie]
-        lst = [riskmap[idx] for idx in [tuple(element) for element in squares_edge]]
+
+        lst = []
+        for idx in [tuple(element) for element in squares_edge]:
+            try:
+                lst.append(riskmap[idx])
+            except IndexError as ie:
+                pass
+                # print(ie, idx)
+
+        # lst = [riskmap[idx] for idx in [tuple(element) for element in squares_edge]]
+
         rmax,ravg = np.max(lst),np.mean(lst)
         # print(f'rmax: {rmax}')
         # print(f'ravg: {ravg}')
@@ -665,6 +794,13 @@ def _forward_pass_nb(V,steps,n_start,Nay,Tay,Ray,alpha_t,alpha_r,q):
         r  += Ray[n0,a1]
     return nodes_ay,dt,r
 
+def plot_costmap(data):
+    plt.figure(figsize=(6, 6))
+    plt.imshow(data, cmap='viridis', origin='lower')
+    plt.colorbar(label='Cost')
+    plt.title('ROS Costmap')
+    plt.show()
+
 def get_time_and_risk_dict_new(riskmap, edges, nodes_dct, squares_edge_dict, resolution, vmax,
                                nodes_neighbors, nodes_action, steps, alpha_t, alpha_r, action_idx_name, 
                                scenario_min, scenario_max):
@@ -692,17 +828,18 @@ def get_time_and_risk_dict_new(riskmap, edges, nodes_dct, squares_edge_dict, res
         # navigation_risk_mtx[n1_name,n0_name,:] = [time_min, t, time_max, r]
         navigation_risk_mtx[n0_name,n1_name,:] = [round(time_min,2), round(t,2), round(time_max,2), round(r,2)]
         navigation_risk_mtx[n1_name,n0_name,:] = [round(time_min,2), round(t,2), round(time_max,2), round(r,2)]
+
     return navigation_risk_mtx
 
 warnings.simplefilter('ignore', category=NumbaDeprecationWarning)
 warnings.simplefilter('ignore', category=NumbaPendingDeprecationWarning)
 
-def get_navigation_risk_dict(reduced_map, large_graph_params, action_idx_name, 
+def get_navigation_risk_mtx(merged_costmap, reduced_map, large_graph_params, action_idx_name, 
                              vmax, action_graph_nodes, action_graph_conversion_dict, 
                              risk_params):
     # dynamic data
     resolution = reduced_map.resolution
-    cmap = reduced_map.data
+    cmap = merged_costmap
     riskmap = get_corrected_riskmap(cmap)
 
     # static data
@@ -711,6 +848,7 @@ def get_navigation_risk_dict(reduced_map, large_graph_params, action_idx_name,
     nodes_neighbors   = {int(key): value for key, value in large_graph_params["nodes_neighbors"].items()}
     squares_edge_dict = {int(key): value for key, value in large_graph_params["squares_edge_dict"].items()}
     nodes_action      = list(action_idx_name.keys())
+    
     # paremeters
     steps   = risk_params["steps"]
     alpha_t = risk_params["alpha_t"]
@@ -729,6 +867,5 @@ def get_navigation_risk_dict(reduced_map, large_graph_params, action_idx_name,
         risk = riskmap[i,j]
         nav_risk_mtx[node_idx, node_idx, :] = [1,1,1, risk]
 
-
     return nav_risk_mtx
-#%%
+

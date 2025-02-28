@@ -1,4 +1,5 @@
 {
-    "pick": 0,
-    "place": 120
+    "pick": 8,
+    "place": 12,
+    "wait": 1
 }

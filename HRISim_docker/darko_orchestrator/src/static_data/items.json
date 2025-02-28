@@ -1,10 +1,12 @@
 {
     "objects": [
         "object0",
-        "object1"
+        "object1",
+        "object2"
     ],
     "trays": [
         "tray0",
-        "tray1"
+        "tray1",
+        "tray2"
     ]
 }

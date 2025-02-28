@@ -115,7 +115,7 @@ windows:
     tags: ['core']
     panes:
       - 'roslaunch pnp_ros pnp_ros.launch plans_folder:=$PNP_PLANS actions_folder:=$PNP_ACTIONS conditions_folder:=$PNP_CONDITIONS'
-      - 'rosparam set /hrisim/abort_time_threshold $ABORT_TIME_THRESHOLD && roscd hrisim_plans/scripts && python TIAGo_noncausal_hardcoded_plan.py'
+      # - 'rosparam set /hrisim/abort_time_threshold $ABORT_TIME_THRESHOLD && roscd hrisim_plans/scripts && python TIAGo_noncausal_hardcoded_plan.py'
   - name: scenario
     tags: ['exp']
     panes:
@@ -133,3 +133,7 @@ windows:
     tags: ['exp']
     panes:
       - 'roslaunch hrisim_prediction_manager prediction_manager.launch CIE:=$CIE pred_step:=$PRED_STEP'
+  # - name: darko_orchestrator
+  #   tags: ['orch']
+  #   panes:
+  #     - 'roslaunch darko_orchestrator orchestrator.launch'

@@ -30,7 +30,7 @@ def check_obstacle_collision(edge, obstacle_polygons):
 def is_free_point(costmap, pi, pj, free_x, free_y):
 
     if free_x == 0 or free_y == 0:
-        if costmap['data'][pi][pj] > 0:
+        if costmap['data'][pi][pj] > 50:
             return False
         return True
 
@@ -127,15 +127,16 @@ def promote_action_nodes(nodes, location_coordinates, picking_distance, throwing
 
     return {f'n{i}': {'x': node[0], 'y': node[1], 'name': node[2]} for i, node in enumerate(action_nodes)}
 
-def plot_graph(nodes, edges, costmap, action_nodes, obstacle_polygons, large_graph_dict):
+def plot_graph(nodes, edges, costmap, action_nodes, obstacle_polygons, location_coordinates, graph_params):
+
+    picking_distance = graph_params['picking_distance']
+    throwing_distance = graph_params['throwing_distance']
 
     G = nx.Graph()
 
-    # Add all the nodes to the graph with integer labels
     for node in nodes:
         G.add_node(node, label=node, pos=node)
 
-    # Add only the filtered edges to the graph
     for edge in edges:
         G.add_edge(*edge)
 
@@ -144,6 +145,7 @@ def plot_graph(nodes, edges, costmap, action_nodes, obstacle_polygons, large_gra
     res = costmap["resolution"]
     for i in range(0, costmap["height"], 10):
         for j in range(0, costmap["width"], 10):
+
             cost = get_cost_from_costmap_x_y(j, i, costmap['data'])
 
             x, y = get_world_x_y(
@@ -161,16 +163,23 @@ def plot_graph(nodes, edges, costmap, action_nodes, obstacle_polygons, large_gra
         x, y = node['x'], node['y']
         ax.plot(x, y, "ro")
 
+    for name, loc in location_coordinates.items():
+
+        ax.plot(loc['x'], loc['y'], 'bo' if 'box' in name else 'go')
+
+        ax.add_patch(
+            plt.Circle((loc['x'], loc['y']), picking_distance if 'box' in name else throwing_distance, color='blue' if 'box' in name else 'green', alpha=0.4)
+        )
 
     for polygon in obstacle_polygons:
         x, y = polygon.exterior.xy
-        ax.fill(x, y, alpha=0.5, fc='red', ec='black')  # 'fc' è il colore di riempimento, 'ec' è il colore del bordo
+        ax.fill(x, y, alpha=0.5, fc='red', ec='black')
 
 
     pos = {node: node for node in G.nodes()}
     nx.draw(G, pos, node_size=20, with_labels=False)
-    #plt.show()
 
+    #plt.show()
     fig.savefig('/root/shared/large_graph.png')
     
 def get_neighbors(free_positions_discrete, node, num_neighbors):
@@ -185,10 +194,7 @@ def get_neighbors(free_positions_discrete, node, num_neighbors):
     # Return a list of the `k` nearest neighbors
     return [tuple(free_positions_discrete[i]) for i in indices[0]]
 
-def create_graph(costmap_reduced, location_coordinates):
-
-    with open("../static_data/graph_params.json", "r") as file:
-        graph_params = json.load(file)
+def create_graph(costmap_reduced, location_coordinates, graph_params):
 
     # graph params
     free_x = graph_params['free_x']
