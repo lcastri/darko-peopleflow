@@ -55,13 +55,23 @@ app.layout = dbc.Container([
             )
     ]),
     components.get_current_action_table(),
-    components.get_state_table(objects, trays),
+    dbc.Row([
+            dbc.Col(
+                components.get_state_table(objects, trays),
+                className="d-flex align-items-center"
+            ),
+            dbc.Col(  
+                components.get_costmap_heatmap(),
+                style={'border': '2px solid black'}
+            )
+    ], align="center"),
     html.Hr(),
     html.Div([
         components.get_input_mission_table(objects, trays),
         components.get_publish_button(),  
-    ], id=ids.input_div_id),
+    ], id=ids.input_div_id),    
     components.get_timer(ids.update_ui_timer_id, 1000, -1),
+    components.get_timer(ids.update_heatmap_timer_id, 5000, -1),
     components.get_timer(ids.hide_reschedule_trigger_timer_id, 7000, 0)
 ])
 

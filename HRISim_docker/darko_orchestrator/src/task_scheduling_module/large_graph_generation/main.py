@@ -23,3 +23,9 @@ def generate_large_graph(costmap_subscriber):
     with open("../static_data/action_graph_nodes.json", "w") as file:
         json.dump(action_nodes, file, indent=4)
 
+    with open("/root/shared/large_graph.json", "w") as file:
+        json.dump(large_graph_dict, file, indent=4)
+
+    with open("/root/shared/action_graph_nodes.json", "w") as file:
+        json.dump(action_nodes, file, indent=4)
+

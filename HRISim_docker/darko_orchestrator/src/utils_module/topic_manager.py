@@ -3,7 +3,7 @@
 import rospy
 from geometry_msgs.msg import Point,Quaternion,Pose,PoseStamped
 from std_msgs.msg import Bool,Int64,String,Float64MultiArray,Int64MultiArray
-from darko_orchestrator.msg import CurrentAction, Action, State
+from darko_orchestrator.msg import CurrentAction, Action, State, PathList, Heatmap
 
 class PublisherManager(object):
     def __init__(self,topic,msg_type,latch_bool=False):
@@ -18,6 +18,7 @@ class PublisherManager(object):
         self._pub.publish(msg) 
 
 class SubscriberManager(object):
+
     def __init__(self,topic,msg_type,wait_for_first_msg=False):
         self._topic = topic
         self._msg_type = msg_type
@@ -47,6 +48,10 @@ class SubscriberManager(object):
             self._data = data.data
         elif self._msg_type == Int64MultiArray:
             self._data = data.data
+        elif self._msg_type == PathList:
+            self._data = data
+        elif self._msg_type == Heatmap:
+            self._data = data
     
     def _reset_data(self):
         if self._msg_type == Bool:
@@ -69,6 +74,10 @@ class SubscriberManager(object):
         elif self._msg_type == Float64MultiArray:
             self._data = []
         elif self._msg_type == Int64MultiArray:
+            self._data = []
+        elif self._msg_type == PathList:
+            self._data = []
+        elif self._msg_type == Heatmap:
             self._data = []
 
     def _check_empty_data(self):
@@ -96,6 +105,10 @@ class SubscriberManager(object):
             o_check = xo_check & yo_check & zo_check & wo_check
             return p_check & o_check
         if self._msg_type == Int64MultiArray:
+            return self._data in [None, []]
+        if self._msg_type == PathList:
+            return self._data in [None, []]
+        if self._msg_type == Heatmap:
             return self._data in [None, []]
         if self._msg_type == State:
             return self._data.state == []

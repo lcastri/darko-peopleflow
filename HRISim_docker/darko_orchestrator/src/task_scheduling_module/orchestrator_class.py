@@ -2,13 +2,13 @@ import rospy
 import numpy as np
 import time
 from std_msgs.msg import Bool,String,Int64MultiArray,Float64MultiArray
-from darko_orchestrator.msg import ScenarioList, Scenario, State, CurrentAction, Action
+from darko_orchestrator.msg import ScenarioList, Scenario, State, CurrentAction, Action, PathList
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 import actionlib
 import tf
 import math
 from utils_module.subscribers import AmclPoseManager,RiskMtxSubscriber, RiskMtxSubscriberFloat
-from scheduler_class import Scheduler
+from scheduler_class import Scheduler, _get_time_index
 from utils_module.topic_manager import SubscriberManager,PublisherManager
 from utils import global_costamap_reduction
 
@@ -55,7 +55,8 @@ class Orchestrator:
         self.navigation_risk_sub      = RiskMtxSubscriberFloat("/risk_estimation/navigation_risk_for_scheduler")
         self.picking_risk_sub         = RiskMtxSubscriber("/risk_estimation/picking_risk_for_scheduler"   )
         self.throwing_risk_sub        = RiskMtxSubscriber("/risk_estimation/throwing_risk_for_scheduler"  )
-        self.ui_mission_subscriber = SubscriberManager("/web_ui/mission", Int64MultiArray, False)
+        self.ui_mission_subscriber    = SubscriberManager("/web_ui/mission", Int64MultiArray, False)
+        self.path_list_subscriber     = SubscriberManager("/risk_estimation/path_list_for_scheduler", PathList, False)
 
         self.costmap_subscriber = costmap_subscriber
 
@@ -174,7 +175,7 @@ class Orchestrator:
         if not self.reschedule_sub._check_empty_data():
             rospy.loginfo("reschedule triggered")
             self.reschedule_sub._reset_data()
-            self.stop_robot()
+            # self.stop_robot()
             return True
         return False
     '''
@@ -307,12 +308,12 @@ class Orchestrator:
         
         t=0
         final_state = np.zeros(total_qfa.size + 2, dtype=np.int64)
-        nav_risk_mtx,picking_prob_mtx,throwing_prob_mtx = self.retrieve_risk_mtx()
+        nav_risk_mtx,picking_prob_mtx,throwing_prob_mtx, path_list = self.retrieve_risk_mtx()
         step_list = self.update_mission_steps(step_list, nav_risk_mtx,picking_prob_mtx,throwing_prob_mtx)
         partial_mission = self.compute_mission_from_steps(step_list[:self.max_mission_steps])
         print("before solve mission internal")
         self.publish_active_mission(True)
-        mission_state= self.solve_mission_internal(partial_mission, nav_risk_mtx, picking_prob_mtx, throwing_prob_mtx, final_state.copy())
+        mission_state= self.solve_mission_internal(partial_mission, nav_risk_mtx, picking_prob_mtx, throwing_prob_mtx, path_list, final_state.copy())
 
         print(f"mission state {mission_state}")
 
@@ -329,7 +330,7 @@ class Orchestrator:
             new_mission, new_state = self.from_array_to_dict_mission(residuo)
 
             step_list = self.generate_mission_steps(new_mission)
-            nav_risk_mtx,picking_prob_mtx,throwing_prob_mtx = self.retrieve_risk_mtx()
+            nav_risk_mtx,picking_prob_mtx,throwing_prob_mtx, path_list = self.retrieve_risk_mtx()
             step_list = self.update_mission_steps(step_list, nav_risk_mtx,picking_prob_mtx,throwing_prob_mtx)
 
             ## TODO DA TESTARE
@@ -350,7 +351,7 @@ class Orchestrator:
             print(f"la mia partial list è {partial_step_list}")
 
             partial_mission = self.compute_mission_from_steps(partial_step_list)
-            mission_state = self.solve_mission_internal(partial_mission, nav_risk_mtx, picking_prob_mtx, throwing_prob_mtx, final_state.copy(), new_state)
+            mission_state = self.solve_mission_internal(partial_mission, nav_risk_mtx, picking_prob_mtx, throwing_prob_mtx, path_list, final_state.copy(), new_state)
 
             print(f"mission state {mission_state}")
             
@@ -380,18 +381,44 @@ class Orchestrator:
         return new_mission, new_state
 
     def retrieve_risk_mtx(self):
+
         # richiesta calcolo rischi
         self.risk_estimation_request_pub._publish_msg(True)
         done = False
+
         while not done:
+
             if not self.risk_estimation_done_sub._check_empty_data():
+
                 rospy.sleep(0.1)
+
                 nav_risk_mtx   = self.navigation_risk_sub._risk_data
                 pick_risk_mtx  = self.picking_risk_sub._risk_data
                 throw_risk_mtx = self.throwing_risk_sub._risk_data
+
+                while self.path_list_subscriber._check_empty_data():
+                    rospy.sleep(5)
+                path_list_obj = self.path_list_subscriber._data
+
+                path_list = []
+                for path_record_obj in path_list_obj.path_list:
+                    coords = []
+                    for coord_obj in path_record_obj.coords_list:
+                        coords.append((coord_obj.x, coord_obj.y))
+                    path_record = [
+                        path_record_obj.time,
+                        path_record_obj.node_source,
+                        path_record_obj.node_dest,
+                        coords
+                    ]
+                    path_list.append(path_record)
+
+
                 self.risk_estimation_done_sub._reset_data()
                 done=True
-        return nav_risk_mtx,pick_risk_mtx,throw_risk_mtx
+
+
+        return nav_risk_mtx,pick_risk_mtx,throw_risk_mtx, path_list
     
     def publish_scenarios(self, scenarios_lst, prob_lst):
 
@@ -460,7 +487,8 @@ class Orchestrator:
         self.scenario_computation_done_pub._publish_msg(value)
         return
 
-    def solve_mission_internal(self, missione_internal, nav_risk_mtx,picking_prob_mtx,throwing_prob_mtx, final_state, new_state=None):
+    def solve_mission_internal(self, missione_internal, nav_risk_mtx,picking_prob_mtx,throwing_prob_mtx, path_list, final_state, new_state=None):
+
         mission_state= np.zeros(2+self.scheduler_module.n_objects*(self.scheduler_module.n_trays+1),dtype=np.int64)
         if new_state:
             for o in range(self.scheduler_module.n_objects):
@@ -489,7 +517,7 @@ class Orchestrator:
         while not next_task['first_task']['action'] == "completed":
 
             if (next_task['first_task']['action'] == 'moving'):
-                reschedule = self.perform_moving_task(next_task)
+                reschedule = self.perform_moving_task(next_task, mission_state[0], mission_state[1], path_list)
                 
                 if reschedule:
                     return mission_state ### TODO invertito
@@ -585,10 +613,50 @@ class Orchestrator:
             delta_x += epsilon
         return math.atan2(delta_y,delta_x)
 
-    def perform_moving_task(self,next_task):
+
+    def retrieve_path(self, path_list, time_val, current_node, target_node):
+
+        path = next((path for path in path_list if path[:3] == [time_val, current_node, target_node]), None)
+
+        if path:
+            return path[3]
+
+        path = next((path for path in path_list if path[:3] == [time_val, target_node, current_node]), None)
+
+        if path:
+            return path[3][::-1]
+        
+        return None
+
+
+    def perform_moving_task(self,next_task, time, current_node, path_list):
 
         target_node = next_task['first_task']['position']
         target_node_pos = self.action_graph_nodes[self.action_nodes[target_node]]
+
+        time_idx = _get_time_index(time, self.t_list)
+        time_val = self.t_list[time_idx]
+
+        path = self.retrieve_path(path_list, time_val, current_node, target_node)
+
+        if path:
+
+            for i in range(1, len(path) - 1):
+
+                node_to_reach = path[i]
+                node_to_point = path[i + 1]
+
+                rospy.loginfo(f"Passing through ({node_to_reach[0]};{node_to_reach[1]})")
+
+                reschedule = self.send_moving_goal(
+                    node_to_reach[0],
+                    node_to_reach[1],
+                    node_to_point[0],
+                    node_to_point[1]
+                )
+
+                if reschedule:
+                    return True
 
         if (next_task['second_task']['action'] == 'picking'):
             object_to_pick_int =  next_task['second_task']['object']
@@ -604,6 +672,7 @@ class Orchestrator:
             return self.send_moving_goal(target_node_pos['x'],target_node_pos['y'],target_tray_pos['x'],target_tray_pos['y'])
         
         return self.send_moving_goal(target_node_pos['x'],target_node_pos['y'],target_node_pos['x'],target_node_pos['y'])
+    
 
     def perform_manipulation_wait_drop_task(self,next_task):
 
@@ -641,9 +710,15 @@ class Orchestrator:
                 rospy.sleep(0.1)
         else:   #waiting
             rospy.sleep(self.action_times["wait"])
+            if self.check_for_reschedule():
+                return False, True
+            rospy.sleep(0.1)
+
         return self.manipulation_success_sub._data, False
 
     def update_mission_state(self,mission_state,time_start_mission,success,next_task):
+
+        print("before update: ", mission_state)
 
         action_type = next_task["first_task"]["action"]
 
@@ -699,5 +774,7 @@ class Orchestrator:
             report = {
                 "action": action_type
             }
+
+        print("after update: ", mission_state)
 
         return mission_state, report

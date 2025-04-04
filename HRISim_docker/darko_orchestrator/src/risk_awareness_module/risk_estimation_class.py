@@ -1,15 +1,19 @@
 #%%
 
+import rospy
+import pandas as pd
 import math
 import json
 import numpy as np
 import numba as nb
 import warnings
 from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning
+from hrisim_prediction_srvs.srv import GetRiskMap, GetRiskMapRequest
 import matplotlib
 import matplotlib.pyplot as plt
 from shapely.geometry import Point, Polygon
 from datetime import datetime
+import time
 
 
 class RiskEstimation:
@@ -113,22 +117,19 @@ class RiskEstimation:
         self.num_boxes = len(self.boxes_loc)
         self.num_trays = len(self.trays_loc)
 
-        """MOCK DELLA PARTE DI LUCA C"""
-        
         self.t_list = self.risk_params["t_list"]
         self.dynamic_costmap_weight ={t: np.exp(-self.risk_params["dynamic_costmap_weight_k"] * t) for t in self.t_list}
-       
-        n_row = len(self.large_graph_params['nodes_xy'])
-        n_col = len(self.t_list)
-        self.prediction_risk_matrix = 0 * np.ones((n_row, n_col), dtype=np.float64)
- 
-        self.prediction_risk_matrix_names = list(self.large_graph_params['nodes_conversion_dict'].keys())
-
         self.predictions_costmaps_dict = {t: np.zeros_like(self.reduced_map.data, dtype=float) for t in self.t_list}
         self.merged_costmaps_dict = {t: np.zeros_like(self.reduced_map.data, dtype=int) for t in self.t_list}
 
         self.gaussian_sigma = 15.0
         self.r = 25
+
+        """MOCK DELLA PARTE DI LUCA C"""
+        n_row = len(self.large_graph_params['nodes_xy'])
+        n_col = len(self.t_list)
+        self.prediction_risk_matrix = 0 * np.ones((n_row, n_col), dtype=np.float64)
+        self.prediction_risk_matrix_names = list(self.large_graph_params['nodes_conversion_dict'].keys())
 
         _ = self.get_risk_estimations()
         
@@ -145,26 +146,131 @@ class RiskEstimation:
                     nodes_action_idx_map[int(n)] = self.action_graph_conversion_dict[n0]
         return nodes_action_idx_map
 
+
+    def plot_predictions(self):
+
+        n_row, n_col = self.prediction_risk_matrix.shape
+
+        filtered_indices = []
+        for row_idx in range(n_row):
+            name = self.prediction_risk_matrix_names[row_idx]
+            if 'wa' in name or 'target' in name:
+                filtered_indices.append(row_idx)
+
+        filtered_names = [self.prediction_risk_matrix_names[i] for i in filtered_indices]
+        filtered_matrix = self.prediction_risk_matrix[filtered_indices, :]
+
+        # Creazione della figura con 4 subplot affiancati
+        fig, axes = plt.subplots(1, n_col, figsize=(15, 5), sharey=True)
+
+        # Generazione dei barplot
+        for col in range(n_col):
+            axes[col].bar(filtered_names, filtered_matrix[:, col])
+            axes[col].set_title(f"t = {self.t_list[col]}")
+            axes[col].tick_params(axis='x', rotation=90)  # Rotazione delle etichette per leggibilità
+            
+        plt.tight_layout()
+        timestamp = int(time.time())
+        plt.savefig(f"/root/shared/prediction/plot_{timestamp}.png")
+
+
+    def call_prediction_service(self):
+
+        tic = time.perf_counter()
+        rospy.wait_for_service('/get_risk_map')
+        rospy.loginfo(f"service wait {time.perf_counter()-tic}")
+
+
+        try:
+
+            get_risk_map = rospy.ServiceProxy('/get_risk_map', GetRiskMap)
+            
+            req = GetRiskMapRequest()
+            
+            tic = time.perf_counter()
+            resp = get_risk_map(req)
+            rospy.loginfo(f"service call {time.perf_counter()-tic}")
+            
+            self.prediction_risk_matrix_names = list(resp.waypoint_ids)
+
+            n_row = resp.n_waypoint
+            n_col = resp.n_steps
+
+            self.prediction_risk_matrix = np.array(resp.PDs, dtype=np.float64).reshape((n_row, n_col))
+
+            tic = time.perf_counter()
+
+            # FILTERING
+            for row_idx in range(n_row):
+                name = self.prediction_risk_matrix_names[row_idx]
+                if not ('wa' in name or 'target' in name):
+                    self.prediction_risk_matrix[row_idx,:] = 0
+
+            # # MIN-MAX normalization
+            # X_min = self.prediction_risk_matrix.min()
+            # X_max = self.prediction_risk_matrix.max()
+            # if X_max > X_min:
+            #     self.prediction_risk_matrix = 100 * (self.prediction_risk_matrix - X_min) / (X_max - X_min)
+            # else:
+            #     self.prediction_risk_matrix = np.zeros_like(self.prediction_risk_matrix)
+
+            # THRESHOLD BINARIZATION
+            for row_idx in range(n_row):
+                for col_idx in range(n_col):
+                    if self.prediction_risk_matrix[row_idx][col_idx] > self.risk_params['prediction_threshold']:
+                        self.prediction_risk_matrix[row_idx][col_idx] = 100
+                    else:
+                        self.prediction_risk_matrix[row_idx][col_idx] = 0
+
+            rospy.loginfo(f"postprocess {time.perf_counter()-tic}")
+
+            # self.plot_predictions()
+
+        except rospy.ServiceException as e:
+
+            rospy.logerr("Service call failed: %s" % e)
+
+
     def get_risk_estimations(self):
 
+        # tic = time.perf_counter()
+        self.call_prediction_service()
+        # rospy.loginfo(f"service call {time.perf_counter()-tic}")
+
+        tic = time.perf_counter()
         self.generate_prediction_risk_costmaps()
-
+        rospy.loginfo(f"process prediction data {time.perf_counter()-tic}")
+        
+        tic = time.perf_counter()
         self.merge_costmaps()
+        rospy.loginfo(f"merge costmaps {time.perf_counter()-tic}")
 
-        navigation_risk_mtx = self.get_navigation_risk()
+        # self.plot_costmaps(list(self.merged_costmaps_dict.values()), self.t_list, list(self.dynamic_costmap_weight.values()), self.risk_params["dynamic_costmap_weight_k"])
+        
+        tic = time.perf_counter()
+        navigation_risk_mtx, path_record_list_with_time = self.get_navigation_risk()
         pick_risk_mtx,throw_risk_mtx = self.get_manipulation_risk()
+        rospy.loginfo(f"generate matrices {time.perf_counter()-tic}")
 
-        return navigation_risk_mtx,pick_risk_mtx,throw_risk_mtx
+        return navigation_risk_mtx,pick_risk_mtx,throw_risk_mtx,path_record_list_with_time
 
     def get_navigation_risk(self):
+
         n_action_nodes = len(self.action_graph_nodes_params)
         navigation_risk_mtx = np.zeros((n_action_nodes,n_action_nodes, 4*len(self.t_list)), dtype=np.float64)
+
+        path_record_list_with_time = []
+
         # for each time step, compute the navigation risk matrix
         for t_idx in range(len(self.t_list)):
-            navigation_risk_mtx[:,:,4*t_idx:4*(t_idx+1)] = get_navigation_risk_mtx(self.merged_costmaps_dict[self.t_list[t_idx]], self.reduced_map, self.large_graph_params, self.action_idx_name, self.v_max, 
+
+            navigation_risk_mtx[:,:,4*t_idx:4*(t_idx+1)], path_record_list = get_navigation_risk_mtx(self.merged_costmaps_dict[self.t_list[t_idx]], self.reduced_map, self.large_graph_params, self.action_idx_name, self.v_max, 
                                                        self.action_graph_nodes_params, self.action_graph_conversion_dict, self.risk_params)
+            
+            for record in path_record_list:
+                path_record_list_with_time += [(self.t_list[t_idx], record[0], record[1], record[2])]
         
-        return navigation_risk_mtx
+        return navigation_risk_mtx, path_record_list_with_time
 
     def get_manipulation_risk(self):
         n_action_nodes = len(self.action_graph_nodes_params)
@@ -209,9 +315,14 @@ class RiskEstimation:
         # the prediction costmap is a costmap where the risk values from prediction have been spreaed with a Gaussian Kernel
         self.predictions_costmaps_dict = {t:np.zeros_like(self.reduced_map.data, dtype=float) for t in self.t_list}
         for t_idx in range(len(self.t_list)):
-            for i in range(len(self.prediction_risk_matrix)):
-                risk_value = self.prediction_risk_matrix[i, t_idx]
-                node_idx = self.large_graph_params['nodes_conversion_dict'][self.prediction_risk_matrix_names[i]]
+            for row in range(len(self.prediction_risk_matrix)):
+
+                risk_value = self.prediction_risk_matrix[row, t_idx]
+                node_idx = self.large_graph_params['nodes_conversion_dict'].get(self.prediction_risk_matrix_names[row], None)
+
+                if node_idx is None:
+                    continue
+
                 j,i = self.large_graph_params['nodes_ij'][str(node_idx)]
                 # Propagate the risk value to the surrounding cells with a Gaussian kernel
                 for di in range(-self.r, self.r + 1):
@@ -392,7 +503,10 @@ class RiskEstimation:
         # Riduciamo gli spazi tra i subplot per ottimizzare la disposizione
         plt.subplots_adjust(left=0.05, right=0.90, top=0.85, bottom=0.15, wspace=0.15)
 
-        plt.show()
+        # plt.show()
+
+        timestamp = int(time.time())
+        plt.savefig(f"/root/shared/costmap/costmap_{timestamp}.png")
 
 # CONTINUOUS LEARNING
     def gradiente(self, t_real, t_prev, velocity):
@@ -742,7 +856,7 @@ def get_PLI_arrays(nodes_action):
     return Pay,Lay,Iay
 
 @nb.njit
-def get_times_and_risks_new(V,Pay,Lay,Iay,steps,Nay,Tay,Ray,alpha_t,alpha_r,q,n_nodes, nodes_action):
+def dp_engine(V,Pay,Lay,Iay,steps,Nay,Tay,Ray,alpha_t,alpha_r,q,n_nodes, nodes_action):
     num_iter = 0
     num_iter_end = 0
     for j in range(0, len(nodes_action)-1):
@@ -750,6 +864,9 @@ def get_times_and_risks_new(V,Pay,Lay,Iay,steps,Nay,Tay,Ray,alpha_t,alpha_r,q,n_
         V = _backward_pass_nb(V,steps,n_nodes,n_end,Nay,Tay,Ray,alpha_t,alpha_r,q)
         for i in range(num_iter_end +1, len(nodes_action)):
             n_start =  nodes_action[i]
+            # ho N iterazioni dove guardo varie coppie di nodi, che trovo in L[num_iter]
+            # per sapere il tempo e il rischio vedo I[num_iter]
+            # per sapere il path da nodo x a nodo y (L[num_iter][0], L[num_iter][1]) guardo P[num_iter]
             Pay[num_iter],Iay[num_iter,0],Iay[num_iter,1] = _forward_pass_nb(V,steps,n_start,Nay,Tay,Ray,alpha_t,alpha_r,q)
             Lay[num_iter] = [n_end, n_start]
             num_iter +=1
@@ -777,7 +894,7 @@ def _forward_pass_nb(V,steps,n_start,Nay,Tay,Ray,alpha_t,alpha_r,q):
     k0 = np.argmin(V[n_start,:])
     nodes_ay = np.zeros(steps-k0,dtype=np.int64)
     nodes_ay[0] = n_start
-    dt,r=0.,0.
+    dt,r=0.,0
     i=0
     for k in range(k0,steps-1):
         n0=nodes_ay[i]
@@ -801,7 +918,7 @@ def plot_costmap(data):
     plt.title('ROS Costmap')
     plt.show()
 
-def get_time_and_risk_dict_new(riskmap, edges, nodes_dct, squares_edge_dict, resolution, vmax,
+def get_time_risk_path(riskmap, edges, nodes_dct, nodes_dct_xy, squares_edge_dict, resolution, vmax,
                                nodes_neighbors, nodes_action, steps, alpha_t, alpha_r, action_idx_name, 
                                scenario_min, scenario_max):
     rt_edges    = get_rt_edges_new(riskmap,edges,nodes_dct,squares_edge_dict,resolution,vmax)
@@ -815,21 +932,32 @@ def get_time_and_risk_dict_new(riskmap, edges, nodes_dct, squares_edge_dict, res
     n_nodes=len(nodes_dct.keys())
     V=np.zeros((n_nodes,steps))
     q = np.zeros(8)
-    Pay,Iay,Lay = get_times_and_risks_new(V,Pay,Lay,Iay,steps,Nay,Tay,Ray,alpha_t,alpha_r,q,n_nodes, nodes_action)
+
+    Pay,Iay,Lay = dp_engine(V,Pay,Lay,Iay,steps,Nay,Tay,Ray,alpha_t,alpha_r,q,n_nodes, nodes_action)
+
+    path_record_list = []
     navigation_risk_mtx = np.zeros((len(nodes_action),len(nodes_action),4),dtype=np.float64)
     for i in range(Iay.shape[0]):
+
+        path = Pay[i]
         n0,n1 = Lay[i,:]
         t ,r  = Iay[i,:]
+
         n0_name = action_idx_name[n0]
         n1_name = action_idx_name[n1]
+
         time_min = t - t*scenario_min
         time_max = t + t*scenario_max
+
         # navigation_risk_mtx[n0_name,n1_name,:] = [time_min, t, time_max, r]
         # navigation_risk_mtx[n1_name,n0_name,:] = [time_min, t, time_max, r]
+
         navigation_risk_mtx[n0_name,n1_name,:] = [round(time_min,2), round(t,2), round(time_max,2), round(r,2)]
         navigation_risk_mtx[n1_name,n0_name,:] = [round(time_min,2), round(t,2), round(time_max,2), round(r,2)]
 
-    return navigation_risk_mtx
+        path_record_list += [(n0_name, n1_name, [nodes_dct_xy[n] for n in path[::-1]])]
+
+    return navigation_risk_mtx, path_record_list
 
 warnings.simplefilter('ignore', category=NumbaDeprecationWarning)
 warnings.simplefilter('ignore', category=NumbaPendingDeprecationWarning)
@@ -844,6 +972,7 @@ def get_navigation_risk_mtx(merged_costmap, reduced_map, large_graph_params, act
 
     # static data
     nodes_dct         = {int(key): value for key, value in large_graph_params["nodes_ij"].items()}
+    nodes_dct_xy      = {int(key): value for key, value in large_graph_params["nodes_xy"].items()}
     edges             = [tuple(element) for element in large_graph_params["edges"]]
     nodes_neighbors   = {int(key): value for key, value in large_graph_params["nodes_neighbors"].items()}
     squares_edge_dict = {int(key): value for key, value in large_graph_params["squares_edge_dict"].items()}
@@ -856,7 +985,7 @@ def get_navigation_risk_mtx(merged_costmap, reduced_map, large_graph_params, act
     scenario_min = risk_params["scenario_min"]
     scenario_max = risk_params["scenario_max"]
 
-    nav_risk_mtx = get_time_and_risk_dict_new(riskmap, edges, nodes_dct, squares_edge_dict, resolution, 
+    nav_risk_mtx, path_record_list = get_time_risk_path(riskmap, edges, nodes_dct, nodes_dct_xy, squares_edge_dict, resolution, 
                                               vmax, nodes_neighbors, nodes_action, steps, alpha_t, alpha_r, 
                                               action_idx_name, scenario_min, scenario_max)
     
@@ -867,5 +996,5 @@ def get_navigation_risk_mtx(merged_costmap, reduced_map, large_graph_params, act
         risk = riskmap[i,j]
         nav_risk_mtx[node_idx, node_idx, :] = [1,1,1, risk]
 
-    return nav_risk_mtx
+    return nav_risk_mtx, path_record_list
 

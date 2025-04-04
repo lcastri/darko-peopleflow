@@ -1,7 +1,10 @@
 import rospy
+import pandas as pd
+import numpy as np
 from dash import Input, Output, State
+import plotly.graph_objects as go
 from app import ids, styles, app, objects, trays, tray_object_list, action_graph_nodes_int, old_current_state, in_mission, qfa
-from app.ros_pub_sub import mission_pub, current_action_sub, current_state_sub, qfa_sub, monitoring_risk_sub, reschedule_sub
+from app.ros_pub_sub import mission_pub, current_action_sub, current_state_sub, qfa_sub, monitoring_risk_sub, reschedule_sub, heatmap_subscriber
 from std_msgs.msg import Int64MultiArray
 
 def publish_mission(spinner_value_list):
@@ -144,52 +147,6 @@ def update_monitoring_risk(n_intervals):
     return retval, retval, retval, retval
 
 
-def process_current_action(first_action_str_list, second_action_str_list):
-
-    if not first_action_str_list:
-        return 'Waiting...'
-
-    first_action_type = first_action_str_list[0]
-
-    if first_action_type == "moving":
-
-        node = int(first_action_str_list[1])
-        node_coords = f"({action_graph_nodes_int[node]['x']:.2f}, {action_graph_nodes_int[node]['y']:.2f})"
-
-        if second_action_str_list:
-
-            second_action_type = second_action_str_list[0]
-
-            if second_action_type == "placing":
-
-                object_index = int(second_action_str_list[1])
-                tray_index = int(second_action_str_list[2])
-
-                return f"Moving in {node_coords} to throw object {objects[object_index]} in tray {trays[tray_index]}"
-            
-            elif second_action_type == "picking":
-
-                object_index = int(second_action_str_list[1])
-
-                return f"Moving in {node_coords} to pick object {objects[object_index]}"
-            
-        return f"Moving in {node_coords}"
-
-    elif first_action_type == "placing":
-
-        object_index = int(first_action_str_list[1])
-        tray_index = int(first_action_str_list[2])
-
-        return f"Throwing object {objects[object_index]} in tray {trays[tray_index]}"
-
-    elif first_action_type == "picking":
-
-        object_index = int(first_action_str_list[1])
-
-        return f"Picking object {objects[object_index]}"
-
-    return 'Waiting...'
-
 @app.callback(
     Output(ids.elapsed_time_id, 'children'),
     Output(ids.robot_tray_id, 'children'),
@@ -252,6 +209,85 @@ def update_current_state(n_intervals, elapsed_time, alert_text, alert_is_open, a
             state_cell_value_list, state_cell_color_list = get_values_and_color_from_state(qfa)
 
     return [time, robot, alert_text, alert_is_open, alert_color] + state_cell_value_list + state_cell_color_list
+
+@app.callback(
+    Output(ids.costmap_heatmap_graph, 'figure'),
+    Input(ids.update_heatmap_timer_id, 'n_intervals'),
+    State(ids.costmap_heatmap_graph, 'figure')
+)
+def update_costmap_heatmap(n_intervals, old_figure):
+    
+    hm = heatmap_subscriber._data
+
+    if not hm:
+        return old_figure
+
+    fig = go.Figure(data=go.Heatmap(
+        z=list(hm.z),
+        x=list(hm.x),
+        y=list(hm.y),
+        colorscale='Viridis',
+        zmin=0,
+        zmax=100,
+        showscale=True
+    ))
+
+    fig.update_layout(
+        xaxis_showgrid=False,
+        yaxis_showgrid=False,
+        xaxis_visible=False,
+        yaxis_visible=False,
+        margin=dict(l=0, r=0, t=0, b=0)
+    )
+
+    return fig
+
+
+def process_current_action(first_action_str_list, second_action_str_list):
+
+    if not first_action_str_list:
+        return 'Waiting...'
+
+    first_action_type = first_action_str_list[0]
+
+    if first_action_type == "moving":
+
+        node = int(first_action_str_list[1])
+        node_coords = f"({action_graph_nodes_int[node]['x']:.2f}, {action_graph_nodes_int[node]['y']:.2f})"
+
+        if second_action_str_list:
+
+            second_action_type = second_action_str_list[0]
+
+            if second_action_type == "placing":
+
+                object_index = int(second_action_str_list[1])
+                tray_index = int(second_action_str_list[2])
+
+                return f"Moving in {node_coords} to throw object {objects[object_index]} in tray {trays[tray_index]}"
+            
+            elif second_action_type == "picking":
+
+                object_index = int(second_action_str_list[1])
+
+                return f"Moving in {node_coords} to pick object {objects[object_index]}"
+            
+        return f"Moving in {node_coords}"
+
+    elif first_action_type == "placing":
+
+        object_index = int(first_action_str_list[1])
+        tray_index = int(first_action_str_list[2])
+
+        return f"Throwing object {objects[object_index]} in tray {trays[tray_index]}"
+
+    elif first_action_type == "picking":
+
+        object_index = int(first_action_str_list[1])
+
+        return f"Picking object {objects[object_index]}"
+
+    return 'Waiting...'
 
 
 def get_values_and_color_from_state(current_state):

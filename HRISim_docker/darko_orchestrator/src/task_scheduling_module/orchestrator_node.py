@@ -12,7 +12,7 @@ rospy.init_node('orchestrator_node', anonymous=True)
 costmap_subscriber = OccupancyGridManager("/move_base/global_costmap/costmap",True)
 
 rospy.loginfo("generating graph...")
-generate_large_graph(costmap_subscriber)
+# generate_large_graph(costmap_subscriber)
 rospy.loginfo("graph generated, all other modules can start")
 rospy.set_param("/orchestrator_started", True)
 

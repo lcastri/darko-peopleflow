@@ -1,0 +1,1 @@
+darko_orchestrator/PathRecord[] path_list

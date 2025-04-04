@@ -1,4 +1,5 @@
 import dash_bootstrap_components as dbc
+import plotly.graph_objects as go
 from dash import html, dcc
 from app import ids, styles
 
@@ -174,6 +175,20 @@ def get_state_table(objects, trays):
         ],
         style={"text-align": "center"}
     )
+
+def get_costmap_heatmap():
+
+    fig = go.Figure()
+
+    fig.update_layout(
+        xaxis_visible=False,
+        yaxis_visible=False,
+        margin=dict(l=0, r=0, t=0, b=0),
+        paper_bgcolor='white',
+        plot_bgcolor='white'
+    )
+
+    return dcc.Graph(id=ids.costmap_heatmap_graph, figure=fig, config={'displayModeBar': False, 'staticPlot': True})
 
 def get_publish_button():
     return dbc.Button('Publish', id=ids.publish_button_id, n_clicks=0, color="success")

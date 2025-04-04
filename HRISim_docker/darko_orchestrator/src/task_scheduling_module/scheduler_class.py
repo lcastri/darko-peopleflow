@@ -243,25 +243,20 @@ def _return_index(shape, indexes, coeff): #utility function used to compute the 
     return int(np.round(idx))
 
 @nb.njit
-def _interp_nav_time_risk(nav_mtx, n1, n2, t, t_list):
-
+def _get_time_index(t, t_list):
     idx = 0
     while idx < len(t_list) and t_list[idx] < t:
         idx += 1
+    return min(idx, len(t_list) - 1)
 
-    idx = min(idx, len(t_list) - 1)
-
+@nb.njit
+def _interp_nav_time_risk(nav_mtx, n1, n2, t, t_list):
+    idx = _get_time_index(t, t_list)
     return max(1, nav_mtx[n1, n2, 4 * idx + 1]), nav_mtx[n1, n2, 4 * idx + 3]
 
 @nb.njit
 def _interp_manip_risk(manip_mtx, n_elem, elem, n, t, t_list):
-
-    idx = 0
-    while idx < len(t_list) and t_list[idx] < t:
-        idx += 1
-
-    idx = min(idx, len(t_list) - 1)
-
+    idx = _get_time_index(t, t_list)
     return manip_mtx[n, n_elem * idx + elem]
 
 
@@ -277,7 +272,10 @@ def _available_actions(state,t_horizon,max_objects,n_action_nodes,n_objects,n_tr
     
     t_horiz,max_objs = t_horizon, max_objects
     max_picking = np.sum(quantities,axis=1)
-    obj_on_tray = sum([state[(n_trays+1)*o+2]-(state[(n_trays+1)*o+3] + state[(n_trays+1)*o+4]) for o in range(n_objects)])  # DA MODIFICARE, generalizzando per numero vassoi
+    obj_on_tray = sum([
+        state[(n_trays+1)*o+2] - sum([state[(n_trays+1)*o+t+1+2] for t in range(n_trays)])
+        for o in range(n_objects)
+    ])
 
     p1_ay = np.zeros(max_actions, dtype='f8')  # create empty reward array
     r1_A_ay = np.zeros(max_actions, dtype='f8')  # create empty reward array
@@ -346,9 +344,13 @@ def _available_actions(state,t_horizon,max_objects,n_action_nodes,n_objects,n_tr
                 throwing_prob = _interp_manip_risk(throwing_prob_mtx, n_trays, t, n0, state[0], t_list)
 
                 cond_1 = (state[0] + throwing_time) < t_horiz # controllo di essere dentro l'orizzonte temporale alla fine dell'azione di throwing
-                cond_2 = state[(n_trays+1) * o + 2] > (state[(n_trays+1) * o + 3] + state[(n_trays+1) * o + 4]) # controllo di avere almeno un oggetto di tipo o sul vassio
+                
+                placed_objects = sum([state[2 + (n_trays+1) * o + t_idx + 1] for t_idx in range(n_trays)])
+
+                cond_2 = state[(n_trays+1) * o + 2] > placed_objects # controllo di avere almeno un oggetto di tipo o sul vassoio
+                
                 cond_3 = state[(n_trays+1) * o + 3 + t] < quantities[o,t] # controllo di dover ancora posizionare oggetti di tipo o nel vassoio t
-                cond_4 = throwing_prob > 50 # controllo che la probabilità di lanciare nel vassio t sia non nulla
+                cond_4 = throwing_prob > 50 # controllo che la probabilità di lanciare nel vassoio t sia non nulla
                 # print(f'Sto considerando il tray {t}')
                 # print(f'Sto provando a throware dal nodo {state[1]} con una probabilità di {throwing_prob_mtx[n0,t]}')
                 if (cond_1 and cond_2 and cond_3 and cond_4):
@@ -364,38 +366,38 @@ def _available_actions(state,t_horizon,max_objects,n_action_nodes,n_objects,n_tr
                     s1_B_mtx[ns, 0] = state[0] + throwing_time
                     s1_B_mtx[ns, (n_trays+1)*o+2] -= 1
                     ns += 1  
-    # Waiting actions
-    _,risk = _interp_nav_time_risk(navigation_risk_mtx, n0, n0, state[0], t_list)
-    cond= (state[0]+wait_time) < t_horiz
-    if cond:
-        p1_ay[ns]=100
-        #success state
-        r1_A_ay[ns] = wait_reward
-        s1_A_mtx[ns, :] = state[:]
-        s1_A_mtx[ns, 0] = state[0] + wait_time
-        ns += 1 
+    # # Waiting actions
+    # _,risk = _interp_nav_time_risk(navigation_risk_mtx, n0, n0, state[0], t_list)
+    # cond= (state[0]+wait_time) < t_horiz
+    # if cond:
+    #     p1_ay[ns]=100
+    #     #success state
+    #     r1_A_ay[ns] = wait_reward
+    #     s1_A_mtx[ns, :] = state[:]
+    #     s1_A_mtx[ns, 0] = state[0] + wait_time
+    #     ns += 1 
     
-    # Dropping actions
-    _,risk = _interp_nav_time_risk(navigation_risk_mtx, n0, n0, state[0], t_list)
-    if (obj_on_tray > 0):
+    # # Dropping actions
+    # _,risk = _interp_nav_time_risk(navigation_risk_mtx, n0, n0, state[0], t_list)
+    # if (obj_on_tray > 0):
 
-        for o in range(n_objects):
+    #     for o in range(n_objects):
 
-            cond_1 = (state[0] + drop_time) < t_horiz # controllo di essere dentro l'orizzonte temporale alla fine dell'azione di dropping
+    #         cond_1 = (state[0] + drop_time) < t_horiz # controllo di essere dentro l'orizzonte temporale alla fine dell'azione di dropping
 
-            cond_2 = state[(n_trays+1) * o + 2] > sum([state[(n_trays+1) * o + 3 + t] for t in range(n_trays)]) # controllo di avere almeno un oggetto di tipo o sul vassoio
+    #         cond_2 = state[(n_trays+1) * o + 2] > sum([state[(n_trays+1) * o + 3 + t] for t in range(n_trays)]) # controllo di avere almeno un oggetto di tipo o sul vassoio
 
-            if cond_1 and cond_2:
+    #         if cond_1 and cond_2:
 
-                p1_ay[ns] = 100
-                # success state
-                r1_A_ay[ns] = -picking_reward
-                s1_A_mtx[ns, :] = state[:]
-                s1_A_mtx[ns, 0] = state[0] + drop_time
-                s1_A_mtx[ns, (n_trays+1)*o+2] -= 1
-                # print(f"State: {state.tolist()}")
-                # print(f"New state: {s1_A_mtx[ns].tolist()}")
-                ns += 1
+    #             p1_ay[ns] = 100
+    #             # success state
+    #             r1_A_ay[ns] = -picking_reward
+    #             s1_A_mtx[ns, :] = state[:]
+    #             s1_A_mtx[ns, 0] = state[0] + drop_time
+    #             s1_A_mtx[ns, (n_trays+1)*o+2] -= 1
+    #             # print(f"State: {state.tolist()}")
+    #             # print(f"New state: {s1_A_mtx[ns].tolist()}")
+    #             ns += 1
                 
                 
     return p1_ay[:ns],r1_A_ay[:ns],s1_A_mtx[:ns,:],r1_B_ay[:ns],s1_B_mtx[:ns,:]
@@ -462,7 +464,7 @@ def _forward_step(state,V,coeff,qfa,t_horizon,o_max,n_action_nodes,n_objects,n_t
         # print(f"Tempo rimanente: {t_horizon-s_move[0]}")
         # print(f"Numero di azioni disponibili: {len(p1)}")
         if (len(p1)==0):
-            # print("Ho zero azioni disponibili")
+            print("Ho zero azioni disponibili")
             if (state[0] > t_horizon*0.8):
                 return 0, state, state
             return  1,state,state

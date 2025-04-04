@@ -55,6 +55,10 @@ find_package(catkin REQUIRED COMPONENTS
    State.msg
    Action.msg
    CurrentAction.msg
+   PathRecord.msg
+   PathList.msg
+   Coords.msg
+   Heatmap.msg
  )
 
 ## Generate services in the 'srv' folder

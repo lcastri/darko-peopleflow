@@ -227,7 +227,7 @@ def create_graph(costmap_reduced, location_coordinates, graph_params):
     nodes_with_name = []
 
     for name, wp in wps.items():
-        if name not in ['parking', 'door_entrance']:
+        if 'wa' in name or 'target' in name:
             nodes_with_name.append((wp['x'], wp['y'], name))
             nodes.append((wp['x'], wp['y']))
 
