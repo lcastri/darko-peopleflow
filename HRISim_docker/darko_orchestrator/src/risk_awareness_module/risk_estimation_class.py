@@ -201,10 +201,10 @@ class RiskEstimation:
             tic = time.perf_counter()
 
             # FILTERING
-            for row_idx in range(n_row):
-                name = self.prediction_risk_matrix_names[row_idx]
-                if not ('wa' in name or 'target' in name):
-                    self.prediction_risk_matrix[row_idx,:] = 0
+            # for row_idx in range(n_row):
+            #     name = self.prediction_risk_matrix_names[row_idx]
+            #     if not ('wa' in name or 'target' in name):
+            #         self.prediction_risk_matrix[row_idx,:] = 0
 
             # # MIN-MAX normalization
             # X_min = self.prediction_risk_matrix.min()
