@@ -128,6 +128,9 @@ COPY HRISim_docker/pedsim_ros /root/ros_ws/src/pedsim_ros
 RUN mkdir -p ~/ros_ws/src/darko_orchestrator/
 COPY HRISim_docker/darko_orchestrator /root/ros_ws/src/darko_orchestrator
 
+RUN chmod +x /root/ros_ws/src/darko_orchestrator/src/tivoli_node/tibur.py
+RUN chmod +x /root/ros_ws/src/darko_orchestrator/src/test_node/test.py
+
 ############################################################################## Final
 # Create a shared folder with the host machine
 RUN mkdir -p ~/shared

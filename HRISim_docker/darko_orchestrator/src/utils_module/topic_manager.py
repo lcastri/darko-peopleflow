@@ -3,7 +3,7 @@
 import rospy
 from geometry_msgs.msg import Point,Quaternion,Pose,PoseStamped
 from std_msgs.msg import Bool,Int64,String,Float64MultiArray,Int64MultiArray
-from darko_orchestrator.msg import CurrentAction, Action, State, PathList, Heatmap
+from darko_orchestrator.msg import CurrentAction, Action, State, PathList, HeatmapList
 
 class PublisherManager(object):
     def __init__(self,topic,msg_type,latch_bool=False):
@@ -50,7 +50,7 @@ class SubscriberManager(object):
             self._data = data.data
         elif self._msg_type == PathList:
             self._data = data
-        elif self._msg_type == Heatmap:
+        elif self._msg_type == HeatmapList:
             self._data = data
     
     def _reset_data(self):
@@ -77,7 +77,7 @@ class SubscriberManager(object):
             self._data = []
         elif self._msg_type == PathList:
             self._data = []
-        elif self._msg_type == Heatmap:
+        elif self._msg_type == HeatmapList:
             self._data = []
 
     def _check_empty_data(self):
@@ -108,7 +108,7 @@ class SubscriberManager(object):
             return self._data in [None, []]
         if self._msg_type == PathList:
             return self._data in [None, []]
-        if self._msg_type == Heatmap:
+        if self._msg_type == HeatmapList:
             return self._data in [None, []]
         if self._msg_type == State:
             return self._data.state == []

@@ -38,19 +38,19 @@ risk_monitoring_module = RiskMonitoring()
 while True:
 
     # controllo se la missione è attiva
-    if not mission_active_sub._check_empty_data():
+    # if not mission_active_sub._check_empty_data():
 
-        rospy.wait_for_service('/move_base/clear_costmaps')
-        try:
-            clear_costmaps_service = rospy.ServiceProxy('/move_base/clear_costmaps', Empty)
-            clear_costmaps_service()
-            rospy.loginfo("Costmap cleared successfully!")
-        except rospy.ServiceException as e:
-            rospy.logerr("Service call failed: %s" % e)
+    #     rospy.wait_for_service('/move_base/clear_costmaps')
+    #     try:
+    #         clear_costmaps_service = rospy.ServiceProxy('/move_base/clear_costmaps', Empty)
+    #         clear_costmaps_service()
+    #         rospy.loginfo("Costmap cleared successfully!")
+    #     except rospy.ServiceException as e:
+    #         rospy.logerr("Service call failed: %s" % e)
 
-        reschedule_trigger_pub._publish_msg(True)
-        ui_reschedule_trigger_pub._publish_msg(True)
-        print("triggerato")
+    #     reschedule_trigger_pub._publish_msg(True)
+    #     ui_reschedule_trigger_pub._publish_msg(True)
+    #     print("triggerato")
        
         # if not scenario_computation_done_sub._check_empty_data():
         #     rospy.sleep(0.1)

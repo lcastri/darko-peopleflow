@@ -13,5 +13,5 @@
     "rbf_throw_scaling_factor": 1,
     "t_list" : [0, 40, 80, 120],
     "dynamic_costmap_weight_k": 0.01,
-    "prediction_threshold": 0.5
+    "prediction_threshold": 1.5
 }

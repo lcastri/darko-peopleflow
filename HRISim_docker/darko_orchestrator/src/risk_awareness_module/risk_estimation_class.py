@@ -86,7 +86,7 @@ class RiskEstimation:
         self.reduced_map = Global_costamap_reduction(self.costmap_subscriber,self.reduced_global_map_parameters)
         self.reduced_static_map = Global_costamap_reduction(self.gridmap_subscriber,self.reduced_global_map_parameters)
 
-        self.update_parameters = True
+        self.update_parameters = False
         self.v_max = self.risk_params["v_max"]
         self.alpha = self.risk_params["alpha"]
         self.plot = False
@@ -176,58 +176,56 @@ class RiskEstimation:
 
     def call_prediction_service(self):
 
-        tic = time.perf_counter()
-        rospy.wait_for_service('/get_risk_map')
-        rospy.loginfo(f"service wait {time.perf_counter()-tic}")
-
-
+        """
+        Chiama il servizio di interpolazione TiburNode per ottenere la matrice interpolata
+        basata sul tempo trascorso dall'ultima lettura
+        """
+        
+        # Attendi che il servizio sia disponibile
+        rospy.wait_for_service('/get_interpolated_matrix')
+    
         try:
-
-            get_risk_map = rospy.ServiceProxy('/get_risk_map', GetRiskMap)
+            # Crea un proxy per il servizio di interpolazione temporale
+            get_interpolated_matrix = rospy.ServiceProxy('/get_interpolated_matrix', GetRiskMap)
             
+            # Prepara la richiesta (vuota)
             req = GetRiskMapRequest()
             
-            tic = time.perf_counter()
-            resp = get_risk_map(req)
-            rospy.loginfo(f"service call {time.perf_counter()-tic}")
+            # Misura il tempo esatto dalla richiesta al ricevimento della matrice
+            matrix_request_tic = time.perf_counter()
             
+            # Chiama il servizio
+            resp = get_interpolated_matrix(req)
+            
+            # La matrice è arrivata quando abbiamo la risposta dal servizio
+            matrix_arrival_time = time.perf_counter() - matrix_request_tic
+            
+            # Stampa specificamente il tempo di arrivo della matrice
+            # rospy.loginfo(f"TEMPO DI ARRIVO MATRICE INTERPOLATA: {matrix_arrival_time:.6f} secondi")
+            
+            # Continua con il resto del codice
             self.prediction_risk_matrix_names = list(resp.waypoint_ids)
-
             n_row = resp.n_waypoint
             n_col = resp.n_steps
-
+            
+            # Ottiene la matrice interpolata basata sul tempo
             self.prediction_risk_matrix = np.array(resp.PDs, dtype=np.float64).reshape((n_row, n_col))
-
+            
             tic = time.perf_counter()
-
-            # FILTERING
-            # for row_idx in range(n_row):
-            #     name = self.prediction_risk_matrix_names[row_idx]
-            #     if not ('wa' in name or 'target' in name):
-            #         self.prediction_risk_matrix[row_idx,:] = 0
-
-            # # MIN-MAX normalization
-            # X_min = self.prediction_risk_matrix.min()
-            # X_max = self.prediction_risk_matrix.max()
-            # if X_max > X_min:
-            #     self.prediction_risk_matrix = 100 * (self.prediction_risk_matrix - X_min) / (X_max - X_min)
-            # else:
-            #     self.prediction_risk_matrix = np.zeros_like(self.prediction_risk_matrix)
-
+    
             # THRESHOLD BINARIZATION
             for row_idx in range(n_row):
                 for col_idx in range(n_col):
                     if self.prediction_risk_matrix[row_idx][col_idx] > self.risk_params['prediction_threshold']:
                         self.prediction_risk_matrix[row_idx][col_idx] = 100
                     else:
-                        self.prediction_risk_matrix[row_idx][col_idx] = 0
-
-            rospy.loginfo(f"postprocess {time.perf_counter()-tic}")
-
+                        self.prediction_risk_matrix[row_idx][col_idx] = 100 * self.prediction_risk_matrix[row_idx][col_idx] / self.risk_params['prediction_threshold']
+    
+            # rospy.loginfo(f"postprocess {time.perf_counter()-tic}")
+            
             # self.plot_predictions()
-
+    
         except rospy.ServiceException as e:
-
             rospy.logerr("Service call failed: %s" % e)
 
 
@@ -239,18 +237,18 @@ class RiskEstimation:
 
         tic = time.perf_counter()
         self.generate_prediction_risk_costmaps()
-        rospy.loginfo(f"process prediction data {time.perf_counter()-tic}")
+        # rospy.loginfo(f"process prediction data {time.perf_counter()-tic}")
         
         tic = time.perf_counter()
         self.merge_costmaps()
-        rospy.loginfo(f"merge costmaps {time.perf_counter()-tic}")
+        # rospy.loginfo(f"merge costmaps {time.perf_counter()-tic}")
 
         # self.plot_costmaps(list(self.merged_costmaps_dict.values()), self.t_list, list(self.dynamic_costmap_weight.values()), self.risk_params["dynamic_costmap_weight_k"])
         
         tic = time.perf_counter()
         navigation_risk_mtx, path_record_list_with_time = self.get_navigation_risk()
         pick_risk_mtx,throw_risk_mtx = self.get_manipulation_risk()
-        rospy.loginfo(f"generate matrices {time.perf_counter()-tic}")
+        # rospy.loginfo(f"generate matrices {time.perf_counter()-tic}")
 
         return navigation_risk_mtx,pick_risk_mtx,throw_risk_mtx,path_record_list_with_time
 
@@ -355,8 +353,9 @@ class RiskEstimation:
         # The dynamic costmap is weighted by a coefficient decreasing over time
         for t in self.t_list:
             # The merged costmap is the maximum between the dynamic costmap, the static costmap and the prediction costmap   
-            merge_predictions_dynamic = np.maximum(self.predictions_costmaps_dict[t], self.dynamic_costmap_weight[t]*dynamic_costmap_dict[t])
-            self.merged_costmaps_dict[t]  = np.maximum(merge_predictions_dynamic, static_costmap)
+            # merge_predictions_dynamic = np.maximum(self.predictions_costmaps_dict[t], self.dynamic_costmap_weight[t]*dynamic_costmap_dict[t])
+            # self.merged_costmaps_dict[t]  = np.maximum(merge_predictions_dynamic, static_costmap)
+            self.merged_costmaps_dict[t] = self.predictions_costmaps_dict[t]
 
 # AREAS AND TRAJECTORIES DEFINITION
     def define_boxes_trays_loc(self):

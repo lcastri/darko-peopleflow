@@ -59,6 +59,7 @@ find_package(catkin REQUIRED COMPONENTS
    PathList.msg
    Coords.msg
    Heatmap.msg
+   HeatmapList.msg
  )
 
 ## Generate services in the 'srv' folder

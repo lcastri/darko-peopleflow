@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+
+<launch>
+    <node name="test_node" pkg="darko_orchestrator" type="test.py" output="screen" cwd="node">
+    </node>
+</launch>

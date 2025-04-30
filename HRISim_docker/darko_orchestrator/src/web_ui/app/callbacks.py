@@ -3,7 +3,8 @@ import pandas as pd
 import numpy as np
 from dash import Input, Output, State
 import plotly.graph_objects as go
-from app import ids, styles, app, objects, trays, tray_object_list, action_graph_nodes_int, old_current_state, in_mission, qfa
+from plotly.subplots import make_subplots
+from app import ids, styles, app, objects, trays, tray_object_list, action_graph_nodes_int, old_current_state, in_mission, qfa, t_list
 from app.ros_pub_sub import mission_pub, current_action_sub, current_state_sub, qfa_sub, monitoring_risk_sub, reschedule_sub, heatmap_subscriber
 from std_msgs.msg import Int64MultiArray
 
@@ -217,28 +218,43 @@ def update_current_state(n_intervals, elapsed_time, alert_text, alert_is_open, a
 )
 def update_costmap_heatmap(n_intervals, old_figure):
     
-    hm = heatmap_subscriber._data
+    hm_data = heatmap_subscriber._data
 
-    if not hm:
+    if not hm_data or len(hm_data.heatmap_list) < 4:
         return old_figure
 
-    fig = go.Figure(data=go.Heatmap(
-        z=list(hm.z),
-        x=list(hm.x),
-        y=list(hm.y),
-        colorscale='Viridis',
-        zmin=0,
-        zmax=100,
-        showscale=True
-    ))
+    fig = make_subplots(
+        rows=2, cols=2,
+        subplot_titles=[f"t = {t}" for t in t_list],
+        horizontal_spacing=0.02,
+        vertical_spacing=0.06
+    )
+
+    for i in range(4):
+        hm = hm_data.heatmap_list[i]
+        row = i // 2 + 1
+        col = i % 2 + 1
+
+        fig.add_trace(go.Heatmap(
+            z=list(hm.z),
+            x=list(hm.x),
+            y=list(hm.y),
+            colorscale='Viridis',
+            zmin=0,
+            zmax=100,
+            showscale=False if i > 0 else True  # Mostra la scala solo per il primo
+        ), row=row, col=col)
 
     fig.update_layout(
-        xaxis_showgrid=False,
-        yaxis_showgrid=False,
-        xaxis_visible=False,
-        yaxis_visible=False,
-        margin=dict(l=0, r=0, t=0, b=0)
+        showlegend=False,
+        margin=dict(l=0, r=0, t=30, b=0),
     )
+
+    # Nasconde assi e griglia per tutti i subplot
+    for i in range(1, 3):
+        for j in range(1, 3):
+            fig.update_xaxes(showgrid=False, visible=False, row=i, col=j)
+            fig.update_yaxes(showgrid=False, visible=False, row=i, col=j)
 
     return fig
 

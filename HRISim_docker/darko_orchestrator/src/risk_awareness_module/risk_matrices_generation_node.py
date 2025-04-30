@@ -2,7 +2,7 @@
 #%%
 import rospy
 from std_msgs.msg import Bool,Int64MultiArray,MultiArrayDimension, Float64MultiArray
-from darko_orchestrator.msg import PathList, PathRecord, Coords, Heatmap
+from darko_orchestrator.msg import PathList, PathRecord, Coords, Heatmap, HeatmapList
 from utils_module.topic_manager import SubscriberManager,PublisherManager
 from utils_module.subscribers import OccupancyGridManager, ReportSubscriber
 from risk_estimation_class import RiskEstimation
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     navigation_risk_for_monitoring_pub      = PublisherManager("/risk_estimation/navigation_risk_for_monitoring", Float64MultiArray)
     picking_risk_for_monitoring_pub         = PublisherManager("/risk_estimation/picking_risk_for_monitoring"   , Int64MultiArray)
     throwing_risk_for_monitoring_pub        = PublisherManager("/risk_estimation/throwing_risk_for_monitoring"  , Int64MultiArray)
-    web_ui_costmap                          = PublisherManager("/web_ui/costmap", Heatmap)
+    web_ui_costmap                          = PublisherManager("/web_ui/costmap", HeatmapList)
 
 
     ### <---------- subscribers ----------> ###
@@ -116,17 +116,27 @@ if __name__ == '__main__':
             #     print(record)
             # print("@@@@@@@@@@@@@@@@@@@@")
 
-            # mando la costmap mergiata alla UI
-            heatmap_msg = Heatmap()
-            heatmap_msg.x = []
-            heatmap_msg.y = []
-            heatmap_msg.z = []
-            for i in range(len(risk_estimation_module.merged_costmaps_dict[0])):
-                for j in range(len(risk_estimation_module.merged_costmaps_dict[0][i])):
-                    heatmap_msg.x.append(j)
-                    heatmap_msg.y.append(i)
-                    heatmap_msg.z.append(risk_estimation_module.merged_costmaps_dict[0][i][j])
-            web_ui_costmap._publish_msg(heatmap_msg)
+            # mando le costmap mergiate alla UI
+
+            heatmap_list_msg = HeatmapList()
+            heatmap_list_msg.heatmap_list = []
+
+            for t in risk_estimation_module.t_list:
+                
+                heatmap_msg = Heatmap()
+                heatmap_msg.x = []
+                heatmap_msg.y = []
+                heatmap_msg.z = []
+
+                for i in range(len(risk_estimation_module.merged_costmaps_dict[t])):
+                    for j in range(len(risk_estimation_module.merged_costmaps_dict[t][i])):
+                        heatmap_msg.x.append(j)
+                        heatmap_msg.y.append(i)
+                        heatmap_msg.z.append(risk_estimation_module.merged_costmaps_dict[t][i][j])
+
+                heatmap_list_msg.heatmap_list.append(heatmap_msg)
+
+            web_ui_costmap._publish_msg(heatmap_list_msg)
             
             # genero messaggio di nav risk
             nav_risk_message = Float64MultiArray()

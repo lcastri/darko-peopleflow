@@ -14,4 +14,6 @@
     </node>
     <node name="darko_web_ui" pkg="darko_orchestrator" type="web_ui.py" output="screen" cwd="node">
     </node>
+    <node name="tibur_node_service" pkg="darko_orchestrator" type="tibur.py" output="screen" cwd="node">
+    </node>
 </launch>

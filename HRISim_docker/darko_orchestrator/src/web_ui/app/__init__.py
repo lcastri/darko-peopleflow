@@ -10,7 +10,8 @@ while not orchestrator_started:
 path_to_static_data = "../static_data"
 static_data_names = [
     "action_graph_nodes",
-    "items"
+    "items",
+    "risk_parameters"
 ]
 
 static_data = {}
@@ -27,6 +28,8 @@ tray_object_list = [
 
 action_nodes = list(static_data["action_graph_nodes"].keys())
 action_graph_nodes_int  = {int(n[1:]):static_data['action_graph_nodes'][n] for n in action_nodes }
+
+t_list = static_data["risk_parameters"]["t_list"]
 
 old_current_state = []
 qfa = []
@@ -55,16 +58,15 @@ app.layout = dbc.Container([
             )
     ]),
     components.get_current_action_table(),
-    dbc.Row([
-            dbc.Col(
-                components.get_state_table(objects, trays),
-                className="d-flex align-items-center"
-            ),
-            dbc.Col(  
-                components.get_costmap_heatmap(),
-                style={'border': '2px solid black'}
-            )
-    ], align="center"),
+    html.Div(
+        components.get_state_table(objects, trays),
+        className="d-flex align-items-center"
+    ),
+    html.Hr(),
+    html.Div(  
+        components.get_costmap_heatmap(),
+        style={'border': '2px solid black'}
+    ),
     html.Hr(),
     html.Div([
         components.get_input_mission_table(objects, trays),

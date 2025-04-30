@@ -1,6 +1,6 @@
 from utils_module.topic_manager import PublisherManager, SubscriberManager
 from std_msgs.msg import Int64MultiArray, Float64MultiArray, Bool
-from darko_orchestrator.msg import CurrentAction, State, Heatmap
+from darko_orchestrator.msg import CurrentAction, State, HeatmapList
 import rospy
 
 rospy.init_node('darko_web_ui', anonymous=True)
@@ -13,4 +13,4 @@ qfa_sub                 = SubscriberManager('/web_ui/qfa', State, False)
 monitoring_risk_sub     = SubscriberManager("/web_ui/monitoring_risk", Float64MultiArray)
 
 reschedule_sub          = SubscriberManager("/web_ui/reschedule", Bool, False)
-heatmap_subscriber      = SubscriberManager("/web_ui/costmap", Heatmap, False)
+heatmap_subscriber      = SubscriberManager("/web_ui/costmap", HeatmapList, False)

@@ -4,6 +4,7 @@ import time
 from std_msgs.msg import Bool,String,Int64MultiArray,Float64MultiArray
 from darko_orchestrator.msg import ScenarioList, Scenario, State, CurrentAction, Action, PathList
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+from std_srvs.srv import Empty
 import actionlib
 import tf
 import math
@@ -100,11 +101,14 @@ class Orchestrator:
 
 
     def go_to_closest_node(self, with_safety=False):
+
         closest_node, closest_distance = self.get_closest_node(self.position_subscriber.get_position_xy(), with_safety=with_safety)
-        if closest_distance>0.:
+        # print(f"{closest_distance = }")
+        if closest_distance > 1.0:
             xp,yp = self.action_graph_nodes_int[closest_node]['x'],self.action_graph_nodes_int[closest_node]['y']
             xo,yo,zo,wo = 0,0,0,1
             self.submit_goal(xp,yp,xo,yo,zo,wo)
+
         return closest_node
         
         #testare cancel goal di action lib inserendo wait_for_result nel while (chiamate continue con duration molto piccola)
@@ -324,6 +328,14 @@ class Orchestrator:
         print(f"final state after update {final_state}")
         
         while not np.array_equal(final_state[2:], total_qfa):
+
+            rospy.wait_for_service('/move_base/clear_costmaps')
+            try:
+                clear_costmaps_service = rospy.ServiceProxy('/move_base/clear_costmaps', Empty)
+                clear_costmaps_service()
+                rospy.loginfo("Costmap cleared successfully!")
+            except rospy.ServiceException as e:
+                rospy.logerr("Service call failed: %s" % e)
             
             residuo = total_qfa - final_state[2:]
             # residuo = np.maximum(residuo, np.zeros(residuo.shape))
@@ -494,15 +506,15 @@ class Orchestrator:
             for o in range(self.scheduler_module.n_objects):
                 mission_state[(self.scheduler_module.n_trays + 1) * o + 2] = int(new_state[self.objects[o]])
     
-        time_start_mission = time.perf_counter()
+        time_start_mission = rospy.get_rostime().secs
         print("before scheduling")
         self.scheduler_module.solve_mission(missione_internal,nav_risk_mtx,picking_prob_mtx,throwing_prob_mtx)
         print("print after scheduling")
         #Define state s0
-        t = time.perf_counter() - time_start_mission
+        t = rospy.get_rostime().secs - time_start_mission
         # TODO go to safest closest node?
         # p,_ = self.get_closest_node(self.position_subscriber.get_position_xy(), with_safety=True)
-        p = self.go_to_closest_node(with_safety=True)
+        p = self.go_to_closest_node()
         
 
         mission_state[0] = t
@@ -526,11 +538,12 @@ class Orchestrator:
                 self.send_report(report)
             else:
                 success, reschedule = self.perform_manipulation_wait_drop_task(next_task)
-                if reschedule:
-                    return mission_state ### TODO invertito
                 mission_state, report = self.update_mission_state(mission_state,time_start_mission,success,next_task)
+                
                 self.publish_current_state(final_state, mission_state)
                 self.send_report(report)
+                if reschedule:
+                    return mission_state ### TODO invertito
 
             next_task, scenarios_lst, prob_lst = self.scheduler_module.next_task(mission_state)
             self.publish_current_action(next_task)
@@ -587,7 +600,7 @@ class Orchestrator:
         goal.target_pose.pose.orientation.y = yo
         goal.target_pose.pose.orientation.z = zo
         goal.target_pose.pose.orientation.w = wo
-        
+
         self.client.send_goal(goal)
 
         while not self.client.wait_for_result(timeout=rospy.Duration(0.01)):
@@ -639,7 +652,12 @@ class Orchestrator:
 
         path = self.retrieve_path(path_list, time_val, current_node, target_node)
 
+        tic = rospy.get_rostime().secs
+
         if path:
+
+            for p in path:
+                print(p)
 
             for i in range(1, len(path) - 1):
 
@@ -663,15 +681,21 @@ class Orchestrator:
             object_to_pick = self.objects[object_to_pick_int]
             target_box = self.objects_box[object_to_pick]
             target_box_pos = self.location_coordinates[target_box]
-            return self.send_moving_goal(target_node_pos['x'],target_node_pos['y'],target_box_pos['x'],target_box_pos['y'])
+            rv = self.send_moving_goal(target_node_pos['x'],target_node_pos['y'],target_box_pos['x'],target_box_pos['y'])
+            print(f"navigation task took {rospy.get_rostime().secs - tic} seconds")
+            return rv
 
         if (next_task['second_task']['action'] == 'placing'):
             target_tray_int =  next_task['second_task']['tray']
             target_tray     = self.trays[target_tray_int]
             target_tray_pos = self.location_coordinates[target_tray]
-            return self.send_moving_goal(target_node_pos['x'],target_node_pos['y'],target_tray_pos['x'],target_tray_pos['y'])
+            rv = self.send_moving_goal(target_node_pos['x'],target_node_pos['y'],target_tray_pos['x'],target_tray_pos['y'])
+            print(f"navigation task took {rospy.get_rostime().secs - tic} seconds")
+            return rv
         
-        return self.send_moving_goal(target_node_pos['x'],target_node_pos['y'],target_node_pos['x'],target_node_pos['y'])
+        rv = self.send_moving_goal(target_node_pos['x'],target_node_pos['y'],target_node_pos['x'],target_node_pos['y'])
+        print(f"navigation task took {rospy.get_rostime().secs - tic} seconds")
+        return rv
     
 
     def perform_manipulation_wait_drop_task(self,next_task):
@@ -714,7 +738,7 @@ class Orchestrator:
                 return False, True
             rospy.sleep(0.1)
 
-        return self.manipulation_success_sub._data, False
+        return self.manipulation_success_sub._data, True
 
     def update_mission_state(self,mission_state,time_start_mission,success,next_task):
 
@@ -722,7 +746,7 @@ class Orchestrator:
 
         action_type = next_task["first_task"]["action"]
 
-        t = time.perf_counter() - time_start_mission
+        t = rospy.get_rostime().secs - time_start_mission
         p,_ = self.get_closest_node(self.position_subscriber.get_position_xy())
 
         mission_state[0] = t

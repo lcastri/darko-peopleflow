@@ -164,6 +164,7 @@ class Scheduler:
             else:
                 task['first_task']['action'] = 'error'
         elif (typ == 2):
+            print(f"expected navigation time: {new_state[0] - state[0]}")
             task['first_task']['action'] = 'moving'
             task['first_task']['position'] = new_state[1]
             act,obj,tray = _pick_place_wait_drop_action(new_state,next_state,self.n_trays)
@@ -287,6 +288,7 @@ def _available_actions(state,t_horizon,max_objects,n_action_nodes,n_objects,n_tr
     n0 = state[1]
     # Moving actions
 
+    # node_risk = []
     for n in range(n_action_nodes):
 
         if (n != n0):
@@ -297,7 +299,8 @@ def _available_actions(state,t_horizon,max_objects,n_action_nodes,n_objects,n_tr
             delta_time, risk = _interp_nav_time_risk(navigation_risk_mtx, n0, n, state[0], t_list)
 
             cond_1 = (state[0] + delta_time) < t_horiz # controllo di essere dentro l'orizzonte temporale alla fine dell'azione di moving
-            cond_2 = risk <= 10
+            # node_risk.append(float(risk))
+            cond_2 = risk <= 50
             if cond_1 and cond_2:
                 # print('n0 ', n0, ' n ', n, ' time ', delta_time, ' risk ', risk)
                 p1_ay[ns] = 100
@@ -307,6 +310,8 @@ def _available_actions(state,t_horizon,max_objects,n_action_nodes,n_objects,n_tr
                 s1_A_mtx[ns, 0] = state[0] + delta_time
                 s1_A_mtx[ns, 1] = n
                 ns += 1  
+
+    # print(f"min node risk: {min(node_risk)}")
 
     # Picking actions
     if (obj_on_tray<max_objs):
