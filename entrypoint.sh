@@ -37,9 +37,9 @@ if ! grep -q "### Sourced by HRISim Entrypoint ###" "$HOME/.bashrc"; then
   echo "" >> ~/.bashrc
   
   echo "### Custom Aliases Added by Entrypoint ###" >> ~/.bashrc
-  echo "function tstart(){  tmule -c /home/hrisim/ros_ws/src/HRISim/hrisim_tmule/tmule/hrisim_bringup.yaml -W 1 launch ; }" >> ~/.bashrc
+  echo "function tstart(){  tmule -c /home/hrisim/ros_ws/src/HRISim/hrisim_tmule/tmule/hrisim_bringup.yaml -W 3 launch ; }" >> ~/.bashrc
   echo "function tstop(){  tmule -c /home/hrisim/ros_ws/src/HRISim/hrisim_tmule/tmule/hrisim_bringup.yaml terminate ; }" >> ~/.bashrc
-  echo "function trestart(){  tmule -c /home/hrisim/ros_ws/src/HRISim/hrisim_tmule/tmule/hrisim_bringup.yaml -W 1 relaunch ; }" >> ~/.bashrc
+  echo "function trestart(){  tmule -c /home/hrisim/ros_ws/src/HRISim/hrisim_tmule/tmule/hrisim_bringup.yaml -W 3 relaunch ; }" >> ~/.bashrc
   echo "function tshow(){  tmux a -t HRISim_bringup ; }" >> ~/.bashrc
   echo "" >> ~/.bashrc
   

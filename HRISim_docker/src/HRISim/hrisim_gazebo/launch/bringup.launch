@@ -1,0 +1,60 @@
+<launch>
+  <arg name="gui"                       default="true"/> 
+  <arg name="world"                     default="maze"/>
+  <arg name="map"                       default="$(env HOME)/.pal/tiago_maps/configurations/$(arg world)"/>
+  <arg name="robot"                     default="iron"/>
+  <arg name="arm"                       default="$(eval {'iron': False}.get(arg('robot'), True))"/>
+  <arg name="end_effector"              default="$(eval {'iron': 'false', 'steel': 'pal-gripper', 'titanium': 'pal-hey5'}.get(arg('robot'), 'pal-gripper'))"/>
+  <arg name="ft_sensor"                 default="$(eval {'titanium': 'schunk-ft'}.get(arg('robot'), 'false'))"/>
+  <arg name="laser_model"               default="sick-571"/>
+  <arg name="camera_model"              default="orbbec-astra"/>
+  <arg name="gzpose"                    default="-x 0.0  -y   0.0 -z  0.0   -R 0.0 -P 0.0 -Y  0.0" />
+  <arg name="public_sim"                default="true"/>
+  <arg name="base_type"                 default="pmb2"/>
+  <arg name="planner"                   default="base" />
+  <arg name="global_planner"            default="global_planner" />
+  <arg name="local_planner"             default="teb" />
+  <arg name="localization"              default="amcl" />
+
+  <arg name="spawn_agent"               default="true"/>
+  <arg name="spawn_teleop_agent"        default="true"/>
+  <arg name="spawn_timeout"             default="10.0"/>
+
+  <param name="/pedsim_simulator/spawn_agent" value="$(arg spawn_agent)" type="bool"/>
+  <param name="/pedsim_simulator/spawn_teleop_agent" value="$(arg spawn_teleop_agent)" type="bool"/>
+  <param name="/pedsim_simulator/spawn_timeout" value="$(arg spawn_timeout)" type="double"/>
+
+  <!-- launch gazebo world -->
+  <include file="$(find tiago_gazebo)/launch/tiago_gazebo.launch">
+    <arg name="world"         value="$(arg world)"/>
+    <arg name="arm"           value="$(arg arm)"/>
+    <arg name="end_effector"  value="$(arg end_effector)"/>
+    <arg name="ft_sensor"     value="$(arg ft_sensor)"/>
+    <arg name="laser_model"   value="$(arg laser_model)"/>
+    <arg name="camera_model"  value="$(arg camera_model)"/>
+    <arg name="gzpose"        value="$(arg gzpose)"/>
+    <arg name="gui"           value="$(arg gui)"/>
+    <arg name="public_sim"    value="$(arg public_sim)"/>
+    <arg if="$(eval local_planner == 'teb')" name="use_dynamic_footprint" value="true"/>
+    <arg name="base_type"     value="$(arg base_type)"/>
+  </include>
+
+  <include file="$(find tiago_2dnav_gazebo)/launch/navigation.launch">
+    <arg name="state"          value="localization"/>
+    <arg name="planner"        value="$(arg planner)"/>
+    <arg name="global_planner" value="$(arg global_planner)"/>
+    <arg name="local_planner"  value="$(arg local_planner)"/>
+    <arg name="localization"   value="$(arg localization)"/>
+    <arg name="map"            value="$(arg map)"/>
+    <arg name="public_sim"     value="$(arg public_sim)"/>
+    <arg name="laser_model"    value="$(arg laser_model)"/>
+    <arg name="base_type"      value="$(arg base_type)"/>
+  </include>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find hrisim_rviz)/config/rviz/hrisim_rviz.rviz --fixed-frame map"/>
+
+  <!-- this node spawn pedsim actors to gazebo once, then the plugin updates their pose -->  
+  <node pkg="pedsim_gazebo_plugin" type="spawn_pedsim_agents.py" name="spawn_pedsim_agents"  output="screen">
+  </node>
+
+</launch>

@@ -6,7 +6,7 @@ import random
 import pickle
 from pedsim_srvs.srv import GetNextDestination, GetNextDestinationResponse
 from peopleflow_msgs.msg import Time as pT
-from hrisim_util.Agent import Agent 
+from peopleflow_util.Agent import Agent 
 import hrisim_util.ros_utils as ros_utils
 import hrisim_util.constants as constants
 import traceback
@@ -166,9 +166,7 @@ if __name__ == '__main__':
         # Create a handle for the Trigger service
         graph_path_show = rospy.ServiceProxy('/graph/path/show', VisualisePath)        # Call the service
         graph_path_show("")
-        
-        G.remove_node(constants.WP.CHARGING_STATION.value)
-        
+                
     pedsimBridge = PedsimBridge()
     rospy.logwarn("Pedsim Bridge started!")
                 
