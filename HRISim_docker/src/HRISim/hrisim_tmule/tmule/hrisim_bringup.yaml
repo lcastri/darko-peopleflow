@@ -76,7 +76,7 @@ windows:
     panes:
       - roslaunch hrisim_gazebo bringup.launch gui:=$GAZEBO_GUI robot:=$TIAGO_TYPE public_sim:=true world:=$WORLD
   - name: pedsim
-    tags: ['exp']
+    tags: ['core']
     panes:
       - |
         roslaunch peopleflow_visualiser visualiser_bringup.launch \
@@ -84,6 +84,10 @@ windows:
         robot_radius:=$ROBOT_RADIUS is_stuck_threshold:=$IS_STUCK_THRESHOLD \
         force_obstacle:=$FORCE_OBSTACLE sigma_obstacle:=$SIGMA_OBSTACLE \
         force_social:=$FORCE_SOCIAL
+  - name: monitoring
+    tags: ['extra']
+    panes:
+      - 'rosrun robot_path_visualisation AstarVisualisation.py'
 # # # # # # windows:
 # # # # # #   - name: env
 # # # # # #     tags: ['ros']

@@ -58,8 +58,9 @@ def line_of_sight_task(args):
 
 
 # Initialize ROS node
-SCENARIO = "/home/hrisim/ros_ws/src/pedsim_ros/pedsim_simulator/scenarios/warehouse"
-MAP_NAME = os.path.expanduser('/home/hrisim/ros_ws/src/HRISim/hrisim_gazebo/tiago_maps/') + 'warehouse'
+SCENE = "INB_3floor"
+SCENARIO = f"/home/hrisim/ros_ws/src/pedsim_ros/pedsim_simulator/scenarios/{SCENE}"
+MAP_NAME = os.path.expanduser('/home/hrisim/ros_ws/src/HRISim/hrisim_gazebo/tiago_maps/') + SCENE
 RES_DIR = "/home/hrisim/ros_ws/src/HRISim/peopleflow/peopleflow_manager/res"
 
 # Create directory for results
@@ -117,8 +118,8 @@ obstacle_mask = map_image < obstacle_threshold
 
 # Prepare plot
 fig, ax = plt.subplots(figsize=(12, 8))
-ax.set_xlim(-20, 11)  # Replace with your desired x-axis limits
-ax.set_ylim(-11, 11)  # Replace with your desired y-axis limits
+ax.set_xlim(-12, 20)  # Replace with your desired x-axis limits
+ax.set_ylim(-5, 7.5)  # Replace with your desired y-axis limits
 ax.imshow(map_image, extent=(origin_x, origin_x + map_image.shape[1] * resolution, 
                              origin_y, origin_y + map_image.shape[0] * resolution), cmap='gray')
 
