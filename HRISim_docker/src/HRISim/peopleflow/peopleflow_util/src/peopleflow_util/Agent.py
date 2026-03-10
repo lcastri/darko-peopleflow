@@ -24,10 +24,6 @@ class Agent:
         self.nextDest = None
         self.nextDestPos = None
         self.nextDestRadius = None
-        self.startingTime = None
-        self.exitTime = None
-        self.atWork = False
-        self.isQuitting = False
         self.isStuck = False
         self.taskDuration = None
         self.nConsecutiveStuck = 0
@@ -102,10 +98,6 @@ class Agent:
             'nextDest': self.nextDest if self.nextDest is not None else '',
             'nextDestPos': self.nextDestPos if self.nextDestPos is not None else [DEFAULT_VALUE, DEFAULT_VALUE, DEFAULT_VALUE],
             'nextDestRadius': self.nextDestRadius if self.nextDestRadius is not None else DEFAULT_VALUE,
-            'startingTime': self.startingTime if self.startingTime is not None else DEFAULT_VALUE,
-            'exitTime': self.exitTime if self.exitTime is not None else DEFAULT_VALUE,
-            'atWork': self.atWork,
-            'isQuitting': self.isQuitting,
             'isStuck': self.isStuck,
             'taskDuration': self.taskDuration if self.taskDuration is not None else DEFAULT_VALUE
         }
@@ -124,10 +116,6 @@ class Agent:
         agent.nextDest = data['nextDest'] if data['nextDest'] != '' else None
         agent.nextDestPos = data['nextDestPos'] if data['nextDestPos'] != [DEFAULT_VALUE, DEFAULT_VALUE] else None
         agent.nextDestRadius = data['nextDestRadius'] if data['nextDestRadius'] != DEFAULT_VALUE else None
-        agent.startingTime = data['startingTime'] if data['startingTime'] != DEFAULT_VALUE else None
-        agent.exitTime = data['exitTime'] if data['exitTime'] != DEFAULT_VALUE else None
-        agent.atWork = data['atWork']
-        agent.isQuitting = data['isQuitting']
         agent.isStuck = data['isStuck']
         agent.taskDuration = data['taskDuration'] if data['taskDuration'] != DEFAULT_VALUE else None
         return agent
@@ -181,10 +169,5 @@ class Agent:
         
     
     def getTaskDuration(self):
-        if self.allowTask:
-            if self.finalDest.startswith("toilet"):
-                return random.randint(2, 4)
-            else:
-                return random.randint(2, self.maxTaskTime)
-        else:
-            return 0
+        return random.randint(2, self.maxTaskTime) if self.allowTask else 0
+

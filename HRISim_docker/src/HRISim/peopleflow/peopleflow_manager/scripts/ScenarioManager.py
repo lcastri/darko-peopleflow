@@ -9,7 +9,6 @@ import hrisim_util.ros_utils as ros_utils
 import subprocess
 from std_srvs.srv import Empty  # Import the Empty service
 
-TIME_INIT = 8
 TSTOP = False
 
 class Time:
@@ -48,12 +47,12 @@ class ScenarioManager():
                 continue
             else:
                 break
-        return str(ros_utils.seconds_to_hhmmss(TIME_INIT*3600 + self.elapsedTime))
+        return str(ros_utils.seconds_to_hhmmss(self.elapsedTime))
     
     @property
     def elapsedTime(self):
         current_time = rospy.Time.now()
-        elapsed_time = (current_time - self.initial_time).to_sec() + STARTING_ELAPSED*3600
+        elapsed_time = (current_time - self.initial_time).to_sec()
         return int(elapsed_time)
             
             
@@ -99,12 +98,12 @@ def pub_time():
     msg.time_of_the_day.data = str(SM.timeOfTheDay)
     msg.hhmmss.data = str(SM.elapsedTimeString)
     msg.elapsed = SM.elapsedTime
+    msg.T = int(SM.T)
     time_pub.publish(msg)
     
 
 def isFinished():
     global TSTOP
-    
     if SM.elapsedTime is not None and SM.elapsedTime > SM.T and not TSTOP:
         try:
             TSTOP = True
@@ -127,7 +126,6 @@ if __name__ == '__main__':
     rate = rospy.Rate(10)  # 10 Hz
     
     SCENARIO = str(rospy.get_param("~scenario"))
-    STARTING_ELAPSED = int(rospy.get_param("~starting_elapsed", 8)) - TIME_INIT
     
     SM = ScenarioManager()
                     

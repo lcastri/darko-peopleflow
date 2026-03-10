@@ -26,12 +26,13 @@ if __name__ == '__main__':
     pv = PeopleFlowVisualiser()
     
     try:
-        g_path = str(rospy.get_param("~g_path"))
+        g_path = str(ros_utils.wait_for_param("~g_path", timeout=10))
         with open(g_path, 'rb') as f:
             G = pickle.load(f)
             ros_utils.load_graph_to_rosparam(G, "/peopleflow/G")
             
             # Create a handle for the Trigger service
+            rospy.wait_for_service('/graph/path/show')
             graph_path_show = rospy.ServiceProxy('/graph/path/show', VisualisePath)        # Call the service
             graph_path_show("")
     except Exception as e:

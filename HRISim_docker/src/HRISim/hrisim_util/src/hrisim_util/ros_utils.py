@@ -11,9 +11,17 @@ class ParameterTimeoutError(Exception):
     pass
 
 
-def wait_for_param(param_name):
+def wait_for_param(param_name, timeout=None):
     rospy.logwarn(f"Waiting rosparam {param_name} to be available...")
-    while not rospy.has_param(param_name): rospy.sleep(0.1)
+    if timeout is not None:
+        start_time = rospy.Time.now().to_sec()
+        while not rospy.has_param(param_name):
+            if rospy.Time.now().to_sec() - start_time > timeout:
+                raise ParameterTimeoutError(f"Parameter {param_name} not found within {timeout} seconds")
+            rospy.sleep(0.1)
+    else:
+        while not rospy.has_param(param_name):
+            rospy.sleep(0.1)
     rospy.loginfo(f"rosparam {param_name} found!")
     return rospy.get_param(param_name)
 

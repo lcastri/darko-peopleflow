@@ -5,3 +5,4 @@ Header header
 std_msgs/String time_of_the_day
 std_msgs/String hhmmss
 int64 elapsed
+int64 T

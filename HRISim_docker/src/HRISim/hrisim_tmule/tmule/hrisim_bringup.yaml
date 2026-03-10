@@ -49,7 +49,6 @@ init_cmd: |
   # robot_mode == 2: SOCIAL mode means the robot's velocity is set by the social force just like the other agents -->
   export_default SCENARIO "$WORLD"
   export_default ALLOW_TASK "true"
-  export_default STARTING_ELAPSED "8"
   export_default MAX_TASKTIME "60"
   export_default IS_STUCK_THRESHOLD "65"
   export_default ROBOT_MODE "1"
@@ -79,15 +78,17 @@ windows:
     tags: ['core']
     panes:
       - |
-        roslaunch peopleflow_visualiser visualiser_bringup.launch \
-        scenario:=$SCENARIO robot_mode:=$ROBOT_MODE max_human_speed:=$MAX_HUMAN_SPEED \
-        robot_radius:=$ROBOT_RADIUS is_stuck_threshold:=$IS_STUCK_THRESHOLD \
-        force_obstacle:=$FORCE_OBSTACLE sigma_obstacle:=$SIGMA_OBSTACLE \
-        force_social:=$FORCE_SOCIAL
+        roslaunch peopleflow_bringup peopleflow_bringup.launch \
+        scenario:=$SCENARIO allow_task:=$ALLOW_TASK \
+        max_tasktime:=$MAX_TASKTIME robot_mode:=$ROBOT_MODE \
+        max_human_speed:=$MAX_HUMAN_SPEED robot_radius:=$ROBOT_RADIUS \
+        is_stuck_threshold:=$IS_STUCK_THRESHOLD force_obstacle:=$FORCE_OBSTACLE \
+        sigma_obstacle:=$SIGMA_OBSTACLE force_social:=$FORCE_SOCIAL
   - name: monitoring
     tags: ['extra']
     panes:
       - 'rosrun robot_path_visualisation AstarVisualisation.py'
+      - 'rosrun hrisim_rviz overlay_visualiser.py'
 # # # # # # windows:
 # # # # # #   - name: env
 # # # # # #     tags: ['ros']
@@ -98,8 +99,6 @@ windows:
 # # # # # #     panes:
 # # # # # #       - roslaunch hrisim_gazebo bringup.launch gui:=$GAZEBO_GUI robot:=$TIAGO_TYPE public_sim:=true world:=$WORLD
 # # # # # #       # - 'roscd hrisim_gazebo && ./physics_params.sh $MAX_STEP_SIZE $REAL_TIME_UPDATE_RATE'
-# # # # # #       # - 'rosrun hrisim_rviz overlay_visualiser.py'
-# # # # # #       # - 'rosrun robot_path_visualisation AstarVisualisation.py'
 # # # # # #   # - name: monitoring
 # # # # # #   #   tags: ['core']
 # # # # # #   #   panes:

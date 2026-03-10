@@ -1,6 +1,5 @@
 <launch>
     <arg name="scenario"                />
-    <arg name="starting_elapsed"        default="8" />
     <arg name="allow_task"              default="true" />
     <arg name="max_tasktime"            default="60" />
     <arg name="robot_mode"              default="1" />
@@ -13,7 +12,6 @@
 
     <include file="$(find peopleflow_manager)/launch/peopleflow_manager.launch">
         <arg name="scenario"            value="$(arg scenario)" />
-        <arg name="starting_elapsed"    value="$(arg starting_elapsed)" />
     </include>
     <include file="$(find peopleflow_pedsim_bridge)/launch/peopleflow_pedsim.launch">
         <arg name="scenario"            value="$(arg scenario)" />
