@@ -61,6 +61,9 @@ class PedsimBridge():
             if agent.isStuck or agent.isFree:
                 next_destination = agent.selectDestination(self.timeOfDay, req.destinations)
                 agent.setTask(next_destination, agent.getTaskDuration())
+            
+            elif not agent.isFree: 
+                pass
                                                                             
             else:
                 rospy.logerr("THERE IS A CASE I DID NOT COVER:")

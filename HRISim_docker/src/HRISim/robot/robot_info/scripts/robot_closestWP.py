@@ -27,6 +27,9 @@ if __name__ == '__main__':
     rate = rospy.Rate(10)  # 1 Hz
     SCENARIO = str(ros_utils.wait_for_param("/peopleflow_manager/scenario"))
     WPS = ros_utils.wait_for_param("/peopleflow/wps")
+    if WPS == {}:
+        rospy.logerr("No waypoints found in the scenario, shutting down the robot_closest_wp node.")
+        exit(1)
 
     RWPP = RobotClosestWP()
     

@@ -7,7 +7,8 @@ Panels:
         - /Planning1/Base1/Global1
         - /Planning1/Base1/Global1/Plan1
         - /Mapping1/Map1
-      Splitter Ratio: 0.4197138249874115
+        - /PedSim1/TrackedPersons1
+      Splitter Ratio: 0.44020354747772217
     Tree Height: 830
   - Class: rviz/Selection
     Name: Selection
@@ -994,7 +995,8 @@ Visualization Manager:
       Value: false
       Visibility:
         Control:
-          "": true
+          Move: true
+          Path: true
           Value: true
         Grid: true
         Localization:
@@ -1054,10 +1056,10 @@ Visualization Manager:
             Sonar Cloud: true
             Sonars: true
             Value: true
-          Clearance:
-            Closest Map Obstacle: true
-            Robot Position: true
-            Value: true
+            Velodyne Cloud: true
+            Virtual Obstacles: true
+          TF: true
+          Twist: true
           Value: true
         Tracking:
           Bounding Boxes: true
@@ -1180,79 +1182,34 @@ Visualization Manager:
           Marker Topic: /pedsim_visualizer/waypoints
           Name: Waypoints
           Namespaces:
-            charging-station: true
-            corridor-0: true
-            corridor-1: true
-            corridor-2-c: true
-            corridor-2-r: true
-            corridor-3-c: true
-            corridor-3-l: true
-            corridor-3-r: true
-            corridor-4-c: true
-            corridor-4-l: true
-            corridor-4-r: true
-            corridor-5-c: true
-            corridor-5-l: true
-            corridor-5-r: true
-            corridor-6-c: true
-            corridor-6-r: true
-            corridor-7-c: true
-            corridor-7-r: true
-            corridor-canteen-1: true
-            corridor-canteen-2: true
-            corridor-canteen-3: true
-            corridor-canteen-4: true
-            door-canteen: true
-            door-corridor-1: true
-            door-corridor-2: true
-            door-corridor-3: true
-            door-entrance: true
-            door-office-1: true
-            door-office-2: true
-            door-toilet-1: true
-            door-toilet-2: true
-            entrance: true
-            office-1: true
-            office-2: true
-            parking: true
-            support-0: true
-            support-1: true
-            support-2: true
-            support-3: true
-            support-4: true
-            support-5: true
-            support-6: true
-            support-7: true
-            support-8: true
-            support-9: true
-            table-12: true
-            table-23: true
-            target-1: true
-            target-2: true
-            target-3: true
-            target-4: true
-            target-5: true
-            target-6: true
-            target-7: true
-            toilet-1: true
-            toilet-2: true
-            wa-1-c: true
-            wa-1-l: true
-            wa-1-r: true
-            wa-2-c: true
-            wa-2-l: true
-            wa-2-r: true
-            wa-3-c: true
-            wa-3-cl: true
-            wa-3-cr: true
-            wa-3-l: true
-            wa-3-r: true
-            wa-4-c: true
-            wa-4-l: true
-            wa-4-r: true
-            wa-5-c: true
-            wa-5-l: true
-            wa-5-r: true
+            c1: true
+            c10: true
+            c11: true
+            c12: true
+            c13: true
+            c14: true
+            c15: true
+            c16: true
+            c17: true
+            c18: true
+            c19: true
+            c2: true
+            c20: true
+            c21: true
+            c22: true
+            c23: true
+            c24: true
+            c25: true
+            c26: true
+            c3: true
+            c4: true
+            c5: true
+            c6: true
+            c7: true
+            c8: true
+            c9: true
+            r1: true
+            r2: true
           Queue Size: 100
           Value: true
         - Alpha: 1
@@ -1260,7 +1217,7 @@ Visualization Manager:
           Color: 130; 130; 130
           Color map offset: 0
           Color transform: Flat
-          Delete after no. cycles: 10
+          Delete after no. cycles: 5
           Enabled: true
           Excluded person IDs: ""
           Font color: 255; 255; 255
@@ -1269,7 +1226,7 @@ Visualization Manager:
           History as line:
             Line width: 0.05000000074505806
             Value: true
-          History size: 10
+          History size: 5
           Included person IDs: ""
           Min. history point distance: 0.4000000059604645
           Missed alpha: 1
@@ -1325,7 +1282,7 @@ Visualization Manager:
           Marker Topic: /graph_visualization
           Name: WPGraph
           Namespaces:
-            "": true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/Group
@@ -1463,17 +1420,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: -4.676022052764893
-        Y: -0.08442909270524979
-        Z: -1.5159965753555298
+        X: 4.042767524719238
+        Y: 2.7216196060180664
+        Z: -0.3919013738632202
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.1997966766357422
+      Pitch: 1.3897966146469116
       Target Frame: <Fixed Frame>
-      Yaw: 4.7027907371521
+      Yaw: 4.697790622711182
     Saved: ~
 Window Geometry:
   DAG:

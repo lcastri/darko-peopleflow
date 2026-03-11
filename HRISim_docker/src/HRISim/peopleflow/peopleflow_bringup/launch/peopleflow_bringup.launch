@@ -29,6 +29,4 @@
         <arg name="force_social"        value="$(arg force_social)" />
     </include>
 
-    <node name="peopleflow_counter" pkg="peopleflow_counter" type="PeopleCounter.py" output="screen" />
-
 </launch>

@@ -84,6 +84,7 @@ def cb_pose(data):
         else:
             # Store the current pose as the last valid one if the robot is upright
             last_valid_pose = data
+            robot_collision_pub.publish(0)
     else:
         rospy.logerr("Could not retrieve the head position.")
 

@@ -20,7 +20,7 @@ TOPICS = [
     "/hrisim/robot_closest_wp",
     "/hrisim/robot_tasks_info",
     "/hrisim/robot_human_collision",
-    "/hrisim/robot_clearing_distance",
+    # "/hrisim/robot_clearing_distance",
     "/hrisim/robot_obs"
 ]
    
@@ -29,9 +29,9 @@ if __name__ == '__main__':
     rate = rospy.Rate(10)  # 10 Hz
     
     schedule = ros_utils.wait_for_param("/peopleflow/schedule")
-    
+    EXP = str(rospy.get_param("~bagname"))
     try:
-        bag_process = subprocess.Popen(['rosbag', 'record', '-O', '/root/shared/experiment.bag'] + TOPICS, shell=False)
+        bag_process = subprocess.Popen(['rosbag', 'record', '-O', f'/home/hrisim/shared/{EXP}.bag'] + TOPICS, shell=False)
     except Exception as e:
         rospy.logerr(f"Failed to start ROS bag recording: {str(e)}")
         
