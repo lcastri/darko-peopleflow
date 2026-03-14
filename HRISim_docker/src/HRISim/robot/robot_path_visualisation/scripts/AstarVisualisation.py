@@ -73,7 +73,7 @@ def update_astar_path(request):
             goal_marker.id = len(edge_data) + 1  # Unique ID
             goal_marker.scale.x = 1  # Sphere size
             goal_marker.scale.y = 1
-            goal_marker.scale.z = 1
+            goal_marker.scale.z = 0.1
             goal_marker.color.r = 0.0
             goal_marker.color.g = 1.0  # Green color
             goal_marker.color.b = 0.0
@@ -82,7 +82,7 @@ def update_astar_path(request):
             # Position the sphere at the final goal
             goal_marker.pose.position.x = node_positions[final_goal][0]
             goal_marker.pose.position.y = node_positions[final_goal][1]
-            goal_marker.pose.position.z = 0.5  # Slightly above ground
+            goal_marker.pose.position.z = 0.15  # Slightly above ground
 
             markers.markers.append(goal_marker)
 

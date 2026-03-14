@@ -15,6 +15,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     software-properties-common \
     gnupg \
     curl \
+    libglvnd0 \
+    libgl1 \
+    libglx0 \
+    libegl1 \
+    libgles2 \
+    mesa-utils \
+    libxrender1 \
+    libxext6 \
+    # libgl1-mesa-glx \
     wget \
     apt-transport-https \
     git \
@@ -61,6 +70,10 @@ RUN rosdep init || true
 RUN groupadd -g $GID hrisim && \
     useradd -m -s /bin/bash -u $UID -g $GID hrisim && \
     echo "hrisim ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Tell NVIDIA Container Toolkit to expose all GPUs and enable graphics
+ENV NVIDIA_VISIBLE_DEVICES=all
+ENV NVIDIA_DRIVER_CAPABILITIES=graphics,compute,display,utility
 
 USER hrisim
 WORKDIR /home/hrisim
@@ -120,6 +133,9 @@ RUN mkdir -p /home/hrisim/.gazebo/models
 USER root
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
+
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES graphics,compute,display,utility
 
 # Set the entrypoint to run the script
 USER hrisim

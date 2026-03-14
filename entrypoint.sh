@@ -17,6 +17,8 @@ if ! grep -q "### Sourced by HRISim Entrypoint ###" "$HOME/.bashrc"; then
   echo "### Sourced by HRISim Entrypoint ###" >> ~/.bashrc
   echo "# Define colors for shell messages" >> ~/.bashrc
   echo "GREEN='\\033[0;32m'" >> ~/.bashrc
+  echo "RED='\\033[0;31m'" >> ~/.bashrc
+  echo "YELLOW='\\033[0;33m'" >> ~/.bashrc
   echo "NC='\\033[0m'" >> ~/.bashrc
   echo "" >> ~/.bashrc
 
@@ -26,13 +28,16 @@ if ! grep -q "### Sourced by HRISim Entrypoint ###" "$HOME/.bashrc"; then
   echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 
   echo "source /home/hrisim/tiago_ws/devel/setup.bash" >> ~/.bashrc
-  echo "echo -e \"\${GREEN}Sourced TIAGo ws.\${NC}\"" >> ~/.bashrc
+  echo "echo -e \"\${GREEN}✔ Sourced TIAGo ws.\${NC}\"" >> ~/.bashrc
   echo "" >> ~/.bashrc
 
   echo "# Source user workspace only if it has been built" >> ~/.bashrc
   echo "if [ -f \"/home/hrisim/ros_ws/devel/setup.bash\" ]; then" >> ~/.bashrc
   echo "  source \"/home/hrisim/ros_ws/devel/setup.bash\"" >> ~/.bashrc
-  echo "  echo -e \"\${GREEN}Sourced ros_ws ws.\${NC}\"" >> ~/.bashrc
+  echo "  echo -e \"\${GREEN}✔ Sourced ros_ws ws.\${NC}\"" >> ~/.bashrc
+  echo "else" >> ~/.bashrc
+  echo "  echo -e \"\${RED}✖ ros_ws ws not sourced (not built).\${NC}\"" >> ~/.bashrc
+  echo "  echo -e \"\${YELLOW}⚠ run a 'catkin build' in /home/hrisim/ros_ws.\${NC}\"" >> ~/.bashrc
   echo "fi" >> ~/.bashrc
   echo "" >> ~/.bashrc
   

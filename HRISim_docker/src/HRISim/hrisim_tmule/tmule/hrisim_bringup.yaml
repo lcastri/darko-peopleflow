@@ -35,6 +35,8 @@ init_cmd: |
   export_default DYNAMIC_DURATION "4"
   export_default CHARGING_TIME "2"
   export_default ABORT_TIME_THRESHOLD "45"
+  export_default OBS_FACTOR ""
+
 
   # Gazebo arguments
   export_default WORLD "INB_3floor"
@@ -66,7 +68,8 @@ init_cmd: |
   export_default PRED_STEP "5"
 
   # Recording arguments
-  export_default BAGNAME "DISCOVERY_POSTER"
+  export_default DTOD "BUFFET"
+  export_default BAGNAME "DISCOVERY_$DTOD"
 
 windows:
   - name: env
@@ -88,7 +91,8 @@ windows:
       - |
         roslaunch robot_battery sim_battery.launch \
         init_battery:=$INIT_BATTERY static_duration:=$STATIC_DURATION \
-        dynamic_duration:=$DYNAMIC_DURATION charging_time:=$CHARGING_TIME
+        dynamic_duration:=$DYNAMIC_DURATION charging_time:=$CHARGING_TIME \
+        obs_factor:=$OBS_FACTOR
       - 'rosrun robot_obs DynamicObstacle.py'
   - name: pedsim
     tags: ['core']
@@ -126,7 +130,7 @@ windows:
   - name: data
     tags: ['exp']
     panes:
-      - roslaunch hrisim_recording record.launch bagname:=$BAGNAME
+      - roslaunch hrisim_recording record.launch bagname:=$BAGNAME desired_tod:=$DTOD
 # python TIAGo_plan.py
 # python TIAGo_causal_plan.py --init_time=$INIT_TIME --init_battery=$INIT_BATTERY
 # # # # # #   # - name: prediction

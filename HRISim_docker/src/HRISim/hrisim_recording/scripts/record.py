@@ -5,6 +5,8 @@ import subprocess
 import rospy
 import signal
 import hrisim_util.ros_utils as ros_utils
+import hrisim_util.constants as constants
+from peopleflow_msgs.msg import Time as pT
 
 TOPICS = [
     "/map",
@@ -23,13 +25,32 @@ TOPICS = [
     # "/hrisim/robot_clearing_distance",
     "/hrisim/robot_obs"
 ]
+
+
+def cb_time(t: pT):
+    global TIME
+    TIME = t.time_of_the_day.data
+
    
 if __name__ == '__main__':
+    TIME = None
+
     rospy.init_node('hrisim_recording')
     rate = rospy.Rate(10)  # 10 Hz
     
-    schedule = ros_utils.wait_for_param("/peopleflow/schedule")
     EXP = str(rospy.get_param("~bagname"))
+    DTOD = str(rospy.get_param("~desired_tod"))
+    
+    rospy.Subscriber("/peopleflow/time", pT, cb_time)
+
+    written = False
+    while TIME is None or TIME != DTOD:
+        if not written:
+            rospy.logwarn(f"Waiting for the desired time of day ({DTOD}) to start recording...")
+            written = True
+        rate.sleep()
+    rospy.logwarn(f"Desired time of day ({DTOD}) reached => Start recording")
+        
     try:
         bag_process = subprocess.Popen(['rosbag', 'record', '-O', f'/home/hrisim/shared/{EXP}.bag'] + TOPICS, shell=False)
     except Exception as e:

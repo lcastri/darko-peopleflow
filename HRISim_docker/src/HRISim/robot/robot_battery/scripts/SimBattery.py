@@ -20,23 +20,23 @@ class SimBatteryManager():
         self.dynamic_duration = dynamic_duration
         self.charging_time = charging_time
         
-        self.K_s = 100 / (self.static_duration * 3600)
-        self.K_d = (100 / (self.dynamic_duration * 3600) - self.K_s)/(ROBOT_MAX_VEL)
+        self.K_nl_s = 100 / (self.static_duration * 3600)
+        self.K_nl_d = (100 / (self.dynamic_duration * 3600) - self.K_nl_s)/(ROBOT_MAX_VEL)
+        self.K_l_s = self.K_nl_s * OBS_FACTOR
+        self.K_l_d = self.K_nl_d * OBS_FACTOR
         self.charge_rate = 100 / (self.charging_time * 3600)
-        rospy.set_param("/robot_battery/is_charging", False)
-        rospy.set_param("/robot_battery/static_consumption", self.K_s)
-        rospy.set_param("/robot_battery/dynamic_consumption", self.K_d)
+        rospy.set_param("/robot_battery/noload_static_consumption", self.K_nl_s)
+        rospy.set_param("/robot_battery/noload_dynamic_consumption", self.K_nl_d)
+        rospy.set_param("/robot_battery/load_static_consumption", self.K_l_s)
+        rospy.set_param("/robot_battery/load_dynamic_consumption", self.K_l_d)
         rospy.set_param("/robot_battery/charge_rate", self.charge_rate)
 
         self.vel = 0
-        self.battery_pub = rospy.Publisher('/hrisim/robot_battery', BatteryStatus, queue_size=10)
         rospy.Subscriber('/mobile_base_controller/odom', Odometry, self.cb_vel)
         rospy.Service('/hrisim/set_battery_level', SetBattery, self.set_battery_level_cb)
 
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer)
-        
-
          
     def cb_vel(self, odom):
         currentT = odom.header.stamp.to_sec()
@@ -62,14 +62,17 @@ class SimBatteryManager():
             
         # Battery
         msg_Battery = BatteryStatus()
-        msg_Battery.level.data = self.battery_level   
-        msg_Battery.is_charging.data = self.is_charging
-        self.battery_pub.publish(msg_Battery)
-
+        msg_Battery.level.data = SBM.battery_level   
+        msg_Battery.is_charging.data = SBM.is_charging        
+        battey_pub.publish(msg_Battery)
+        
         self.lastT = odom.header.stamp.to_sec()
     
     def discharge_battery(self):
-        self.battery_level -= self.deltaT * (self.K_s + self.K_d * self.vel)
+        OBS = bool(rospy.get_param('/hrisim/robot_obs'))
+        KS = self.K_l_s if OBS else self.K_nl_s
+        KD = self.K_l_d if OBS else self.K_nl_d
+        self.battery_level -= self.deltaT * (KS + KD * self.vel)
         if self.battery_level < 0:
             self.battery_level = 0
         
@@ -94,9 +97,15 @@ if __name__ == '__main__':
     INIT_BATTERY = float(rospy.get_param("~init_battery", 100))
     STATIC_DURATION = float(rospy.get_param("~static_duration"))
     DYNAMIC_DURATION = float(rospy.get_param("~dynamic_duration"))
+    OBS_FACTOR = float(rospy.get_param("~obs_factor"))
     CHARGING_TIME = float(rospy.get_param("~charging_time"))
     ROBOT_MAX_VEL = float(ros_utils.wait_for_param("/move_base/TebLocalPlannerROS/max_vel_x"))
 
+    ros_utils.wait_for_param('/hrisim/robot_obs')
+
     SBM = SimBatteryManager(INIT_BATTERY, STATIC_DURATION, DYNAMIC_DURATION, CHARGING_TIME)
-    rospy.logwarn("Robot Battery started!")
+    
+    battey_pub = rospy.Publisher('/hrisim/robot_battery', BatteryStatus, queue_size=10)
+    rospy.set_param("/robot_battery/is_charging", False)
+    
     rospy.spin()

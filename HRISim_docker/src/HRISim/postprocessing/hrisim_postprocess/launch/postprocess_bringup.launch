@@ -1,0 +1,21 @@
+<launch>
+
+  <arg name="bagname"/>
+  <arg name="tod"/>
+  <arg name="scenario" default="INB_3floor"/>
+  <arg name="playback_speed" default="10" />
+
+  <!-- rosbags play -->
+  <param name="use_sim_time" value="true" />
+  <node name="rosbag_play_data" pkg="rosbag" type="play"
+        args="--clock -r $(arg playback_speed) $(find hrisim_postprocess)/bags/$(arg bagname).bag"/>
+
+  <!-- Extracting data -->
+  <node pkg="hrisim_postprocess" type="data_extractor.py" name="hrisim_postprocess" output="screen" >
+      <param name="bagname" value="$(arg bagname)" />
+      <param name="tod" value="$(arg tod)" />
+      <param name="node_path" value="$(find hrisim_postprocess)" />
+      <param name="scenario" value="$(find pedsim_simulator)/scenarios/$(arg scenario).xml" />
+  </node>
+
+</launch> 

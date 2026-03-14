@@ -9,6 +9,7 @@ class TOD(Enum):
     STARTING = "STARTING"
     POSTER = "POSTER"
     BUFFET = "BUFFET"
+    OFF = "OFF"
 
 TODS = {t.value: i for i, t in enumerate(TOD)}
 

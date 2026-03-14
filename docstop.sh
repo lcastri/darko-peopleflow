@@ -11,4 +11,4 @@ echo "Stopping and removing the container..."
 docker compose down
 
 echo " "
-echo -e "${GREEN}Environment has been stopped.${NC}"
+echo -e "${GREEN}✔ Environment has been stopped.${NC}"
