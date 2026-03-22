@@ -17,6 +17,7 @@
 
     <node name="stand_up" pkg="robot_recovery" type="standUp.py" output="screen" />
     <node name="localise_me" pkg="robot_recovery" type="localiseMe.py" output="screen" />
+    <node name="out_bounds" pkg="robot_recovery" type="resetPos.py" output="screen" />
     <node name="robot_closest_wp" pkg="robot_info" type="robot_closestWP.py" output="screen" />
     
 </launch>

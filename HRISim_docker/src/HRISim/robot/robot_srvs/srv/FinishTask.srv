@@ -1,4 +1,5 @@
 int32 task_id             # ID of the task to mark as finished
-int8 result               # Result of the task: 1 for success, -1 for failure
+int8 result               # Result of the task: 1 for success, -1 for failure, -2 for battery failure
+float64 completion_percentage # Percentage of the task completed
 ---
 bool success              # True if the task was successfully updated, False otherwise

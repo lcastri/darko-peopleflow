@@ -33,7 +33,7 @@ from geometry_msgs.msg import PoseWithCovarianceStamped
 from nav_msgs.msg import Odometry
 import time
 
-BATTERY_CRITICAL_LEVEL = 20
+BATTERY_CRITICAL_LEVEL = 21
 
 class HeuristicCounter:
     """
@@ -104,7 +104,7 @@ def shortest_heuristic(a, b):
     return ((x1 - x2)**2 + (y1 - y2)**2)**0.5
 
 
-def causal_heuristic(a, b, max_d_cost, max_pd_cost, max_bc_cost):
+def causal_heuristic(a, b, max_d_cost, max_D_cost, max_L_cost):
     
     def _extract_info(a, b, variable):
         if (a, b) in RISK_MAP:
@@ -124,26 +124,26 @@ def causal_heuristic(a, b, max_d_cost, max_pd_cost, max_bc_cost):
     # Calculate normalized distance cost
     distance_cost = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
     #! Not normalised
-    normalized_d_cost = distance_cost
+    # normalized_d_cost = distance_cost
     #! Normalised
-    # normalized_d_cost = distance_cost / max_d_cost if max_d_cost > 0 else 0
+    normalized_d_cost = distance_cost / max_d_cost if max_d_cost > 0 else 0
 
     # Calculate PD cost
-    PD_cost = _extract_info(a, b, 'PD')
+    D_cost = _extract_info(a, b, 'PD')
     #! Not normalised
-    normalized_PD_cost = PD_cost
+    # normalized_PD_cost = PD_cost
     #! Normalised
-    # normalized_PD_cost = PD_cost / max_pd_cost if max_pd_cost > 0 else 0
+    normalized_D_cost = D_cost / max_D_cost if max_D_cost > 0 else 0
 
     # Calculate BC cost
-    BC_cost = _extract_info(a, b, 'BC')
+    L_cost = _extract_info(a, b, 'BC')
     #! Not normalised
-    normalized_BC_cost = BC_cost
+    # normalized_BC_cost = BC_cost
     #! Normalised
-    # normalized_BC_cost = BC_cost / max_bc_cost if max_bc_cost > 0 else 0
+    normalized_L_cost = L_cost / max_L_cost if max_L_cost > 0 else 0
 
     # Combine weighted costs
-    return K_D * normalized_d_cost + K_PD * normalized_PD_cost + K_BC * normalized_BC_cost
+    return K_D * normalized_d_cost + K_PD * normalized_D_cost + K_BC * normalized_L_cost
 
 
 def compute_max_values(G, risk_map):
@@ -159,13 +159,10 @@ def compute_max_values(G, risk_map):
 
 
     max_d_cost = max(travel_distances) if travel_distances else 1
-    max_pd_cost = max([risk_map[arc]['PD'] for arc in risk_map.keys()])
-    max_bc_cost = max([risk_map[arc]['BC'] for arc in risk_map.keys()])
-    rospy.logwarn(f"max_d_cost: {max_d_cost}")
-    rospy.logwarn(f"max_pd_cost: {max_pd_cost}") 
-    rospy.logwarn(f"max_bc_cost: {max_bc_cost}") 
+    max_D_cost = max([risk_map[arc]['PD'] for arc in risk_map.keys()])
+    max_L_cost = max([risk_map[arc]['BC'] for arc in risk_map.keys()])
 
-    return max_d_cost, max_pd_cost, max_bc_cost
+    return max_d_cost, max_D_cost, max_L_cost
 
 
 def update_G_weights(g, max_d_cost, max_pd_cost, max_bc_cost):
@@ -193,7 +190,7 @@ def update_G_weights(g, max_d_cost, max_pd_cost, max_bc_cost):
         d_cost = ((x1 - x2)**2 + (y1 - y2)**2)**0.5
         d_costs.append(d_cost)
 
-        if u != constants.WP.CHARGING_STATION.value and v != constants.WP.CHARGING_STATION.value and ((u, v) in RISK_MAP or (v, u) in RISK_MAP):
+        if (u, v) in RISK_MAP or (v, u) in RISK_MAP:
             PD_cost = _extract_info(u, v, 'PD')
             BC_cost = _extract_info(u, v, 'BC')
         else:
@@ -204,14 +201,14 @@ def update_G_weights(g, max_d_cost, max_pd_cost, max_bc_cost):
         bc_costs.append(BC_cost)
     
     #! Not normalised   
-    normalized_d_costs = d_costs
-    normalized_pd_costs = pd_costs
-    normalized_bc_costs = bc_costs
+    # normalized_d_costs = d_costs
+    # normalized_pd_costs = pd_costs
+    # normalized_bc_costs = bc_costs
     
     #! Normalised   
-    # normalized_d_costs = [d / max_d_cost for d in d_costs]
-    # normalized_pd_costs = [c / max_pd_cost for c in pd_costs]
-    # normalized_bc_costs = [c / max_bc_cost for c in bc_costs]
+    normalized_d_costs = [d / max_d_cost for d in d_costs]
+    normalized_pd_costs = [c / max_pd_cost for c in pd_costs]
+    normalized_bc_costs = [c / max_bc_cost for c in bc_costs]
 
     # Apply normalization and scaling factors
     for idx, (u, v) in enumerate(g.edges()):
@@ -232,24 +229,12 @@ def get_next_goal():
     global TASK_LIST
 
     if not rospy.get_param('/robot_battery/is_charging') and not rospy.get_param('/hrisim/robot_busy'):
-        
         tod = rospy.get_param('/peopleflow/timeday')                                   
         if len(TASK_LIST[tod]) > 0:
-            if tod in [constants.TOD.H1.value, constants.TOD.H2.value, constants.TOD.H3.value, 
-                    constants.TOD.H4.value, constants.TOD.H5.value, constants.TOD.H7.value, 
-                    constants.TOD.H8.value, constants.TOD.H9.value, constants.TOD.H10.value]:
-                return TASK_LIST[tod][0], constants.Task.DELIVERY, True
-                        
-            elif rospy.get_param('/peopleflow/timeday') in [constants.TOD.H6.value]:
-                return TASK_LIST[tod][0], constants.Task.DELIVERY, True
-                        
-            elif rospy.get_param('/peopleflow/timeday') in [constants.TOD.OFF.value]:
-                if len(TASK_LIST[tod]) > 0:
-                    rospy.logwarn("It's off time, going to clean the shop.")
-                    return TASK_LIST[tod][0], constants.Task.CLEANING, True
+            return TASK_LIST[tod][0], True
         else:
             rospy.logwarn("No tasks left, shutting down the planning.")
-            return None, None, False
+            return None, False
 
 
 def set_battery(b):
@@ -311,6 +296,7 @@ def Plan(p):
     ros_utils.wait_for_service('/hrisim/new_task')
     ros_utils.wait_for_service('/hrisim/finish_task')
     ros_utils.wait_for_service('/graph/path/show')
+    ros_utils.wait_for_service('/graph/weights/update')
     ros_utils.wait_for_service('/hrisim/obstacles/remove')
     ros_utils.wait_for_service('/hrisim/obstacles/timer/off')
     ros_utils.wait_for_service('/hrisim/shutdown')
@@ -321,6 +307,7 @@ def Plan(p):
     new_task_service = rospy.ServiceProxy('/hrisim/new_task', NewTask)
     finish_task_service = rospy.ServiceProxy('/hrisim/finish_task', FinishTask)
     graph_path_show = rospy.ServiceProxy('/graph/path/show', VisualisePath)
+    graph_weight_update = rospy.ServiceProxy('/graph/weights/update', Empty)
     dynobs_remove_service = rospy.ServiceProxy('/hrisim/obstacles/remove', Empty)
     dynobs_timer_service = rospy.ServiceProxy('/hrisim/obstacles/timer/off', Empty) 
     shutdown_service = rospy.ServiceProxy('/hrisim/shutdown', Empty)
@@ -329,12 +316,11 @@ def Plan(p):
     ros_utils.wait_for_param("/hrisim/prediction_ready")
     
     rospy.logwarn("Waiting PeopleFlow timeday to be ready...")
-    while rospy.get_param('/peopleflow/timeday') != INIT_TIME: 
-        rospy.sleep(0.1)    
+    while rospy.get_param('/peopleflow/timeday') != INIT_TIME: rospy.sleep(0.1)
+        
     set_battery(INIT_BATTERY)
     rospy.set_param('/hrisim/tasks/total', len(TASK_LIST[rospy.get_param('/peopleflow/timeday')]))
     rospy.set_param('/hrisim/robot_busy', False)
-    no_prediction = False
     PLAN_ON = True
     TASK_ON = False
     GO_TO_CHARGER = False
@@ -344,7 +330,7 @@ def Plan(p):
         if GO_TO_CHARGER:
             if TASK_ON:
                 rospy.logerr(f"Task {task_id} fail for critical battery")
-                finish_task_service(task_id, constants.TaskResult.CRITICAL_BATTERY.value)
+                finish_task_service(task_id, constants.TaskResult.CRITICAL_BATTERY.value, 1-(len(QUEUE)+1)/ORIG_QUEUE_LEN)
                 TASK_ON = False
                 rospy.logwarn("Cancelling all goals..")
                 client = actionlib.SimpleActionClient('/move_base', MoveBaseAction)
@@ -360,30 +346,25 @@ def Plan(p):
             GO_TO_CHARGER = False
             
         elif not rospy.get_param('/robot_battery/is_charging') and not GO_TO_CHARGER and len(QUEUE) == 0:
-            NEXT_GOAL, TASK, PLAN_ON = get_next_goal()
+            NEXT_GOAL, PLAN_ON = get_next_goal()
             if NEXT_GOAL is None: continue
             if isinstance(NEXT_GOAL, constants.WP): NEXT_GOAL = NEXT_GOAL.value
-            rospy.logerr(f"New goal defined: {NEXT_GOAL}")
+            rospy.logwarn(f"############# New goal defined: {NEXT_GOAL}")
             
-            if not no_prediction:
-                RISK_MAP, tot_inf_time, mean_inf_time = get_prediction(p)
-            else:
-                tot_inf_time = 0.0
-                mean_inf_time = 0.0
-            if rospy.get_param('/peopleflow/timeday') == constants.TOD.OFF.value and not no_prediction:
-                no_prediction = True
-            
+            RISK_MAP, tot_inf_time, mean_inf_time = get_prediction(p)
+
             # Update weights
-            max_d_cost, max_pd_cost, max_bc_cost = compute_max_values(G, RISK_MAP)
-            G = update_G_weights(G, max_d_cost, max_pd_cost, max_bc_cost)
+            max_d_cost, max_D_cost, max_L_cost = compute_max_values(G, RISK_MAP)
+            G = update_G_weights(G, max_d_cost, max_D_cost, max_L_cost)
             ros_utils.load_graph_to_rosparam(G, "/peopleflow/G")
+            graph_weight_update()
             
             # Wrap the heuristic function to pre-fill parameters
             causal_heuristic_predefined = functools.partial(
                 causal_heuristic, 
                 max_d_cost=max_d_cost, 
-                max_pd_cost=max_pd_cost, 
-                max_bc_cost=max_bc_cost, 
+                max_D_cost=max_D_cost, 
+                max_L_cost=max_L_cost, 
             )
 
             heuristic_wrapper = HeuristicCounter(causal_heuristic_predefined)
@@ -393,6 +374,7 @@ def Plan(p):
             try:
                 start_time = time.perf_counter()
                 QUEUE = nx.astar_path(G, ROBOT_CLOSEST_WP, NEXT_GOAL, heuristic=heuristic_wrapper, weight='weight')
+                ORIG_QUEUE_LEN = len(QUEUE)
                 end_time = time.perf_counter()
                 planning_time = end_time - start_time
                 evaluations = heuristic_wrapper.get_count()            
@@ -405,12 +387,13 @@ def Plan(p):
 
                 # Step 3: Enforce the battery constraint AFTER path selection
                 if BATTERY_LEVEL - total_battery_cost < BATTERY_CRITICAL_LEVEL:
-                    rospy.logwarn("Path violates battery safety constraint! Going to charger")
+                    rospy.logerr("    Path violates battery safety constraint! Going to charger")
                     QUEUE = []
                     GO_TO_CHARGER = True
                     continue
                 else:
-                    rospy.logwarn(f"Path found: {QUEUE}")
+                    rospy.logwarn(f"    Estimated remaining battery after task: {BATTERY_LEVEL - total_battery_cost}")
+                    rospy.logwarn(f"    Path found: {QUEUE}")
             
             graph_path_show(','.join(QUEUE))
             TASK_LIST[rospy.get_param('/peopleflow/timeday')].pop(0)
@@ -423,7 +406,7 @@ def Plan(p):
             next_sub_goal = QUEUE.pop(0)
             rospy.logwarn(f"Planning next goal: {next_sub_goal}")
             nextnext_sub_goal = QUEUE[0] if len(QUEUE) > 0 else None
-            if nextnext_sub_goal is None and TASK is constants.Task.CLEANING:
+            if nextnext_sub_goal is None:
                 tod = rospy.get_param('/peopleflow/timeday')                                   
                 nextnext_sub_goal = TASK_LIST[tod][0] if len(TASK_LIST[tod]) > 0 else None
             
@@ -431,7 +414,7 @@ def Plan(p):
             GOAL_STATUS = rospy.get_param('/hrisim/goal_status')
             if GOAL_STATUS == -1:
                 rospy.logerr("Goal failed!")
-                finish_task_service(task_id, constants.TaskResult.FAILURE.value)
+                finish_task_service(task_id, constants.TaskResult.FAILURE.value, 1-(len(QUEUE)+1)/ORIG_QUEUE_LEN)
                 TASK_ON = False
                 set_robot_pos(NEXT_GOAL)
                 QUEUE = []
@@ -439,7 +422,7 @@ def Plan(p):
             rospy.set_param('/hrisim/goal_status', 0)
             
             if len(QUEUE) == 0: 
-                finish_task_service(task_id, constants.TaskResult.SUCCESS.value)
+                finish_task_service(task_id, constants.TaskResult.SUCCESS.value, 1.0)
                 TASK_ON = False
                 
     shutdown_service()
@@ -477,7 +460,6 @@ if __name__ == "__main__":
     rospy.set_param('/hrisim/robot_obs', False)
 
     
-    PRED_STEP = 5
     K_D = 1
     K_PD = 10
     K_BC = 5
@@ -492,7 +474,6 @@ if __name__ == "__main__":
     g_path = ros_utils.wait_for_param("/peopleflow_pedsim_bridge/g_path")
     with open(g_path, 'rb') as f:
         G = pickle.load(f)
-        G.remove_node("parking")
     ros_utils.load_graph_to_rosparam(G, "/peopleflow/G")
     rospy.Subscriber("/hrisim/robot_battery", BatteryStatus, cb_battery)
     rospy.Subscriber("/hrisim/robot_closest_wp", String, cb_robot_closest_wp)
@@ -504,7 +485,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Initialize robot parameters.')
     parser.add_argument('--init_time', type=str, required=True, help='Initial time to start the plan.')
     parser.add_argument('--init_battery', type=float, required=True, help='Initial battery level.')
-
     args = parser.parse_args()
     INIT_TIME = args.init_time
     INIT_BATTERY = args.init_battery

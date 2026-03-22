@@ -25,9 +25,9 @@ def cb_vel(odom):
     ROBOT_VEL = abs(odom.twist.twist.linear.x)
     
     
-# def cb_robot_tasks(msg: TasksInfo):      
-#     global TASKS
-#     TASKS = (int(msg.num_tasks), int(msg.num_success), int(msg.num_failure))
+def cb_robot_tasks(msg: TasksInfo):      
+    global TASKS
+    TASKS = (int(msg.num_tasks), int(msg.num_success), int(msg.num_failure))
     
  
 def create_overlay_text():
@@ -52,27 +52,26 @@ def create_overlay_text():
     text_main.font = "DejaVu Sans Mono"
     text_main.fg_color = ColorRGBA(1.0, 1.0, 1.0, 1.0)  # RGBA (White)
     
-    # # Task
-    # text_task = OverlayText()
-    # text_task.width = 400  # Width of the overlay
-    # text_task.height = 80  # Height of the overlay
-    # text_task.left = 10  # X position (left offset)
-    # text_task.top = text_main.height + 10  # Y position (top offset)
-    # text_task.text_size = 13  # Font size
-    # text_task.line_width = 2
-    # if TASKS is not None:
-    #     intro_str = f"Task {TASKS[0]}/{int(rospy.get_param('/hrisim/tasks/total', 0))}:"
-    #     tasks_detail_str = f"- Pending: {TASKS[0] - (TASKS[1]+TASKS[2])}/{int(TASKS[0])}\n- Success: {TASKS[1]}/{int(TASKS[0])}\n- Failure: {TASKS[2]}/{int(TASKS[0])}" if TASKS is not None else 'none'
-    #     overlay_str = '\n'.join([intro_str, tasks_detail_str])
-    # else:
-    #     overlay_str = "Task none"
-    # text_task.text = overlay_str
-    # text_task.font = "DejaVu Sans Mono"
-    # text_task.fg_color = ColorRGBA(1.0, 1.0, 1.0, 1.0)  # RGBA (White)
-       
+    # Task
+    text_task = OverlayText()
+    text_task.width = 400  # Width of the overlay
+    text_task.height = 80  # Height of the overlay
+    text_task.left = 10  # X position (left offset)
+    text_task.top = text_main.height + 10  # Y position (top offset)
+    text_task.text_size = 13  # Font size
+    text_task.line_width = 2
+    if TASKS is not None:
+        intro_str = f"Task {TASKS[0]}/{int(rospy.get_param('/hrisim/tasks/total', 0))}:"
+        tasks_detail_str = f"- Pending: {TASKS[0] - (TASKS[1]+TASKS[2])}/{int(TASKS[0])}\n- Success: {TASKS[1]}/{int(TASKS[0])}\n- Failure: {TASKS[2]}/{int(TASKS[0])}" if TASKS is not None else 'none'
+        overlay_str = '\n'.join([intro_str, tasks_detail_str])
+    else:
+        overlay_str = "Task none"
+    text_task.text = overlay_str
+    text_task.font = "DejaVu Sans Mono"
+    text_task.fg_color = ColorRGBA(1.0, 1.0, 1.0, 1.0)  # RGBA (White)
     
-    # return text_main, text_task
-    return text_main
+    return text_main, text_task
+    # return text_main
 
 
 if __name__ == '__main__':
@@ -88,18 +87,18 @@ if __name__ == '__main__':
     TASKS = None
     
     rospy.Subscriber('/hrisim/robot_battery', BatteryStatus, cb_battery)
-    # rospy.Subscriber('/hrisim/robot_tasks_info', TasksInfo, cb_robot_tasks)
+    rospy.Subscriber('/hrisim/robot_tasks_info', TasksInfo, cb_robot_tasks)
     rospy.Subscriber('/mobile_base_controller/odom', Odometry, cb_vel)
     rospy.Subscriber("/peopleflow/time", pT, cb_time)
     
     text_pub = rospy.Publisher('/hrisim/robot/info/main', OverlayText, queue_size=10)
-    # task_pub = rospy.Publisher('/hrisim/robot/info/tasks', OverlayText, queue_size=10)
+    task_pub = rospy.Publisher('/hrisim/robot/info/tasks', OverlayText, queue_size=10)
     
     while not rospy.is_shutdown():
         
         # Overlay text
-        text_main = create_overlay_text()
+        text_main, text_task = create_overlay_text()
         text_pub.publish(text_main)
-        # task_pub.publish(text_task)
+        task_pub.publish(text_task)
                 
         rate.sleep()

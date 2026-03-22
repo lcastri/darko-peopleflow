@@ -362,7 +362,13 @@ dist/
 *.csv
 
 /results/*
-/HRISim_docker/src/HRISim/hrisim_postprocess/*
+/HRISim_docker/src/HRISim/postprocessing/hrisim_postprocess/**/*.csv
+/HRISim_docker/src/HRISim/postprocessing/hrisim_postprocess/**/*.json
+/HRISim_docker/src/HRISim/postprocessing/hrisim_postprocess/**/*.pkl
+/HRISim_docker/src/HRISim/postprocessing/hrisim_postprocess/results/*
+/HRISim_docker/src/HRISim/peopleflow/peopleflow_manager/hardcoded/*.pkl
+/HRISim_docker/src/HRISim/hrisim_plans/hardcoded/*.json
+/HRISim_docker/src/HRISim/prediction/hrisim_prediction_manager/**/*.png
 /shared/*
 /utilities_ws/*
 *.vscode

@@ -78,7 +78,6 @@ def Plan(p):
     dynobs_timer_service = rospy.ServiceProxy('/hrisim/obstacles/timer/off', Empty) 
     shutdown_service = rospy.ServiceProxy('/hrisim/shutdown', Empty)
     
-    
     ros_utils.wait_for_param("/peopleflow/timeday")
     rospy.set_param('/hrisim/robot_busy', False)
     PLAN_ON = True

@@ -9,7 +9,7 @@ from scipy.stats import shapiro, mannwhitneyu, ttest_ind, normaltest
 def readScenario(scenario):
     # Load and parse the XML file
     
-    tree = ET.parse('/home/lcastri/git/PeopleFlow/utilities_ws/src/RA-L/hrisim_postprocess/scenarios/' + scenario + '.xml')
+    tree = ET.parse('/home/hrisim/ros_ws/src/pedsim_ros/pedsim_simulator/scenarios/' + scenario + '.xml')
     root = tree.getroot()
     
     tmp = {}
@@ -299,7 +299,7 @@ def plot_stacked_bar(metrics_dict, title, ylabel, xTickLabel, bar_width=0.1, off
 
     # Extracting values and colors for stacked bars
     values = {component: [metrics_dict[cat][component]["value"] for cat in categories] for component in components}
-    pvalues = {component: [metrics_dict[cat][component]["p-value"] for cat in categories] for component in components}
+    # pvalues = {component: [metrics_dict[cat][component]["p-value"] for cat in categories] for component in components}
     if not noPerc:
         percs = {component: [metrics_dict[cat][component]["%"] for cat in categories] for component in components}
     colors = {component: [metrics_dict[cat][component]["color"] for cat in categories] for component in components}

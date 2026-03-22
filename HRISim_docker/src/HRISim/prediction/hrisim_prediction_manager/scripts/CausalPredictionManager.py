@@ -18,6 +18,7 @@ import pyAgrum.causal as pyc
 from enum import Enum
 import time
 
+
 class Robot():
     def __init__(self) -> None:
         self.x = None
@@ -28,21 +29,7 @@ class Robot():
         self.is_charging = 0
         self.closest_wp = ''
         self.task_result = 0
-        
-        
-class TOD(Enum):
-    H1 = "H1"
-    H2 = "H2"
-    H3 = "H3"
-    H4 = "H4"
-    H5 = "H5"
-    H6 = "H6"
-    H7 = "H7"
-    H8 = "H8"
-    H9 = "H9"
-    H10 = "H10"
-    OFF = "off"
-        
+                
 
 def heuristic(a, b):
     pos = nx.get_node_attributes(G, 'pos')
@@ -73,11 +60,10 @@ class PredictionManager:
         """
         self.robot = Robot()
 
-        self.WPs = {}
-        self.ELTs = {}
-        self.PDs = {}
+        self.Ws = {}
+        self.Ds = {}
 
-        self.TOD = ''        
+        self.S = ''        
         self.hhmmss = ''
         self.elapsed = 0
 
@@ -98,17 +84,14 @@ class PredictionManager:
             cm = pyc.CausalModel(bn)
             self.CIE[wp] = {'audit': AUDITs[wp], 'd': Ds[wp], 'bn': bn, 'cm': cm}
             
-        quantiles_RV, edges_RV, midpoints_RV = get_info(Ds['target-3'], AUDITs['target-3'], "RVt") # target-3 has been chosen as random wp
-        quantiles_EC, edges_EC, midpoints_EC = get_info(Ds['target-3'], AUDITs['target-3'], "ECt") # target-3 has been chosen as random wp
-        self.RV_info = {'quantiles': quantiles_RV, 'edges': edges_RV, 'midpoints': midpoints_RV}
-        self.EC_info = {'quantiles': quantiles_EC, 'edges': edges_EC, 'midpoints': midpoints_EC}
+        quantiles_V, edges_V, midpoints_V = get_info(Ds['r1'], AUDITs['r1'], "V") # r1 has been chosen as random wp
+        quantiles_L, edges_L, midpoints_L = get_info(Ds['r1'], AUDITs['r1'], "L") # r1 has been chosen as random wp
+        self.V_info = {'quantiles': quantiles_V, 'edges': edges_V, 'midpoints': midpoints_V}
+        self.L_info = {'quantiles': quantiles_L, 'edges': edges_L, 'midpoints': midpoints_L}
                
         self.TTWP = self.get_ttwp()
         self.ARCs = []
         for arc in self.TTWP.keys():
-            wp_i, wp_j = arc
-            if wp_i in ['parking', 'charging-station']: continue            
-            if wp_j in ['parking', 'charging-station']: continue   
             self.ARCs.append('__'.join(arc))
         rospy.Service('/hrisim/riskMap/predict', GetRiskMap, self.handle_get_risk_map)
         
@@ -136,12 +119,12 @@ class PredictionManager:
     def cb_people_counter(self, wps: WPPeopleCounters):
         self.peopleAtWork = wps.numberOfWorkingPeople
         for wp in wps.counters:
-            self.WPs[wp.WP_id.data] = wp.numberOfPeople
-            self.PDs[wp.WP_id.data] = wp.numberOfPeople/WPS_COORD[wp.WP_id.data]['A']
+            self.Ws[wp.WP_id.data] = wp.numberOfPeople
+            self.Ds[wp.WP_id.data] = wp.numberOfPeople/WPS_COORD[wp.WP_id.data]['A']
             
             
     def cb_time(self, t: pT):
-        self.TOD = int(ros_utils.seconds_to_hh(t.elapsed))
+        self.S = int(ros_utils.seconds_to_hh(t.elapsed))
         self.hhmmss = t.hhmmss.data
         self.elapsed = t.elapsed
             
@@ -153,7 +136,7 @@ class PredictionManager:
         Returns:
             dict: A dictionary with waypoint pairs as keys and travel times as values.
         """
-        travelled_distances = {}
+        travelled_time = {}
         if relative:
             for wp in WPS_COORD.keys():
                 path = nx.astar_path(G, self.robot.closest_wp, wp, heuristic=heuristic, weight='weight')
@@ -162,13 +145,13 @@ class PredictionManager:
                     wp_current = path[wp_idx-1]
                     wp_next = path[wp_idx]
                     travelled_distance += math.sqrt((WPS_COORD[wp_next]['x'] - WPS_COORD[wp_current]['x'])**2 + (WPS_COORD[wp_next]['y'] - WPS_COORD[wp_current]['y'])**2)
-                travelled_distances[wp] = math.ceil((travelled_distance/ROBOT_MAX_VEL)/PREDICTION_STEP)
+                travelled_time[wp] = math.ceil((travelled_distance/ROBOT_MAX_VEL)/PREDICTION_STEP)
         else:
             for arc in G.edges():
                 wp_i, wp_j = arc
                 travelled_distance = math.sqrt((WPS_COORD[wp_i]['x'] - WPS_COORD[wp_j]['x'])**2 + (WPS_COORD[wp_i]['y'] - WPS_COORD[wp_j]['y'])**2)
-                travelled_distances[arc] = math.ceil((travelled_distance/ROBOT_MAX_VEL)/PREDICTION_STEP)
-        return travelled_distances
+                travelled_time[arc] = math.ceil((travelled_distance/ROBOT_MAX_VEL)/PREDICTION_STEP)
+        return travelled_time
                        
             
     def elapsed2TOD(self, t):
@@ -178,10 +161,10 @@ class PredictionManager:
             if t > d:
                 continue
             else:
-                return constants.TODS[SCHEDULE[time]['name']]
+                return constants.TODS[SCHEDULE[time]['name']] - 1 # -1 because the CIE doesnt consider STARTING
             
             
-    def predict_BC(self, rv, cs):
+    def predict_L(self, v, tod, wp):
         
         def find_bin(value, edges):
             """
@@ -191,34 +174,33 @@ class PredictionManager:
             idx = np.digitize(value, edges, right=False) - 1
             return int(max(0, min(idx, len(edges) - 2)))
     
-        RV_bin_idx = find_bin(rv, self.RV_info['edges'])
-                
-        # # --- BN prediction ---
-        cm = self.CIE['target-3']['cm']
-                        
+        RV_bin_idx = find_bin(v, self.V_info['edges'])
+        tod_bin = tod
+        wp_bin = 0
+                                        
         # --- CausalModel prediction ---
-        evidence = {"RVt": RV_bin_idx, "CSt": cs}
-        _, adj, _ = pyc.causalImpact(cm, on="ECt", doing="RVt", knowing={"CSt"}, values=evidence)
+        cm = self.CIE[wp]['cm']
+        evidence = {"V": RV_bin_idx, "S": tod_bin, "W": wp_bin}
+        _, adj, _ = pyc.causalImpact(cm, on="L", doing="V", knowing={"W", "S"}, values=evidence)
         posterior_causal = adj.toarray()
-        pred_causal = sum(posterior_causal[j] * self.EC_info['midpoints'][j] for j in range(len(posterior_causal)))
+        pred_causal = sum(posterior_causal[j] * self.L_info['midpoints'][j] for j in range(len(posterior_causal)))
                         
         return pred_causal
     
     
-    def predict_PD(self, tod, wp):
+    def predict_D(self, tod, wp):
 
         wp_bin = 0
         tod_bin = tod
               
-        bn = self.CIE[wp]['bn']
         cm = self.CIE[wp]['cm']
         dwp = self.CIE[wp]['d']
                
-        _, _, midpoints_PD = get_info(dwp, self.CIE[wp]['audit'], 'PD0')
+        _, _, midpoints_PD = get_info(dwp, self.CIE[wp]['audit'], 'D')
       
         # --- CausalModel prediction ---
-        evidence = {"TOD0": tod_bin, "WP0": wp_bin}
-        _, adj, _ = pyc.causalImpact(cm, on="PD0", doing="TOD0", knowing={"WP0"}, values=evidence)
+        evidence = {"S": tod_bin, "W": wp_bin}
+        _, adj, _ = pyc.causalImpact(cm, on="D", doing="S", knowing={"W"}, values=evidence)
         posterior_causal = adj.toarray()
         pred_causal = sum(posterior_causal[j] * midpoints_PD[j] for j in range(len(posterior_causal)))
 
@@ -227,45 +209,45 @@ class PredictionManager:
 
     def handle_get_risk_map(self, req):
         start_time = time.perf_counter()
-        rospy.logwarn("Prediction requested!")
+        rospy.logwarn("################# Prediction requested #################")
         
         # Convert the observations deque to a pandas DataFrame
         TTWP_relative = self.get_ttwp(relative=True)
                
         # Init output
-        PD_wps = {}
-        PD_infs = {}
-        PDs = []
-        BCs = []
-        PD_inf_time = []
-        BC_inf_time = []
+        D_wps = {}
+        D_infs = {}
+        Ds = []
+        Ls = []
+        D_inf_time = []
+        L_inf_time = []
+        
+        tod = self.elapsed2TOD(self.elapsed)
+        rospy.logwarn(f"    TOD: {(list(constants.TODS.keys())[tod + 1])}")
         
         for wp in WPS_COORD.keys():
-            if wp in ['parking', 'charging-station']: continue
             traversal_step = TTWP_relative[wp]
             tod = self.elapsed2TOD(self.elapsed + traversal_step * PREDICTION_STEP)
-            PD_start_time = time.perf_counter()
-            PD_wps[wp] = self.predict_PD(tod, wp)
-            PD_end_time = time.perf_counter()
-            PD_infs[wp] = PD_end_time - PD_start_time
+            D_start_time = time.perf_counter()
+            D_wps[wp] = self.predict_D(tod, wp)
+            D_end_time = time.perf_counter()
+            D_infs[wp] = D_end_time - D_start_time
             
         for arc in self.ARCs:
             wp_i, wp_j = arc.split('__')
-            if wp_i in ['parking', 'charging-station']: continue            
-            if wp_j in ['parking', 'charging-station']: continue            
             traversal_step = self.TTWP[(wp_i, wp_j)]
                         
-            BC_start_time = time.perf_counter()
-            BCs.append(self.predict_BC(rv=ROBOT_MAX_VEL, cs=0)*traversal_step)
-            BC_end_time = time.perf_counter()
-            BC_inf_time.append(BC_end_time - BC_start_time)
-            PDs.append((PD_wps[wp_i] + PD_wps[wp_j])/2)
-            PD_inf_time.append(PD_infs[wp_i] + PD_infs[wp_j])
+            L_start_time = time.perf_counter()
+            Ls.append(self.predict_L(ROBOT_MAX_VEL, tod, self.robot.closest_wp)*traversal_step)
+            L_end_time = time.perf_counter()
+            L_inf_time.append(L_end_time - L_start_time)
+            Ds.append((D_wps[wp_i] + D_wps[wp_j])/2)
+            D_inf_time.append(D_infs[wp_i] + D_infs[wp_j])
             
         end_time = time.perf_counter()
         tot_inf_time = end_time - start_time
             
-        return GetRiskMapResponse(self.ARCs, PDs, BCs, tot_inf_time, PD_inf_time, BC_inf_time)
+        return GetRiskMapResponse(self.ARCs, Ds, Ls, tot_inf_time, D_inf_time, L_inf_time)
         
 
 if __name__ == "__main__":

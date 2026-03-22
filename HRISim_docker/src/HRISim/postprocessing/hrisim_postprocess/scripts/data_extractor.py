@@ -60,7 +60,8 @@ class Task():
         self.planning_time = planning_time
         self.evaluations = evaluations
         self.ending = 0
-        self.result = 0      
+        self.result = 0
+        self.completion_percentage = 0 
 
 class DataManager():
     """
@@ -159,12 +160,13 @@ class DataManager():
             if task.task_id not in self.tasks:
                 # self.tasks[task.task_id] = Task(task.task_id, task.start_time.to_sec(), task.path, task.final_destination,
                 #                                 task.tot_inf_time, task.mean_inf_time, 0, task.evaluations) # VersionA
-                # self.tasks[task.task_id] = Task(task.task_id, task.start_time.to_sec(), task.path, task.final_destination,
-                #                                 task.tot_inf_time, task.mean_inf_time, task.planning_time, task.evaluations) # VersionB
-                self.tasks[task.task_id] = Task(task.task_id, task.start_time.to_sec(), task.path, task.final_destination) # Base/Full
+                self.tasks[task.task_id] = Task(task.task_id, task.start_time.to_sec(), task.path, task.final_destination,
+                                                task.tot_inf_time, task.mean_inf_time, task.planning_time, task.evaluations) # VersionB
+                # self.tasks[task.task_id] = Task(task.task_id, task.start_time.to_sec(), task.path, task.final_destination) # Base/Full
             self.tasks[task.task_id].result = task.result
             self.tasks[task.task_id].ending = task.end_time.to_sec()
-            
+            self.tasks[task.task_id].completion_percentage = task.completion_percentage
+
         self.robot.task = tasks[-1].task_id if len(tasks) and not self.robot.is_charging else -1
         
         self.n_tasks = msg.num_tasks
@@ -347,7 +349,8 @@ if __name__ == '__main__':
                       'evaluations': task.evaluations,
                       'planning_time': task.planning_time,
                       'mean_query_inf_time': task.mean_query_inf_time,
-                      'tot_query_inf_time': task.tot_query_inf_time} for id, task in data_handler.tasks.items()}
+                      'tot_query_inf_time': task.tot_query_inf_time,
+                      'completion_percentage': task.completion_percentage} for id, task in data_handler.tasks.items()}
         
         tasks['n_tasks'] = data_handler.n_tasks
         tasks['n_success'] = data_handler.n_success

@@ -63,6 +63,7 @@ class HeuristicCounter:
         """Returns the current count."""
         return self.counter
 
+
 def send_goal(p, next_dest, nextnext_dest=None, time_threshold=-1, first=False):
     pos = nx.get_node_attributes(G, 'pos')
     x, y = pos[next_dest]
@@ -75,28 +76,6 @@ def send_goal(p, next_dest, nextnext_dest=None, time_threshold=-1, first=False):
     p.exec_action('gotoobs', "_".join([str(_input) for _input in inputs]))
     
     
-def get_prediction(p):
-    p.exec_action('predict', "")
-
-    risk_map_data = rospy.get_param('/hrisim/risk_map')
-    tmp_ARCs = risk_map_data['arcs']
-    ARCs = [(arc.split("__")[0], arc.split("__")[1]) for arc in tmp_ARCs]
-    PDs = risk_map_data['PDs']
-    BCs = risk_map_data['BCs']
-    tot_inf_time = risk_map_data['tot_inf_time']
-    PD_inf_time = risk_map_data['PD_inf_time']
-    BC_inf_time = risk_map_data['BC_inf_time']
-    mean_inf_time = (sum(PD_inf_time)/len(PD_inf_time) + sum(BC_inf_time)/len(BC_inf_time))
-    
-    risk_map = {}
-    for i, arc in enumerate(ARCs):
-        risk_map[arc] = {
-            'PD': PDs[i],
-            'BC': BCs[i]
-        }
-    return risk_map, tot_inf_time, mean_inf_time
-
-
 def shortest_heuristic(a, b):
     pos = nx.get_node_attributes(G, 'pos')
     (x1, y1) = pos[a]
@@ -104,152 +83,16 @@ def shortest_heuristic(a, b):
     return ((x1 - x2)**2 + (y1 - y2)**2)**0.5
 
 
-def causal_heuristic(a, b, max_d_cost, max_pd_cost, max_bc_cost):
-    
-    def _extract_info(a, b, variable):
-        if (a, b) in RISK_MAP:
-            cost = RISK_MAP[(a, b)][variable]
-        elif (b, a) in RISK_MAP:
-            cost = RISK_MAP[(b, a)][variable]
-        else:
-            cost = 0
-        return cost
-    
-    pos = nx.get_node_attributes(G, 'pos')
-
-    # Get coordinates
-    (x1, y1) = pos[a]
-    (x2, y2) = pos[b]
-
-    # Calculate normalized distance cost
-    distance_cost = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
-    #! Not normalised
-    normalized_d_cost = distance_cost
-    #! Normalised
-    # normalized_d_cost = distance_cost / max_d_cost if max_d_cost > 0 else 0
-
-    # Calculate PD cost
-    PD_cost = _extract_info(a, b, 'PD')
-    #! Not normalised
-    normalized_PD_cost = PD_cost
-    #! Normalised
-    # normalized_PD_cost = PD_cost / max_pd_cost if max_pd_cost > 0 else 0
-
-    # Calculate BC cost
-    BC_cost = _extract_info(a, b, 'BC')
-    #! Not normalised
-    normalized_BC_cost = BC_cost
-    #! Normalised
-    # normalized_BC_cost = BC_cost / max_bc_cost if max_bc_cost > 0 else 0
-
-    # Combine weighted costs
-    return K_D * normalized_d_cost + K_PD * normalized_PD_cost + K_BC * normalized_BC_cost
-
-
-def compute_max_values(G, risk_map):
-    pos = nx.get_node_attributes(G, 'pos')
-    travel_distances = []
-
-    # Calculate all edge travel distances
-    for u, v in G.edges():
-        (x1, y1) = pos[u]
-        (x2, y2) = pos[v]
-        travel_distance = ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
-        travel_distances.append(travel_distance)
-
-
-    max_d_cost = max(travel_distances) if travel_distances else 1
-    max_pd_cost = max([risk_map[arc]['PD'] for arc in risk_map.keys()])
-    max_bc_cost = max([risk_map[arc]['BC'] for arc in risk_map.keys()])
-    rospy.logwarn(f"max_d_cost: {max_d_cost}")
-    rospy.logwarn(f"max_pd_cost: {max_pd_cost}") 
-    rospy.logwarn(f"max_bc_cost: {max_bc_cost}") 
-
-    return max_d_cost, max_pd_cost, max_bc_cost
-
-
-def update_G_weights(g, max_d_cost, max_pd_cost, max_bc_cost):
-    
-    def _extract_info(a, b, variable):
-        if (a, b) in RISK_MAP:
-            cost = RISK_MAP[(a, b)][variable]
-        elif (b, a) in RISK_MAP:
-            cost = RISK_MAP[(b, a)][variable]
-        else:
-            cost = 0
-        return cost  
-        
-    # Get the position information from the graph
-    pos = nx.get_node_attributes(g, 'pos')
-    
-    d_costs = []
-    pd_costs = []
-    bc_costs = []
-    
-    for u, v in g.edges():
-        # Calculate travel distance between nodes u and v
-        (x1, y1) = pos[u]
-        (x2, y2) = pos[v]
-        d_cost = ((x1 - x2)**2 + (y1 - y2)**2)**0.5
-        d_costs.append(d_cost)
-
-        if u != constants.WP.CHARGING_STATION.value and v != constants.WP.CHARGING_STATION.value and ((u, v) in RISK_MAP or (v, u) in RISK_MAP):
-            PD_cost = _extract_info(u, v, 'PD')
-            BC_cost = _extract_info(u, v, 'BC')
-        else:
-            PD_cost = max_pd_cost
-            BC_cost = max_bc_cost
-        
-        pd_costs.append(PD_cost)
-        bc_costs.append(BC_cost)
-    
-    #! Not normalised   
-    normalized_d_costs = d_costs
-    normalized_pd_costs = pd_costs
-    normalized_bc_costs = bc_costs
-    
-    #! Normalised   
-    # normalized_d_costs = [d / max_d_cost for d in d_costs]
-    # normalized_pd_costs = [c / max_pd_cost for c in pd_costs]
-    # normalized_bc_costs = [c / max_bc_cost for c in bc_costs]
-
-    # Apply normalization and scaling factors
-    for idx, (u, v) in enumerate(g.edges()):
-        d_cost = normalized_d_costs[idx]
-        PD_cost = normalized_pd_costs[idx]
-        BC_cost = normalized_bc_costs[idx]
-                
-        # Assign the combined weight to the edge between u and v
-        g[u][v]['D_cost'] = d_cost
-        g[u][v]['PD_cost'] = PD_cost
-        g[u][v]['BC_cost'] = BC_cost
-        g[u][v]['weight'] = K_D * d_cost + K_PD * PD_cost + K_BC * BC_cost
-        
-    return g
-
-
 def get_next_goal():
     global TASK_LIST
 
     if not rospy.get_param('/robot_battery/is_charging') and not rospy.get_param('/hrisim/robot_busy'):
-        
         tod = rospy.get_param('/peopleflow/timeday')                                   
         if len(TASK_LIST[tod]) > 0:
-            if tod in [constants.TOD.H1.value, constants.TOD.H2.value, constants.TOD.H3.value, 
-                    constants.TOD.H4.value, constants.TOD.H5.value, constants.TOD.H7.value, 
-                    constants.TOD.H8.value, constants.TOD.H9.value, constants.TOD.H10.value]:
-                return TASK_LIST[tod][0], constants.Task.DELIVERY, True
-                        
-            elif rospy.get_param('/peopleflow/timeday') in [constants.TOD.H6.value]:
-                return TASK_LIST[tod][0], constants.Task.DELIVERY, True
-                        
-            elif rospy.get_param('/peopleflow/timeday') in [constants.TOD.OFF.value]:
-                if len(TASK_LIST[tod]) > 0:
-                    rospy.logwarn("It's off time, going to clean the shop.")
-                    return TASK_LIST[tod][0], constants.Task.CLEANING, True
+            return TASK_LIST[tod][0], True
         else:
             rospy.logwarn("No tasks left, shutting down the planning.")
-            return None, None, False
+            return None, False
 
 
 def set_battery(b):
@@ -307,7 +150,7 @@ def Plan(p):
     while not ros_utils.wait_for_param("/pnp_ros/ready"):
         rospy.sleep(0.1)
         
-    global NEXT_GOAL, QUEUE, GO_TO_CHARGER, G, RISK_MAP, TASK_LIST, set_battery_level, dynobs_remove_service, dynobs_timer_service
+    global NEXT_GOAL, QUEUE, GO_TO_CHARGER, G, TASK_LIST, set_battery_level, dynobs_remove_service, dynobs_timer_service
     ros_utils.wait_for_service('/hrisim/new_task')
     ros_utils.wait_for_service('/hrisim/finish_task')
     ros_utils.wait_for_service('/graph/path/show')
@@ -315,7 +158,6 @@ def Plan(p):
     ros_utils.wait_for_service('/hrisim/obstacles/timer/off')
     ros_utils.wait_for_service('/hrisim/shutdown')
     ros_utils.wait_for_service('/hrisim/set_battery_level')
-    ros_utils.wait_for_service('/hrisim/riskMap/predict')
     ros_utils.wait_for_param("/peopleflow/timeday")
 
     new_task_service = rospy.ServiceProxy('/hrisim/new_task', NewTask)
@@ -325,16 +167,13 @@ def Plan(p):
     dynobs_timer_service = rospy.ServiceProxy('/hrisim/obstacles/timer/off', Empty) 
     shutdown_service = rospy.ServiceProxy('/hrisim/shutdown', Empty)
     set_battery_level = rospy.ServiceProxy('/hrisim/set_battery_level', SetBattery)
-   
-    ros_utils.wait_for_param("/hrisim/prediction_ready")
-    
+       
     rospy.logwarn("Waiting PeopleFlow timeday to be ready...")
-    while rospy.get_param('/peopleflow/timeday') != INIT_TIME: 
-        rospy.sleep(0.1)    
+    while rospy.get_param('/peopleflow/timeday') != INIT_TIME: rospy.sleep(0.1)
+        
     set_battery(INIT_BATTERY)
     rospy.set_param('/hrisim/tasks/total', len(TASK_LIST[rospy.get_param('/peopleflow/timeday')]))
     rospy.set_param('/hrisim/robot_busy', False)
-    no_prediction = False
     PLAN_ON = True
     TASK_ON = False
     GO_TO_CHARGER = False
@@ -344,7 +183,7 @@ def Plan(p):
         if GO_TO_CHARGER:
             if TASK_ON:
                 rospy.logerr(f"Task {task_id} fail for critical battery")
-                finish_task_service(task_id, constants.TaskResult.CRITICAL_BATTERY.value)
+                finish_task_service(task_id, constants.TaskResult.CRITICAL_BATTERY.value, 1-(len(QUEUE)+1)/ORIG_QUEUE_LEN)
                 TASK_ON = False
                 rospy.logwarn("Cancelling all goals..")
                 client = actionlib.SimpleActionClient('/move_base', MoveBaseAction)
@@ -360,7 +199,7 @@ def Plan(p):
             GO_TO_CHARGER = False
             
         elif not rospy.get_param('/robot_battery/is_charging') and not GO_TO_CHARGER and len(QUEUE) == 0:
-            NEXT_GOAL, TASK, PLAN_ON = get_next_goal()
+            NEXT_GOAL, PLAN_ON = get_next_goal()
             if NEXT_GOAL is None: continue
             if isinstance(NEXT_GOAL, constants.WP): NEXT_GOAL = NEXT_GOAL.value
             rospy.logerr(f"New goal defined: {NEXT_GOAL}")
@@ -373,6 +212,7 @@ def Plan(p):
             try:
                 start_time = time.perf_counter()
                 QUEUE = nx.astar_path(G, ROBOT_CLOSEST_WP, NEXT_GOAL, heuristic=heuristic_wrapper, weight='weight')
+                ORIG_QUEUE_LEN = len(QUEUE)
                 end_time = time.perf_counter()
                 planning_time = end_time - start_time
                 evaluations = heuristic_wrapper.get_count()            
@@ -390,7 +230,7 @@ def Plan(p):
             next_sub_goal = QUEUE.pop(0)
             rospy.logwarn(f"Planning next goal: {next_sub_goal}")
             nextnext_sub_goal = QUEUE[0] if len(QUEUE) > 0 else None
-            if nextnext_sub_goal is None and TASK is constants.Task.CLEANING:
+            if nextnext_sub_goal is None:
                 tod = rospy.get_param('/peopleflow/timeday')                                   
                 nextnext_sub_goal = TASK_LIST[tod][0] if len(TASK_LIST[tod]) > 0 else None
             
@@ -398,7 +238,7 @@ def Plan(p):
             GOAL_STATUS = rospy.get_param('/hrisim/goal_status')
             if GOAL_STATUS == -1:
                 rospy.logerr("Goal failed!")
-                finish_task_service(task_id, constants.TaskResult.FAILURE.value)
+                finish_task_service(task_id, constants.TaskResult.FAILURE.value, 1-(len(QUEUE)+1)/ORIG_QUEUE_LEN)
                 TASK_ON = False
                 set_robot_pos(NEXT_GOAL)
                 QUEUE = []
@@ -406,10 +246,11 @@ def Plan(p):
             rospy.set_param('/hrisim/goal_status', 0)
             
             if len(QUEUE) == 0: 
-                finish_task_service(task_id, constants.TaskResult.SUCCESS.value)
+                finish_task_service(task_id, constants.TaskResult.SUCCESS.value, 1.0)
                 TASK_ON = False
                 
     shutdown_service()
+        
                                    
 def cb_battery(msg):
     global BATTERY_LEVEL, GO_TO_CHARGER
@@ -443,11 +284,6 @@ if __name__ == "__main__":
     QUEUE = []
     rospy.set_param('/hrisim/robot_obs', False)
 
-    
-    PRED_STEP = 5
-    K_D = 1
-    K_PD = 10
-    K_BC = 5
     global TASK_LIST
 
     p = PNPCmd()
@@ -459,7 +295,6 @@ if __name__ == "__main__":
     g_path = ros_utils.wait_for_param("/peopleflow_pedsim_bridge/g_path")
     with open(g_path, 'rb') as f:
         G = pickle.load(f)
-        G.remove_node("parking")
     ros_utils.load_graph_to_rosparam(G, "/peopleflow/G")
     rospy.Subscriber("/hrisim/robot_battery", BatteryStatus, cb_battery)
     rospy.Subscriber("/hrisim/robot_closest_wp", String, cb_robot_closest_wp)
@@ -471,7 +306,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Initialize robot parameters.')
     parser.add_argument('--init_time', type=str, required=True, help='Initial time to start the plan.')
     parser.add_argument('--init_battery', type=float, required=True, help='Initial battery level.')
-
     args = parser.parse_args()
     INIT_TIME = args.init_time
     INIT_BATTERY = args.init_battery

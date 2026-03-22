@@ -4490,7 +4490,7 @@
   
 
   <schedule>
-    <time name="STARTING" duration="60" >
+    <time name="STARTING" duration="30" >
       <adddest name="r1"         p="0.125" std="0"/>
       <adddest name="r2"         p="0.125" std="0"/>
       <adddest name="c12"        p="0.125" std="0"/>
@@ -4505,35 +4505,35 @@
       <adddest name="c16"        p="0" std="0"/>
     </time>
     <!-- POSTER -->
-    <!-- <time name="POSTER" duration="1200" >
-      <adddest name="r1"         p="0.01" std="0"/>
-      <adddest name="r2"         p="0.01" std="0"/>
+    <time name="POSTER" duration="86400" >
+      <adddest name="r1"         p="0" std="0"/>
+      <adddest name="r2"         p="0.05" std="0"/>
       <adddest name="c12"        p="0" std="0"/>
       <adddest name="c13"        p="0" std="0"/>
       <adddest name="c25"        p="0" std="0"/>
       <adddest name="c26"        p="0" std="0"/>
-      <adddest name="c19"        p="0.01" std="0"/>
-      <adddest name="c24"        p="0.01" std="0"/>
-      <adddest name="c3"         p="0.24" std="0" />
-      <adddest name="c4"         p="0.24" std="0" />
-      <adddest name="c5"         p="0.24" std="0" />
-      <adddest name="c16"        p="0.24" std="0" />
-    </time> -->
+      <adddest name="c19"        p="0.05" std="0"/>
+      <adddest name="c24"        p="0.1" std="0"/>
+      <adddest name="c3"         p="0.2" std="0" />
+      <adddest name="c4"         p="0.2" std="0" />
+      <adddest name="c5"         p="0.2" std="0" />
+      <adddest name="c16"        p="0.2" std="0" />
+    </time>
     <!-- BUFFET -->
-    <time name="BUFFET" duration="1200" >
-      <adddest name="r1"         p="0.01" std="0"/>
-      <adddest name="r2"         p="0.01" std="0"/>
-      <adddest name="c12"        p="0.24" std="0"/>
-      <adddest name="c13"        p="0.24" std="0"/>
-      <adddest name="c25"        p="0.24" std="0"/>
-      <adddest name="c26"        p="0.24" std="0"/>
-      <adddest name="c19"        p="0.01" std="0"/>
-      <adddest name="c24"        p="0.01" std="0"/>
+    <!-- <time name="BUFFET" duration="86400" >
+      <adddest name="r1"         p="0.05" std="0"/>
+      <adddest name="r2"         p="0.05" std="0"/>
+      <adddest name="c12"        p="0.2" std="0"/>
+      <adddest name="c13"        p="0.2" std="0"/>
+      <adddest name="c25"        p="0.2" std="0"/>
+      <adddest name="c26"        p="0.2" std="0"/>
+      <adddest name="c19"        p="0" std="0"/>
+      <adddest name="c24"        p="0.1" std="0"/>
       <adddest name="c3"         p="0" std="0" />
       <adddest name="c4"         p="0" std="0" />
       <adddest name="c5"         p="0" std="0" />
       <adddest name="c16"        p="0" std="0" />
-    </time>
+    </time> -->
     <!-- OFF -->
     <!-- <time name="OFF" duration="1200" >
       <adddest name="r1"         p="0.01" std="0"/>

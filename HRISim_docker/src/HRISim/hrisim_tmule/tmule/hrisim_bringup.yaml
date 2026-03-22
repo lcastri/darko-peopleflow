@@ -35,11 +35,15 @@ init_cmd: |
   export_default DYNAMIC_DURATION "4"
   export_default CHARGING_TIME "2"
   export_default ABORT_TIME_THRESHOLD "45"
-  export_default OBS_FACTOR ""
-
+  export_default OBS_FACTOR "5"
 
   # Gazebo arguments
   export_default WORLD "INB_3floor"
+  export_default MAP_X_MIN "-12.5"
+  export_default MAP_X_MAX "18.5"
+  export_default MAP_Y_MIN "-3.5"
+  export_default MAP_Y_MAX "6.2"
+
   # export_default MAP "$HOME/.pal/tiago_maps/configurations/$WORLD"
   export_default GAZEBO_GUI "true"
   export_default MAX_STEP_SIZE "0.001"
@@ -64,12 +68,12 @@ init_cmd: |
   export_default FORCE_SOCIAL "10.0"
 
   # CausalFlow arguments
-  export_default CIE "CIE3.8"
-  export_default PRED_STEP "5"
+  export_default CIE "CIE-sim"
+  export_default PRED_STEP "0.1"
 
   # Recording arguments
-  export_default DTOD "BUFFET"
-  export_default BAGNAME "DISCOVERY_$DTOD"
+  export_default DTOD "POSTER"
+  export_default BAGNAME "EXP_CAUSAL_$DTOD"
 
 windows:
   - name: env
@@ -80,11 +84,9 @@ windows:
     tags: ['core']
     panes:
       - roslaunch hrisim_gazebo bringup.launch gui:=$GAZEBO_GUI robot:=$TIAGO_TYPE public_sim:=true world:=$WORLD
-      # - 'roscd hrisim_gazebo && ./physics_params.sh $MAX_STEP_SIZE $REAL_TIME_UPDATE_RATE'
   - name: robot_utils
     tags: ['extra']
     panes:
-      # - roslaunch robot_clearing_distance clearing_distance.launch
       - rosrun robot_recovery standUp.py
       - rosrun robot_recovery localiseMe.py
       - rosrun robot_info robot_closestWP.py
@@ -103,18 +105,18 @@ windows:
         max_tasktime:=$MAX_TASKTIME robot_mode:=$ROBOT_MODE \
         max_human_speed:=$MAX_HUMAN_SPEED robot_radius:=$ROBOT_RADIUS \
         is_stuck_threshold:=$IS_STUCK_THRESHOLD force_obstacle:=$FORCE_OBSTACLE \
-        sigma_obstacle:=$SIGMA_OBSTACLE force_social:=$FORCE_SOCIAL
+        sigma_obstacle:=$SIGMA_OBSTACLE force_social:=$FORCE_SOCIAL init_time:=$DTOD
   - name: pedsim-utils
     tags: ['extra']
     panes:
       - rosrun peopleflow_counter PeopleCounter.py
+      - rosrun peopleflow_graph_visualisation GraphVisualisation.py
   - name: monitoring
     tags: ['extra']
     panes:
       - 'rosrun robot_task TaskInfoManager.py'
       - 'rosrun robot_path_visualisation AstarVisualisation.py'
       - 'rosrun hrisim_rviz overlay_visualiser.py'
-      # - 'rosrun rqt_peopleflow agents_info.py'
   - name: planning
     tags: ['core']
     panes:
@@ -126,14 +128,14 @@ windows:
       - |
         rosparam set /hrisim/abort_time_threshold $ABORT_TIME_THRESHOLD && \
         roscd hrisim_plans/scripts && \
-        python TIAGo_exploration_plan.py
-  - name: data
+        # python TIAGo_exploration_plan.py
+        # python TIAGo_noncausal_plan.py --init_time=$DTOD --init_battery=$INIT_BATTERY
+        python TIAGo_causal_plan.py --init_time=$DTOD --init_battery=$INIT_BATTERY
+  # - name: data
+  #   tags: ['exp']
+  #   panes:
+  #     - roslaunch hrisim_recording record.launch bagname:=$BAGNAME desired_tod:=$DTOD
+  - name: prediction
     tags: ['exp']
     panes:
-      - roslaunch hrisim_recording record.launch bagname:=$BAGNAME desired_tod:=$DTOD
-# python TIAGo_plan.py
-# python TIAGo_causal_plan.py --init_time=$INIT_TIME --init_battery=$INIT_BATTERY
-# # # # # #   # - name: prediction
-# # # # # #   #   tags: ['exp']
-# # # # # #   #   panes:
-# # # # # #   #     - 'roslaunch hrisim_prediction_manager prediction_manager.launch CIE:=$CIE pred_step:=$PRED_STEP'
+      - 'roslaunch hrisim_prediction_manager prediction_manager.launch CIE:=$CIE pred_step:=$PRED_STEP'

@@ -9,6 +9,7 @@
     <arg name="force_obstacle"          default="5.0" />
     <arg name="sigma_obstacle"          default="0.25" />
     <arg name="force_social"            default="10.0" />
+    <arg name="init_time"               />
 
     <include file="$(find peopleflow_manager)/launch/peopleflow_manager.launch">
         <arg name="scenario"            value="$(arg scenario)" />
@@ -17,6 +18,7 @@
         <arg name="scenario"            value="$(arg scenario)" />
         <arg name="allow_task"          value="$(arg allow_task)" />
         <arg name="max_tasktime"        value="$(arg max_tasktime)" />
+        <arg name="init_time"           value="$(arg init_time)" />
     </include>
     <include file="$(find pedsim_simulator)/launch/mysimulator.launch">
         <arg name="scenario"            value="$(arg scenario)" />

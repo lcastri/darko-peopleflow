@@ -55,6 +55,7 @@ class RobotTaskManager():
         task.evaluations = req.evaluations
         task.start_time = rospy.Time.now()
         task.result = 0
+        task.completion_percentage = 0.0
         self.tasks_msg.Tasks.append(task)
         self.tasks_msg.header.stamp = rospy.Time.now()
         rospy.logwarn(f"New task requested: {task.task_id}")
@@ -72,6 +73,7 @@ class RobotTaskManager():
             if task.task_id == req.task_id:
                 task.end_time = rospy.Time.now()
                 task.result = req.result
+                task.completion_percentage = req.completion_percentage
                 return FinishTaskResponse(True)
         return FinishTaskResponse(False)
 
