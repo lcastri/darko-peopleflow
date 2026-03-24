@@ -1,0 +1,1 @@
+led_style = {'width': '25px', 'height': '25px', 'border-radius': '50%', 'border': '1px solid #000'}

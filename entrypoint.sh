@@ -22,9 +22,11 @@ if ! grep -q "### Sourced by HRISim Entrypoint ###" "$HOME/.bashrc"; then
   echo "NC='\\033[0m'" >> ~/.bashrc
   echo "" >> ~/.bashrc
 
+
   echo "export PNP_HOME=/home/hrisim/ros_ws/src/pnp_ros/" >> ~/.bashrc
   echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
   echo "export GAZEBO_MODEL_PATH=/home/hrisim/.gazebo/models:$GAZEBO_MODEL_PATH" >> ~/.bashrc
+  echo 'export GAZEBO_MODEL_DATABASE_URI=""' >> ~/.bashrc
   echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 
   echo "source /home/hrisim/tiago_ws/devel/setup.bash" >> ~/.bashrc

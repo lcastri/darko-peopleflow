@@ -1,0 +1,63 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="airport_conveyor">
+    <static>true</static>
+    <link name="link">
+
+      <visual name="pillar">
+        <pose>2.0 0 0.5 0 0 0</pose> 
+        <geometry><box><size>1.0 1.0 1.0</size></box></geometry>
+        <material><ambient>0.3 0.3 0.3 1</ambient><diffuse>0.4 0.4 0.4 1</diffuse></material>
+      </visual>
+      <collision name="pillar_col">
+        <pose>2.0 0 0.5 0 0 0</pose> 
+        <geometry><box><size>1.0 1.0 1.0</size></box></geometry>
+      </collision>
+
+      <visual name="v_east_base">
+        <pose>0 1.0 0.075 0 0 0</pose>
+        <geometry><box><size>7.2 1.0 0.15</size></box></geometry>
+        <material><ambient>0.6 0.6 0.6 1</ambient><diffuse>0.7 0.7 0.7 1</diffuse></material>
+      </visual>
+      <visual name="v_west_base">
+        <pose>0 -1.0 0.075 0 0 0</pose>
+        <geometry><box><size>7.2 1.0 0.15</size></box></geometry>
+        <material><ambient>0.6 0.6 0.6 1</ambient><diffuse>0.7 0.7 0.7 1</diffuse></material>
+      </visual>
+      <visual name="v_north_base">
+        <pose>3.0 0 0.075 0 0 0</pose>
+        <geometry><box><size>1.0 3.0 0.15</size></box></geometry>
+        <material><ambient>0.6 0.6 0.6 1</ambient><diffuse>0.7 0.7 0.7 1</diffuse></material>
+      </visual>
+      <visual name="v_south_base">
+        <pose>-3.0 0 0.075 0 0 0</pose>
+        <geometry><box><size>1.0 3.0 0.15</size></box></geometry>
+        <material><ambient>0.6 0.6 0.6 1</ambient><diffuse>0.7 0.7 0.7 1</diffuse></material>
+      </visual>
+
+      <visual name="belt_e"><pose>0 1.0 0.151 0 0 0</pose><geometry><box><size>7.0 0.9 0.01</size></box></geometry>
+        <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material></visual>
+      <visual name="belt_w"><pose>0 -1.0 0.151 0 0 0</pose><geometry><box><size>7.0 0.9 0.01</size></box></geometry>
+        <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material></visual>
+      <visual name="belt_n"><pose>3.0 0 0.151 0 0 0</pose><geometry><box><size>0.9 1.1 0.01</size></box></geometry>
+        <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material></visual>
+      <visual name="belt_s"><pose>-3.0 0 0.151 0 0 0</pose><geometry><box><size>0.9 1.1 0.01</size></box></geometry>
+        <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material></visual>
+
+      <visual name="b_out_n"><pose>3.475 0 0.155 0 0 0</pose><geometry><box><size>0.05 3.0 0.02</size></box></geometry><material><ambient>0.7 0.7 0.7 1</ambient></material></visual>
+      <visual name="b_out_s"><pose>-3.475 0 0.155 0 0 0</pose><geometry><box><size>0.05 3.0 0.02</size></box></geometry><material><ambient>0.7 0.7 0.7 1</ambient></material></visual>
+      <visual name="b_out_e"><pose>0 1.475 0.155 0 0 0</pose><geometry><box><size>7.0 0.05 0.02</size></box></geometry><material><ambient>0.7 0.7 0.7 1</ambient></material></visual>
+      <visual name="b_out_w"><pose>0 -1.475 0.155 0 0 0</pose><geometry><box><size>7.0 0.05 0.02</size></box></geometry><material><ambient>0.7 0.7 0.7 1</ambient></material></visual>
+
+      <visual name="b_in_n"><pose>2.525 0 0.155 0 0 0</pose><geometry><box><size>0.05 1.0 0.02</size></box></geometry><material><ambient>0.7 0.7 0.7 1</ambient></material></visual>
+      <visual name="b_in_s"><pose>-2.525 0 0.155 0 0 0</pose><geometry><box><size>0.05 1.0 0.02</size></box></geometry><material><ambient>0.7 0.7 0.7 1</ambient></material></visual>
+      <visual name="b_in_e"><pose>0 0.525 0.155 0 0 0</pose><geometry><box><size>5.0 0.05 0.02</size></box></geometry><material><ambient>0.7 0.7 0.7 1</ambient></material></visual>
+      <visual name="b_in_w"><pose>0 -0.525 0.155 0 0 0</pose><geometry><box><size>5.0 0.05 0.02</size></box></geometry><material><ambient>0.7 0.7 0.7 1</ambient></material></visual>
+
+      <collision name="c_e"><pose>0 1.0 0.075 0 0 0</pose><geometry><box><size>7.0 1.0 0.15</size></box></geometry></collision>
+      <collision name="c_w"><pose>0 -1.0 0.075 0 0 0</pose><geometry><box><size>7.0 1.0 0.15</size></box></geometry></collision>
+      <collision name="c_n"><pose>3.0 0 0.075 0 0 0</pose><geometry><box><size>1.0 1.0 0.15</size></box></geometry></collision>
+      <collision name="c_s"><pose>-3.0 0 0.075 0 0 0</pose><geometry><box><size>1.0 1.0 0.15</size></box></geometry></collision>
+    </link>
+  </model>
+</sdf>

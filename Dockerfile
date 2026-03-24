@@ -104,6 +104,17 @@ rosdep install -y --from-paths src --ignore-src --rosdistro noetic --skip-keys \
 # Build the workspace
 RUN /bin/bash -c 'source /opt/ros/noetic/setup.bash; cd /home/hrisim/tiago_ws; catkin build'
 
+############################################################################## 
+# Orchestrator
+##############################################################################
+# Install darko orchestrator extra requirements
+RUN pip install blinker==1.4 --user
+RUN pip install dash --user
+RUN pip install dash-bootstrap-components --user
+RUN pip install numba --user
+RUN pip install PyYAML --user
+RUN pip install scikit-learn --user
+
 # ############################################################################## 
 # PetriNetPlans
 # ##############################################################################

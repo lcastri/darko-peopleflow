@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<launch>
+    <env name="PYTHONPATH" value="/root/ros_ws/src/darko_orchestrator/src:$(env PYTHONPATH)" />
+    <param name="orchestrator_started" type="bool" value="False">
+    </param>
+    <node name="orchestrator_node" pkg="darko_orchestrator" type="orchestrator_node.py" output="screen" cwd="node">
+    </node>
+    <node name="risk_monitoring" pkg="darko_orchestrator" type="risk_monitoring_node.py" output="screen" cwd="node">
+    </node>
+    <node name="risk_matrices_generation" pkg="darko_orchestrator" type="risk_matrices_generation_node.py" output="screen" cwd="node">
+    </node> 
+    <node name="fake_manipulation_node" pkg="darko_orchestrator" type="manipulation_node.py" output="screen" cwd="node">
+    </node>
+    <node name="darko_web_ui" pkg="darko_orchestrator" type="web_ui.py" output="screen" cwd="node">
+    </node>
+    <node name="tibur_node_service" pkg="darko_orchestrator" type="tibur.py" output="screen" cwd="node">
+    </node>
+</launch>

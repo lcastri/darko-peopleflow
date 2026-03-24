@@ -1,0 +1,12 @@
+{    
+    "free_x": 0,
+    "free_y": 0,
+    "num_clusters": 100,
+    "min_samples": 200,
+    "dist_threshold": 10.0,
+    "num_obstacle_clusters": 500,
+    "num_neighbors": 10,
+    "picking_distance": 1.0,
+    "throwing_distance": 3.0
+}
+        

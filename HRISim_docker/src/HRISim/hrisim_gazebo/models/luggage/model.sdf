@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="luggage">
+    <static>false</static>
+    <link name="link">
+      <inertial>
+        <mass>3.0</mass>
+        <inertia>
+          <ixx>0.05</ixx><ixy>0</ixy><ixz>0</ixz>
+          <iyy>0.05</iyy><iyz>0</iyz><izz>0.05</izz>
+        </inertia>
+      </inertial>
+      
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://luggage/meshes/HandLuggage.dae</uri>
+            <scale>1 1 1</scale> 
+          </mesh>
+        </geometry>
+      </visual>
+      
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://luggage/meshes/HandLuggage.dae</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>
