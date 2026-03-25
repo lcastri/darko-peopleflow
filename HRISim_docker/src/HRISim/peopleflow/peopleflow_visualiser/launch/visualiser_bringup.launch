@@ -8,7 +8,6 @@
     <arg name="sigma_obstacle"          default="0.25" />
     <arg name="force_social"            default="10.0" />
 
-
     <include file="$(find pedsim_simulator)/launch/mysimulator.launch">
         <arg name="scenario"            value="$(arg scenario)" />
         <arg name="robot_mode"          value="$(arg robot_mode)" />
@@ -20,8 +19,8 @@
         <arg name="force_social"        value="$(arg force_social)" />
     </include>
 
-    <node name="peopleflow_visualiser" pkg="peopleflow_visualiser" type="Visualiser.py" output="screen">
+    <!-- <node name="peopleflow_visualiser" pkg="peopleflow_visualiser" type="Visualiser.py" output="screen">
         <param name="g_path"   value="$(find peopleflow_manager)/res/$(arg scenario)/graph.pkl"/> 
-    </node>
+    </node> -->
 
 </launch>

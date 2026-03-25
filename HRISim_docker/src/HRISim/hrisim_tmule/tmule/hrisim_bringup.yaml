@@ -38,11 +38,7 @@ init_cmd: |
   export_default OBS_FACTOR "5"
 
   # Gazebo arguments
-  export_default WORLD "INB_3floor"
-  export_default MAP_X_MIN "-12.5"
-  export_default MAP_X_MAX "18.5"
-  export_default MAP_Y_MIN "-3.5"
-  export_default MAP_Y_MAX "6.2"
+  export_default WORLD "airport"
 
   # export_default MAP "$HOME/.pal/tiago_maps/configurations/$WORLD"
   export_default GAZEBO_GUI "true"
@@ -84,58 +80,59 @@ windows:
     tags: ['core']
     panes:
       - roslaunch hrisim_gazebo bringup.launch gui:=$GAZEBO_GUI robot:=$TIAGO_TYPE public_sim:=true world:=$WORLD
-  - name: robot_utils
-    tags: ['extra']
-    panes:
-      - rosrun robot_recovery standUp.py
-      - rosrun robot_recovery localiseMe.py
-      - rosrun robot_info robot_closestWP.py
-      - |
-        roslaunch robot_battery sim_battery.launch \
-        init_battery:=$INIT_BATTERY static_duration:=$STATIC_DURATION \
-        dynamic_duration:=$DYNAMIC_DURATION charging_time:=$CHARGING_TIME \
-        obs_factor:=$OBS_FACTOR
-      - 'rosrun robot_obs DynamicObstacle.py'
-  - name: pedsim
-    tags: ['core']
-    panes:
-      - |
-        roslaunch peopleflow_bringup peopleflow_bringup.launch \
-        scenario:=$SCENARIO allow_task:=$ALLOW_TASK \
-        max_tasktime:=$MAX_TASKTIME robot_mode:=$ROBOT_MODE \
-        max_human_speed:=$MAX_HUMAN_SPEED robot_radius:=$ROBOT_RADIUS \
-        is_stuck_threshold:=$IS_STUCK_THRESHOLD force_obstacle:=$FORCE_OBSTACLE \
-        sigma_obstacle:=$SIGMA_OBSTACLE force_social:=$FORCE_SOCIAL init_time:=$DTOD
+  # - name: robot_utils
+  #   tags: ['extra']
+  #   panes:
+  #     - rosrun robot_recovery standUp.py
+  #     - rosrun robot_recovery localiseMe.py
+  #     - rosrun robot_info robot_closestWP.py
+  #     - |
+  #       roslaunch robot_battery sim_battery.launch \
+  #       init_battery:=$INIT_BATTERY static_duration:=$STATIC_DURATION \
+  #       dynamic_duration:=$DYNAMIC_DURATION charging_time:=$CHARGING_TIME \
+  #       obs_factor:=$OBS_FACTOR
+  #     - 'rosrun robot_obs DynamicObstacle.py'
+  # - name: pedsim
+  #   tags: ['core']
+  #   panes:
+  #     - |
+  #       roslaunch peopleflow_bringup peopleflow_bringup.launch \
+  #       scenario:=$SCENARIO allow_task:=$ALLOW_TASK \
+  #       max_tasktime:=$MAX_TASKTIME robot_mode:=$ROBOT_MODE \
+  #       max_human_speed:=$MAX_HUMAN_SPEED robot_radius:=$ROBOT_RADIUS \
+  #       is_stuck_threshold:=$IS_STUCK_THRESHOLD force_obstacle:=$FORCE_OBSTACLE \
+  #       sigma_obstacle:=$SIGMA_OBSTACLE force_social:=$FORCE_SOCIAL init_time:=$DTOD
   - name: pedsim-utils
     tags: ['extra']
     panes:
-      - rosrun peopleflow_counter PeopleCounter.py
-      - rosrun peopleflow_graph_visualisation GraphVisualisation.py
-  - name: monitoring
-    tags: ['extra']
-    panes:
-      - 'rosrun robot_task TaskInfoManager.py'
-      - 'rosrun robot_path_visualisation AstarVisualisation.py'
-      - 'rosrun hrisim_rviz overlay_visualiser.py'
-  - name: planning
-    tags: ['core']
-    panes:
-      - |
-        roslaunch pnp_ros pnp_ros.launch \
-        plans_folder:=$PNP_PLANS \
-        actions_folder:=$PNP_ACTIONS \
-        conditions_folder:=$PNP_CONDITIONS
-      - |
-        rosparam set /hrisim/abort_time_threshold $ABORT_TIME_THRESHOLD && \
-        roscd hrisim_plans/scripts && \
-        # python TIAGo_exploration_plan.py
-        # python TIAGo_noncausal_plan.py --init_time=$DTOD --init_battery=$INIT_BATTERY
-        python TIAGo_causal_plan.py --init_time=$DTOD --init_battery=$INIT_BATTERY
+      - roslaunch peopleflow_visualiser visualiser_bringup.launch scenario:=$SCENARIO
+      # - rosrun peopleflow_counter PeopleCounter.py
+      # - rosrun peopleflow_graph_visualisation GraphVisualisation.py
+  # - name: monitoring
+  #   tags: ['extra']
+  #   panes:
+  #     - 'rosrun robot_task TaskInfoManager.py'
+  #     - 'rosrun robot_path_visualisation AstarVisualisation.py'
+  #     - 'rosrun hrisim_rviz overlay_visualiser.py'
+  # - name: planning
+  #   tags: ['core']
+  #   panes:
+  #     - |
+  #       roslaunch pnp_ros pnp_ros.launch \
+  #       plans_folder:=$PNP_PLANS \
+  #       actions_folder:=$PNP_ACTIONS \
+  #       conditions_folder:=$PNP_CONDITIONS
+  #     - |
+  #       rosparam set /hrisim/abort_time_threshold $ABORT_TIME_THRESHOLD && \
+  #       roscd hrisim_plans/scripts && \
+  #       # python TIAGo_exploration_plan.py
+  #       # python TIAGo_noncausal_plan.py --init_time=$DTOD --init_battery=$INIT_BATTERY
+  #       python TIAGo_causal_plan.py --init_time=$DTOD --init_battery=$INIT_BATTERY
   # - name: data
   #   tags: ['exp']
   #   panes:
   #     - roslaunch hrisim_recording record.launch bagname:=$BAGNAME desired_tod:=$DTOD
-  - name: prediction
-    tags: ['exp']
-    panes:
-      - 'roslaunch hrisim_prediction_manager prediction_manager.launch CIE:=$CIE pred_step:=$PRED_STEP'
+  # - name: prediction
+  #   tags: ['exp']
+  #   panes:
+  #     - 'roslaunch hrisim_prediction_manager prediction_manager.launch CIE:=$CIE pred_step:=$PRED_STEP'
