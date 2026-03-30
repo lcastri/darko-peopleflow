@@ -19,8 +19,8 @@
         <arg name="force_social"        value="$(arg force_social)" />
     </include>
 
-    <!-- <node name="peopleflow_visualiser" pkg="peopleflow_visualiser" type="Visualiser.py" output="screen">
+    <node name="peopleflow_visualiser" pkg="peopleflow_visualiser" type="Visualiser.py" output="screen">
         <param name="g_path"   value="$(find peopleflow_manager)/res/$(arg scenario)/graph.pkl"/> 
-    </node> -->
+    </node>
 
 </launch>

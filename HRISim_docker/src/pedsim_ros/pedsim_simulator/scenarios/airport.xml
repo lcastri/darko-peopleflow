@@ -4636,4 +4636,398 @@
   <obstacle x1="5.125000000000002" y1="-9.724999999999996" x2="5.075000000000001" y2="-9.674999999999995"/>
   <obstacle x1="5.175000000000006" y1="-9.724999999999996" x2="5.125000000000005" y2="-9.674999999999995"/>
   <obstacle x1="5.225000000000003" y1="-9.724999999999996" x2="5.1750000000000025" y2="-9.674999999999995"/>
+
+
+<!--Waypoints-->
+  <waypoint id="A1"      x="-9.65"   y="2.5"  r="0.5"/>
+  <waypoint id="B1"      x="-4.9"   y="2.5"  r="0.5"/>
+  <waypoint id="C1"      x="0.3"   y="2.5"  r="0.5"/>
+  <waypoint id="D1"      x="5.3"   y="2.5"  r="0.5"/>
+  <waypoint id="A-L1"      x="-9.65"   y="0"  r="0.5"/>
+  <waypoint id="A-L2"      x="-9.65"   y="-3.5"  r="0.5"/>
+  <waypoint id="B-L1"      x="-4.9"   y="0"  r="0.5"/>
+  <waypoint id="B-L2"      x="-4.9"   y="-3.5"  r="0.5"/>
+  <waypoint id="C-L1"      x="0.3"   y="0"  r="0.5"/>
+  <waypoint id="C-L2"      x="0.3"   y="-3.5"  r="0.5"/>
+  <waypoint id="D-L1"      x="5.3"   y="0"  r="0.5"/>
+  <waypoint id="D-L2"      x="4.8"   y="-3.5"  r="0.5"/>
+  <waypoint id="A2"      x="-9.65"   y="-6.2"  r="0.5"/>
+  <waypoint id="B2"      x="-4.9"   y="-6.2"  r="0.5"/>
+  <waypoint id="C2"      x="0.3"   y="-6.2"  r="0.5"/>
+  <waypoint id="D2"      x="5"   y="-6.2"  r="0.5"/>
+  <waypoint id="A3"      x="-9.65"   y="-8.5"  r="0.5"/>
+  <waypoint id="B3"      x="-4.9"   y="-8.75"  r="0.5"/>
+  <waypoint id="C3"      x="0.3"   y="-8.75"  r="0.5"/>
+  <waypoint id="D3"      x="5"   y="-8.75"  r="0.5"/>
+  <waypoint id="door1"      x="-10.9"   y="-8.5"  r="0.5"/>
+  <waypoint id="door2"      x="-2.5"   y="-9.3"  r="0.5"/>
+  <waypoint id="out1"      x="7.5"   y="-8.75"  r="0.5"/>
+  <waypoint id="out2"      x="7.5"   y="2.5"  r="0.5"/>
+  <!-- <waypoint id="r2"      x="4"   y="0.75"  r="1"/>
+  <waypoint id="c1"      x="-8.5"   y="4.5"  r="0.5"/>
+  <waypoint id="c2"      x="-4.5"   y="4.5"  r="0.5"/>
+  <waypoint id="c3"      x="0"   y="4.5"  r="1"/>
+  <waypoint id="c4"      x="2.75"   y="4.5"  r="1"/>
+  <waypoint id="c5"      x="5"   y="4.5"  r="1"/>
+  <waypoint id="c6"      x="-8.5"   y="1.25"  r="0.5"/>
+  <waypoint id="c7"      x="-8.5"   y="-2.15"  r="0.5"/>
+  <waypoint id="c8"      x="-4.5"   y="-2.15"  r="0.5"/>
+  <waypoint id="c9"      x="0"   y="-2.15"  r="0.5"/>
+  <waypoint id="c10"     x="4.5"   y="-2.15"  r="0.5"/>
+  <waypoint id="c11"     x="0"   y="1.25"  r="0.5"/>
+  <waypoint id="c12"     x="7.1"   y="1"  r="1"/>
+  <waypoint id="c13"     x="10.9"   y="0.75"  r="1"/>
+  <waypoint id="c14"     x="7.1"   y="-2.15"  r="0.5"/>
+  <waypoint id="c15"     x="11.1"   y="-2.15"  r="0.5"/>
+  <waypoint id="c16"     x="7.1"   y="4.5"  r="1"/>
+  <waypoint id="c17"     x="11.1"   y="4.5"  r="1.1"/>
+  <waypoint id="c18"     x="14"   y="4.5"  r="1"/>
+  <waypoint id="c19"     x="13.8"   y="0.18"  r="0.5"/>
+  <waypoint id="c20"     x="14"   y="-2.15"  r="0.5"/>
+  <waypoint id="c21"     x="17.7"   y="4.5"  r="0.5"/>
+  <waypoint id="c22"     x="17.7"   y="1.25"  r="0.5"/>
+  <waypoint id="c23"     x="17.7"   y="-2.15"  r="0.5"/>
+  <waypoint id="c24"     x="15.6"   y="1.25"  r="0.5"/>
+  <waypoint id="c25"     x="9"   y="-1.5"  r="1"/>
+  <waypoint id="c26"     x="9"   y="2.65"  r="1"/> -->
+
+
+  <!--Robot (type = 2)-->
+  <agent x="1.0" y="1.0" n="1" dx="0" dy="0" type="2">
+  </agent>
+
+  <!-- <agent x="-8.5" y="4.5" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="-4.5" y="4.5" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="0" y="4.5" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="2.75" y="4.5" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="5" y="4.5" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="-8.5" y="1.25" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="-8.5" y="-2.15" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="-4.5" y="-2.15" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="0" y="-2.15" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="4.5" y="-2.15" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="0" y="1.25" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="7.1" y="1" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="10.9" y="0.75" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="7.1" y="-2.15" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="11.1" y="-2.15" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="7.1" y="4.5" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="11.1" y="4.5" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="14" y="4.5" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="13.8" y="0.18" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent>
+  <agent x="9" y="2.65" n="1" dx="0.5" dy="0.5" type="0">
+    <addwaypoint id="r1"/>
+    <addwaypoint id="c12"/>
+    <addwaypoint id="c13"/>
+    <addwaypoint id="c25"/>
+    <addwaypoint id="c26"/>
+    <addwaypoint id="r2"/>
+    <addwaypoint id="c19"/>
+    <addwaypoint id="c24"/>
+    <addwaypoint id="c3"/>
+    <addwaypoint id="c4"/>
+    <addwaypoint id="c5"/>
+    <addwaypoint id="c16"/>
+  </agent> -->
+  
+  
+
+  <schedule>
+    <time name="STARTING" duration="30" >
+      <adddest name="A"         p="1" std="0"/>
+    </time>
+    <!-- POSTER -->
+    <!-- <time name="POSTER" duration="86400" >
+      <adddest name="r1"         p="0" std="0"/>
+      <adddest name="r2"         p="0.05" std="0"/>
+      <adddest name="c12"        p="0" std="0"/>
+      <adddest name="c13"        p="0" std="0"/>
+      <adddest name="c25"        p="0" std="0"/>
+      <adddest name="c26"        p="0" std="0"/>
+      <adddest name="c19"        p="0.05" std="0"/>
+      <adddest name="c24"        p="0.1" std="0"/>
+      <adddest name="c3"         p="0.2" std="0" />
+      <adddest name="c4"         p="0.2" std="0" />
+      <adddest name="c5"         p="0.2" std="0" />
+      <adddest name="c16"        p="0.2" std="0" />
+    </time> -->
+    <!-- BUFFET -->
+    <!-- <time name="BUFFET" duration="86400" >
+      <adddest name="r1"         p="0.05" std="0"/>
+      <adddest name="r2"         p="0.05" std="0"/>
+      <adddest name="c12"        p="0.2" std="0"/>
+      <adddest name="c13"        p="0.2" std="0"/>
+      <adddest name="c25"        p="0.2" std="0"/>
+      <adddest name="c26"        p="0.2" std="0"/>
+      <adddest name="c19"        p="0" std="0"/>
+      <adddest name="c24"        p="0.1" std="0"/>
+      <adddest name="c3"         p="0" std="0" />
+      <adddest name="c4"         p="0" std="0" />
+      <adddest name="c5"         p="0" std="0" />
+      <adddest name="c16"        p="0" std="0" />
+    </time> -->
+    <!-- OFF -->
+    <!-- <time name="OFF" duration="1200" >
+      <adddest name="r1"         p="0.01" std="0"/>
+      <adddest name="r2"         p="0.01" std="0"/>
+      <adddest name="c12"        p="0.24" std="0"/>
+      <adddest name="c13"        p="0.24" std="0"/>
+      <adddest name="c25"        p="0.24" std="0"/>
+      <adddest name="c26"        p="0.24" std="0"/>
+      <adddest name="c19"        p="0.01" std="0"/>
+      <adddest name="c24"        p="0.01" std="0"/>
+      <adddest name="c3"         p="0" std="0" />
+      <adddest name="c4"         p="0" std="0" />
+      <adddest name="c5"         p="0" std="0" />
+      <adddest name="c16"        p="0" std="0" />
+    </time> -->
+  </schedule>
+
 </scenario>
