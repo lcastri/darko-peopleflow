@@ -68,8 +68,9 @@ tstop
 | `./docbuild.sh` | Build Docker image |
 | `./docrun.sh` | Start Docker container |
 | `./docshell.sh` | Enter Docker shell |
-| `catkin build & exit & ./docshell.sh` | Rebuild ROS workspace and re-source |
-| `exit` & `./docstop.sh` | Exit Docker and stop container |
+| `catkin build` | Build ROS workspace (inside Docker)|
+| `exit` | Exit Docker (inside Docker)|
+| `./docstop.sh` | Stop container |
 | `tstart` | Start simulation (inside Docker) |
 | `tstop` | Stop simulation (inside Docker) |
 
