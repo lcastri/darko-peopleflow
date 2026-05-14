@@ -1,72 +1,97 @@
+# Docker Setup Guide
 
-## Real-World Experiments
+This guide explains how to activate and use Docker for the darko-peopleflow project.
 
-The framework was also evaluated in a real-world university setting. Two scenarios were staged to qualitatively test the effectiveness of our approach when deployed on a real TIAGo robot: a busy <strong>poster session in a corridor</strong> and a <strong>social event in a kitchen</strong>.
+## Prerequisites
 
-Twenty participants took part in the data collection for the learning pipeline of our causal framework.
+Ensure you have Docker installed on your system.
 
-![INB map](https://github.com/lcastri/causal-sim2real/blob/website/static/images/INB-3floor-map-coloured.png)
+## Activating Docker
 
-### Scenario 1: Poster Session
+Follow these steps to set up and enter the Docker environment:
 
-#### Learning
+### Step 1: Build the Docker Image
+```bash
+./docbuild.sh
+```
+This script builds the Docker image with all necessary dependencies.
 
-<video controls width="640">
-	<source src="https://github.com/lcastri/causal-sim2real/blob/website/static/videos/S1-learning-screen.mp4" type="video/mp4">
-	Your browser does not support the video tag.
-</video>
+### Step 2: Start the Docker Container
+```bash
+./docrun.sh
+```
+This script starts the Docker container.
 
-The data collected during the poster session was used to update the conditional probability distributions of the causal model (W → D ← S). The corridor waypoints used in the experiment had higher people density than other areas.
+### Step 3: Enter the Docker Shell
+```bash
+./docshell.sh
+```
+This script opens an interactive shell inside the Docker container.
 
-![S1 map](https://github.com/lcastri/causal-sim2real/blob/website/static/images/S1-map.png)
+### Step 4: Build and Source the ROS Workspace
+```bash
+catkin build
+exit 
+./docshell.sh
+```
+- `catkin build`: Builds the ROS workspace packages
+- `exit`: Exits the current shell session
+- `./docshell.sh`: Re-enters the Docker shell to source the updated ROS workspace
 
-#### Inference
+### Step 5: Stop the Docker Container
+When you're done working:
+```bash
+exit
+./docstop.sh
+```
+- `exit`: Exits the Docker shell
+- `./docstop.sh`: Stops the Docker container
 
-Robot Task: Navigate from the starting pink waypoint to the target green waypoint.
+## Working Inside the Docker
 
-<table>
-	<tr>
-		<td style="vertical-align: top; padding-right: 12px;">
-			<p><strong>Non-causal approach (baseline)</strong></p>
-			<img src="https://github.com/lcastri/causal-sim2real/blob/website/static/gifs/S1-inference-noncausal-screen.gif" alt="S1 non-causal" style="max-width:100%; height:auto;">
-		</td>
-		<td style="vertical-align: top; padding-left: 12px;">
-			<p><strong>Causal approach (Our)</strong></p>
-			<img src="https://github.com/lcastri/causal-sim2real/blob/website/static/gifs/S1-inference-causal-screen.gif" alt="S1 causal" style="max-width:100%; height:auto;">
-		</td>
-	</tr>
-</table>
+Once you're inside the Docker shell (via `./docshell.sh`), you can use the following commands to manage the simulation:
 
-The causal approach correctly identified the corridor as congested and chose a longer but clearer path, improving task success and safety.
+### Start the Simulation
+```bash
+tstart
+```
 
-### Scenario 2: Social Event
+### Stop the Simulation
+```bash
+tstop
+```
 
-#### Learning
+## Quick Reference
 
-<video controls width="640">
-	<source src="https://github.com/lcastri/causal-sim2real/blob/website/static/videos/S2-learning-screen.mp4" type="video/mp4">
-	Your browser does not support the video tag.
-</video>
+| Command | Purpose |
+|---------|---------|
+| `./docbuild.sh` | Build Docker image |
+| `./docrun.sh` | Start Docker container |
+| `./docshell.sh` | Enter Docker shell |
+| `catkin build & exit & ./docshell.sh` | Rebuild ROS workspace and re-source |
+| `exit` & `./docstop.sh` | Exit Docker and stop container |
+| `tstart` | Start simulation (inside Docker) |
+| `tstop` | Stop simulation (inside Docker) |
 
-Data from the social event (kitchen) was used to further update the model. The kitchen waypoint showed a higher concentration of people.
+## Workflow Example
 
-![S2 map](static/images/S2-map.png)
+```bash
+# Initial setup
+./docbuild.sh (your pc)
+./docrun.sh (your pc)
+./docshell.sh (your pc)
 
-#### Inference
+# Inside Docker: build and exit
+catkin build (docker)
+exit (docker)
+./docshell.sh (your pc)
 
-Robot Task: Navigate from the starting pink waypoint to the target green waypoint.
+# Inside Docker: run simulation
+tstart
+# ... do your work ...
+tstop
 
-<table>
-	<tr>
-		<td style="vertical-align: top; padding-right: 12px;">
-			<p><strong>Non-causal approach (baseline)</strong></p>
-			<img src="https://github.com/lcastri/causal-sim2real/blob/website/static/gifs/S2-inference-noncausal-screen.gif" alt="S2 non-causal" style="max-width:100%; height:auto;">
-		</td>
-		<td style="vertical-align: top; padding-left: 12px;">
-			<p><strong>Causal approach (Our)</strong></p>
-			<img src="https://github.com/lcastri/causal-sim2real/blob/website/static/gifs/S2-inference-causal-screen.gif" alt="S2 causal" style="max-width:100%; height:auto;">
-		</td>
-	</tr>
-</table>
-
-Without causal reasoning the baseline attempts the shortest path through the crowded kitchen and often fails. The causal approach predicts the high people density and chooses a safer, more efficient alternative route.
+# Exit and cleanup
+exit (docker)
+./docstop.sh (your pc)
+```
