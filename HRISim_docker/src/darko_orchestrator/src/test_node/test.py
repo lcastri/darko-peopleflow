@@ -78,7 +78,7 @@ class TestNode:
             ax.set_title(f'Plot {ax_idx + 1}')
 
         plt.tight_layout()
-        fig.savefig(f'/root/shared/plot/plot_{t}.png')
+        fig.savefig(f'/home/hrisim/shared/plot/plot_{t}.png')
 
 
 

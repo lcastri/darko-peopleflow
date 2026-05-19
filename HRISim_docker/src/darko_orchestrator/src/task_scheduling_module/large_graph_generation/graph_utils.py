@@ -180,7 +180,7 @@ def plot_graph(nodes, edges, costmap, action_nodes, obstacle_polygons, location_
     nx.draw(G, pos, node_size=20, with_labels=False)
 
     #plt.show()
-    fig.savefig('/root/shared/large_graph.png')
+    fig.savefig('/home/hrisim/shared/large_graph.png')
     
 def get_neighbors(free_positions_discrete, node, num_neighbors):
     """
@@ -196,102 +196,48 @@ def get_neighbors(free_positions_discrete, node, num_neighbors):
 
 def create_graph(costmap_reduced, location_coordinates, graph_params):
 
-    # graph params
     free_x = graph_params['free_x']
     free_y = graph_params['free_y']
-    num_clusters = graph_params['num_clusters']
-    min_samples = graph_params['min_samples']
-    dist_threshold = graph_params['dist_threshold']
     num_obstacle_clusters = graph_params['num_obstacle_clusters']
-    num_neighbors = graph_params['num_neighbors']
-    picking_distance = graph_params['picking_distance']
-    throwing_distance = graph_params['throwing_distance']
 
     free_positions, obstacle_positions = get_free_and_obstacles_real_positions(costmap_reduced, free_x, free_y)
 
-    # # Create a MiniBatchKMeans object with a minimum of min_samples points per batch
-    # kmeans = MiniBatchKMeans(n_clusters=num_clusters, batch_size=min_samples)
-
-    # # Fit the MiniBatchKMeans object to the free_positions array
-    # kmeans.fit(free_positions)
-
-    # # Get the cluster centers
-    # cluster_centers = kmeans.cluster_centers_
-
-    # # Round the cluster center coordinates to integers
-    # nodes = [tuple(pt) for pt in cluster_centers]
-
-    wps = rospy.get_param("/peopleflow/wps")
+    ros_nodes = rospy.get_param("/peopleflow/G/nodes")
+    ros_edges = rospy.get_param("/peopleflow/G/edges")
 
     nodes = []
     nodes_with_name = []
+    node_name_to_xy = {}
+    for name, data in ros_nodes.items():
+        x, y = data['pos'][0], data['pos'][1]
+        nodes_with_name.append((x, y, name))
+        nodes.append((x, y))
+        node_name_to_xy[name] = (x, y)
 
-    for name, wp in wps.items():
-        if 'wa' in name or 'target' in name:
-            nodes_with_name.append((wp['x'], wp['y'], name))
-            nodes.append((wp['x'], wp['y']))
-
-
+    obstacle_polygons = []
     if obstacle_positions:
-
-        # Convert obstacle_real_positions to numpy array
         points = np.array(obstacle_positions)
-
-        # Run KMeans to cluster points
         kmeans = KMeans(n_clusters=num_obstacle_clusters).fit(points)
         labels = kmeans.labels_
-
-        # Creation of polygons to represent obstacles
         obstacle_polygons = generate_polygons(labels, points, num_obstacle_clusters)
 
-
-    # Create a set of all possible edges connecting each node to its num_neighbors nearest neighbors
     edges = set()
-    for node in nodes:
-        neighbors = get_neighbors(nodes, node, num_neighbors)
-        for neighbor in neighbors:
-            if node == neighbor:
-                continue
-            edge = tuple(sorted([node, neighbor]))
-            if not check_obstacle_collision(edge, obstacle_polygons) and check_distance(node, neighbor, dist_threshold):
-                edges.add(edge)
-
-    # Filter out the longest edge crossing another edge
-    to_remove = set()
-    edges = list(edges)
-    for i in range(len(edges) - 1):
-        edge1 = edges[i]
-        if edge1 in to_remove:
-            continue
-        for j in range(i + 1, len(edges)):
-            edge2 = edges[j]
-            if edge2 in to_remove:
-                continue
-            if edge1 == edge2:
-                continue
-            line1 = sg.LineString(edge1)
-            line2 = sg.LineString(edge2)
-            if line1.crosses(line2):
-                if line1.length > line2.length:
-                    to_remove.add(edge1)
-                else:
-                    to_remove.add(edge2)
-
-    for edge in to_remove:
-        edges.remove(edge)
+    for edge_data in ros_edges:
+        src, tgt = edge_data['source'], edge_data['target']
+        if src in node_name_to_xy and tgt in node_name_to_xy:
+            edge = tuple(sorted([node_name_to_xy[src], node_name_to_xy[tgt]]))
+            edges.add(edge)
 
     preds = [edge[0] for edge in edges]
     succs = [edge[1] for edge in edges]
 
-    nodes_to_remove = [node for node in nodes if node not in preds and node not in succs]
-    nodes_with_name_to_remove = [node for node in nodes_with_name if (node[0], node[1]) not in preds and (node[0], node[1]) not in succs]
+    nodes_to_remove = [n for n in nodes if n not in preds and n not in succs]
+    nodes_with_name_to_remove = [n for n in nodes_with_name if (n[0], n[1]) not in preds and (n[0], n[1]) not in succs]
 
-    [nodes.remove(node_to_remove) for node_to_remove in nodes_to_remove]
-    [nodes_with_name.remove(node_with_name_to_remove) for node_with_name_to_remove in nodes_with_name_to_remove]
+    [nodes.remove(n) for n in nodes_to_remove]
+    [nodes_with_name.remove(n) for n in nodes_with_name_to_remove]
 
-    action_nodes = promote_action_nodes(nodes_with_name, location_coordinates, picking_distance, throwing_distance)
-    
-    return nodes, nodes_with_name, edges, action_nodes, obstacle_polygons
+    return nodes, nodes_with_name, edges, {}, obstacle_polygons
 
 def process_graph(nodes, edges, costmap):
 

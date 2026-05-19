@@ -171,7 +171,7 @@ class RiskEstimation:
             
         plt.tight_layout()
         timestamp = int(time.time())
-        plt.savefig(f"/root/shared/prediction/plot_{timestamp}.png")
+        plt.savefig(f"/home/hrisim/shared/prediction/plot_{timestamp}.png")
 
 
     def call_prediction_service(self):
@@ -473,7 +473,7 @@ class RiskEstimation:
         plt.imshow(data, cmap='gray', origin='lower')
         plt.colorbar(label='Cost')
         plt.title('ROS Costmap')
-        plt.savefig("/root/shared/costmp.png")
+        plt.savefig("/home/hrisim/shared/costmp.png")
 
     def plot_costmaps(self, costmaps, t_values, alpha_values, k):
         if len(costmaps) != 4 or len(t_values) != 4 or len(alpha_values) != 4:
@@ -505,7 +505,7 @@ class RiskEstimation:
         # plt.show()
 
         timestamp = int(time.time())
-        plt.savefig(f"/root/shared/costmap/costmap_{timestamp}.png")
+        plt.savefig(f"/home/hrisim/shared/costmap/costmap_{timestamp}.png")
 
 # CONTINUOUS LEARNING
     def gradiente(self, t_real, t_prev, velocity):
@@ -758,7 +758,7 @@ def plot_manipulation_area(node_x, node_y, manip_x, manip_y, merged_costmap, cos
     # disegno i punti di partenza (nodo di lancio e nodo di placing)
     plt.scatter([it], [jt], color='lightgreen', s = 5)
     plt.scatter([i], [j], color='red', s = 5)
-    # plt.savefig(f"/root/shared/traj_{current_time.strftime('%Y-%m-%d_%H:%M:%S')}.png")
+    # plt.savefig(f"/home/hrisim/shared/traj_{current_time.strftime('%Y-%m-%d_%H:%M:%S')}.png")
     plt.savefig(f"traj_{current_time.strftime('%Y-%m-%d_%H%M%S')}.png")
 
 

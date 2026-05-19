@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <launch>
-    <env name="PYTHONPATH" value="/root/ros_ws/src/darko_orchestrator/src:$(env PYTHONPATH)" />
+    <env name="PYTHONPATH" value="$(find darko_orchestrator)/src:$(env PYTHONPATH)" />
     <param name="orchestrator_started" type="bool" value="False">
     </param>
     <node name="orchestrator_node" pkg="darko_orchestrator" type="orchestrator_node.py" output="screen" cwd="node">
