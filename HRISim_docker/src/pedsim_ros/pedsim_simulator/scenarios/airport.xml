@@ -4660,7 +4660,11 @@
   <waypoint id="C3"      x="0.3"   y="-8.75"  r="0.5"/>
   <waypoint id="D3"      x="5"   y="-8.75"  r="0.5"/>
   <waypoint id="door1"      x="-10.9"   y="-8.5"  r="0.5"/>
+  <waypoint id="out3"      x="-13"   y="-8.5"  r="0.5"/>
+  <waypoint id="out4"      x="-13"   y="-11"  r="0.5"/>
+  <waypoint id="out5"      x="-2.5"   y="-11"  r="0.5"/>
   <waypoint id="door2"      x="-2.5"   y="-9.3"  r="0.5"/>
+  <waypoint id="out6"      x="7.5"   y="-11"  r="0.5"/>
   <waypoint id="out1"      x="7.5"   y="-8.75"  r="0.5"/>
   <waypoint id="out2"      x="7.5"   y="2.5"  r="0.5"/>
   <!-- <waypoint id="r2"      x="4"   y="0.75"  r="1"/>
